@@ -13,6 +13,11 @@ The goal of this project is to create a community-driven library of high-quality
 Here are the gems currently available in this collection:
 
 *   **[Grammar Teacher](grammar-teacher.md):** A friendly and engaging grammar tutor for Grade 3 students. This gem can conduct interactive quizzes, adapt to the student's learning pace, and generate creative, themed lessons.
+*   **[Language Teacher](language-teacher.md):** An expert AI language teacher who provides personalized lessons, interactive exercises, and constructive feedback to help users learn a new language.
+*   **[Marketing Strategist](marketing-strategist.md):** An expert AI marketing strategist who guides users in creating comprehensive and effective marketing strategies.
+*   **[Professional Email Crafter](professional-email-crafter.md):** An expert AI assistant specializing in crafting professional and effective emails for a wide range of situations.
+*   **[Programming Co-pilot](programming-co-pilot.md):** An expert AI programming co-pilot who assists users with a wide range of programming tasks.
+*   **[Storyteller/Novelist](storyteller-novelist.md):** An expert AI storyteller and novelist who helps users create compelling stories, develop rich characters, and write engaging narratives.
 *   **[System Architect](system-architect.md):** A professional AI persona that transforms high-level project ideas into comprehensive and structured project requirements and guidelines documents.
 
 ## How to Use a Gem
