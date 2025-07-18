@@ -220,17 +220,17 @@
             <!-- Gems Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <template x-for="gem in filteredGems" :key="gem.id">
-                    <div class="gem-card bg-white rounded-xl p-6 border border-gray-200 hover:border-purple-300">
+                    <div class="gem-card rounded-2xl p-8 shadow-xl">
                         <!-- Gem Header -->
-                        <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-start justify-between mb-6">
                             <div class="flex items-center">
-                                <div class="w-12 h-12 rounded-lg flex items-center justify-center mr-4" 
+                                <div class="w-16 h-16 rounded-2xl flex items-center justify-center mr-5 shadow-lg"
                                      :class="gem.color">
-                                    <i :data-lucide="gem.icon" class="w-6 h-6 text-white"></i>
+                                    <i :data-lucide="gem.icon" class="w-8 h-8 text-white"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-xl font-semibold text-gray-900" x-text="gem.name"></h3>
-                                    <span class="inline-block px-3 py-1 text-xs font-medium rounded-full mt-1"
+                                    <h3 class="text-2xl font-bold text-gray-900 mb-2" x-text="gem.name"></h3>
+                                    <span class="inline-block px-4 py-2 text-sm font-bold rounded-full"
                                           :class="getCategoryColor(gem.category)"
                                           x-text="gem.category">
                                     </span>
@@ -239,15 +239,15 @@
                         </div>
 
                         <!-- Gem Description -->
-                        <p class="text-gray-600 mb-4 line-clamp-3" x-text="gem.description"></p>
+                        <p class="gem-description mb-6 text-base leading-relaxed" x-text="gem.description"></p>
 
                         <!-- Gem Features -->
-                        <div class="mb-6">
-                            <h4 class="text-sm font-semibold text-gray-900 mb-2">Key Features:</h4>
-                            <ul class="space-y-1">
+                        <div class="mb-8">
+                            <h4 class="text-lg font-bold text-gray-900 mb-4">Key Features:</h4>
+                            <ul class="feature-list space-y-3">
                                 <template x-for="feature in gem.features.slice(0, 3)" :key="feature">
-                                    <li class="text-sm text-gray-600 flex items-center">
-                                        <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2 flex-shrink-0"></i>
+                                    <li class="text-sm flex items-start">
+                                        <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 mr-3 flex-shrink-0 mt-0.5"></i>
                                         <span x-text="feature"></span>
                                     </li>
                                 </template>
@@ -255,17 +255,17 @@
                         </div>
 
                         <!-- Gem Actions -->
-                        <div class="flex gap-3">
-                            <a :href="gem.file" 
+                        <div class="flex gap-4">
+                            <a :href="gem.file"
                                target="_blank"
-                               class="flex-1 bg-purple-600 text-white px-4 py-2 rounded-lg text-center font-medium hover:bg-purple-700 transition-colors">
-                                <i data-lucide="download" class="inline-block w-4 h-4 mr-2"></i>
+                               class="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-xl text-center font-bold hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg">
+                                <i data-lucide="download" class="inline-block w-5 h-5 mr-2"></i>
                                 Get Gem
                             </a>
                             <button @click="copyToClipboard(gem.file)"
-                                    class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                                    class="px-4 py-3 border-2 border-gray-300 rounded-xl hover:bg-gray-50 hover:border-indigo-300 transition-all transform hover:scale-105"
                                     title="Copy file path">
-                                <i data-lucide="copy" class="w-4 h-4 text-gray-600"></i>
+                                <i data-lucide="copy" class="w-5 h-5 text-gray-600"></i>
                             </button>
                         </div>
                     </div>
@@ -273,10 +273,16 @@
             </div>
 
             <!-- No Results -->
-            <div x-show="filteredGems.length === 0" class="text-center py-12">
-                <i data-lucide="search-x" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
-                <h3 class="text-xl font-semibold text-gray-900 mb-2">No gems found</h3>
-                <p class="text-gray-600">Try adjusting your search or filter criteria</p>
+            <div x-show="filteredGems.length === 0" class="text-center py-16">
+                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i data-lucide="search-x" class="w-12 h-12 text-gray-400"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-3">No gems found</h3>
+                <p class="text-lg text-gray-600 mb-6">Try adjusting your search or filter criteria</p>
+                <button @click="searchQuery = ''; selectedCategory = 'all'"
+                        class="bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors">
+                    Clear Filters
+                </button>
             </div>
         </div>
     </section>
@@ -314,43 +320,43 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
+    <footer class="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-16">
         <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                 <div>
-                    <h3 class="text-xl font-bold mb-4">
-                        <i data-lucide="gem" class="inline-block w-6 h-6 mr-2"></i>
+                    <h3 class="text-2xl font-bold mb-6">
+                        <i data-lucide="gem" class="inline-block w-8 h-8 mr-3"></i>
                         Gemini Gems
                     </h3>
-                    <p class="text-gray-400 mb-4">
+                    <p class="text-gray-300 mb-6 text-lg leading-relaxed">
                         A community-driven collection of specialized AI personas for Google's Gemini models.
                     </p>
-                    <div class="flex space-x-4">
-                        <a href="https://github.com/nirzaf/gemini-gems" target="_blank" class="text-gray-400 hover:text-white transition-colors">
-                            <i data-lucide="github" class="w-6 h-6"></i>
+                    <div class="flex space-x-6">
+                        <a href="https://github.com/nirzaf/gemini-gems" target="_blank" class="text-gray-300 hover:text-white transition-colors transform hover:scale-110">
+                            <i data-lucide="github" class="w-8 h-8"></i>
                         </a>
                     </div>
                 </div>
                 <div>
-                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#gems" class="text-gray-400 hover:text-white transition-colors">Browse Gems</a></li>
-                        <li><a href="https://github.com/nirzaf/gemini-gems/blob/main/README.md" target="_blank" class="text-gray-400 hover:text-white transition-colors">Documentation</a></li>
-                        <li><a href="https://github.com/nirzaf/gemini-gems/issues" target="_blank" class="text-gray-400 hover:text-white transition-colors">Report Issues</a></li>
-                        <li><a href="https://github.com/nirzaf/gemini-gems/blob/main/CODE_OF_CONDUCT.md" target="_blank" class="text-gray-400 hover:text-white transition-colors">Code of Conduct</a></li>
+                    <h4 class="text-xl font-bold mb-6">Quick Links</h4>
+                    <ul class="space-y-4">
+                        <li><a href="#gems" class="text-gray-300 hover:text-white transition-colors text-lg hover:underline">Browse Gems</a></li>
+                        <li><a href="https://github.com/nirzaf/gemini-gems/blob/main/README.md" target="_blank" class="text-gray-300 hover:text-white transition-colors text-lg hover:underline">Documentation</a></li>
+                        <li><a href="https://github.com/nirzaf/gemini-gems/issues" target="_blank" class="text-gray-300 hover:text-white transition-colors text-lg hover:underline">Report Issues</a></li>
+                        <li><a href="https://github.com/nirzaf/gemini-gems/blob/main/CODE_OF_CONDUCT.md" target="_blank" class="text-gray-300 hover:text-white transition-colors text-lg hover:underline">Code of Conduct</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-lg font-semibold mb-4">Contribute</h4>
-                    <p class="text-gray-400 mb-4">Help us grow this collection by contributing your own gems or improving existing ones.</p>
-                    <a href="https://github.com/nirzaf/gemini-gems/fork" target="_blank" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors inline-block">
-                        <i data-lucide="git-fork" class="inline-block w-4 h-4 mr-2"></i>
+                    <h4 class="text-xl font-bold mb-6">Contribute</h4>
+                    <p class="text-gray-300 mb-6 text-lg leading-relaxed">Help us grow this collection by contributing your own gems or improving existing ones.</p>
+                    <a href="https://github.com/nirzaf/gemini-gems/fork" target="_blank" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-3 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-105 inline-block font-bold shadow-lg">
+                        <i data-lucide="git-fork" class="inline-block w-5 h-5 mr-2"></i>
                         Fork & Contribute
                     </a>
                 </div>
             </div>
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
-                <p class="text-gray-400">
+            <div class="border-t border-gray-700 mt-12 pt-8 text-center">
+                <p class="text-gray-300 text-lg">
                     &copy; 2025 Gemini Gems. Open source project under MIT License.
                 </p>
             </div>
@@ -360,15 +366,15 @@
     <!-- Toast Notification -->
     <div x-show="showToast"
          x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0 transform translate-y-2"
-         x-transition:enter-end="opacity-100 transform translate-y-0"
+         x-transition:enter-start="opacity-0 transform translate-y-2 scale-95"
+         x-transition:enter-end="opacity-100 transform translate-y-0 scale-100"
          x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100 transform translate-y-0"
-         x-transition:leave-end="opacity-0 transform translate-y-2"
-         class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+         x-transition:leave-start="opacity-100 transform translate-y-0 scale-100"
+         x-transition:leave-end="opacity-0 transform translate-y-2 scale-95"
+         class="fixed bottom-6 right-6 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-8 py-4 rounded-2xl shadow-2xl z-50 backdrop-blur-sm">
         <div class="flex items-center">
-            <i data-lucide="check-circle" class="w-5 h-5 mr-2"></i>
-            <span x-text="toastMessage"></span>
+            <i data-lucide="check-circle" class="w-6 h-6 mr-3"></i>
+            <span class="font-semibold text-lg" x-text="toastMessage"></span>
         </div>
     </div>
 
@@ -572,13 +578,24 @@
 
                 getCategoryColor(category) {
                     const colors = {
-                        'Education': 'bg-blue-100 text-blue-800',
-                        'Development': 'bg-purple-100 text-purple-800',
-                        'Business': 'bg-green-100 text-green-800',
-                        'Creative': 'bg-yellow-100 text-yellow-800',
-                        'Spiritual': 'bg-emerald-100 text-emerald-800'
+                        'Education': 'bg-blue-100 text-blue-800 border-blue-200',
+                        'Development': 'bg-purple-100 text-purple-800 border-purple-200',
+                        'Business': 'bg-green-100 text-green-800 border-green-200',
+                        'Creative': 'bg-amber-100 text-amber-800 border-amber-200',
+                        'Spiritual': 'bg-emerald-100 text-emerald-800 border-emerald-200'
                     };
-                    return colors[category] || 'bg-gray-100 text-gray-800';
+                    return colors[category] || 'bg-gray-100 text-gray-800 border-gray-200';
+                },
+
+                getCategoryIcon(category) {
+                    const icons = {
+                        'Education': 'graduation-cap',
+                        'Development': 'code-2',
+                        'Business': 'briefcase',
+                        'Creative': 'palette',
+                        'Spiritual': 'heart'
+                    };
+                    return icons[category] || 'tag';
                 },
 
                 copyToClipboard(filename) {
