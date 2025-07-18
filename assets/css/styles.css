@@ -23,6 +23,11 @@
     --code-text: #dc2626;
     --pre-bg: #1f2937;
     --pre-text: #f9fafb;
+    --input-bg: #ffffff;
+    --input-placeholder: #9ca3af;
+    --scrollbar-track: #f1f5f9;
+    --scrollbar-thumb: #cbd5e1;
+    --scrollbar-thumb-hover: #94a3b8;
 }
 
 /* Dark theme colors */
@@ -47,6 +52,11 @@
     --code-text: #f87171;
     --pre-bg: #0f172a;
     --pre-text: #f1f5f9;
+    --input-bg: #334155;
+    --input-placeholder: #94a3b8;
+    --scrollbar-track: #1e293b;
+    --scrollbar-thumb: #475569;
+    --scrollbar-thumb-hover: #64748b;
 }
 
 body {
