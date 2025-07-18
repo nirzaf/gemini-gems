@@ -7,6 +7,9 @@ function geminiGems() {
         showPreview: false,
         selectedGem: null,
         gemContent: '',
+        parsedContent: '',
+        loadingContent: false,
+        errorMessage: '',
         
         gems: [
             {
@@ -238,18 +241,110 @@ function geminiGems() {
         async previewGem(gem) {
             this.selectedGem = gem;
             this.gemContent = '';
+            this.parsedContent = '';
+            this.loadingContent = true;
+            this.errorMessage = '';
             this.showPreview = true;
-            
+
             try {
-                const response = await fetch(gem.file);
+                // First try to load from local file system using file:// protocol
+                const localPath = window.location.origin + window.location.pathname.replace('index.html', '') + gem.file;
+                let response = await fetch(localPath);
+
+                if (!response.ok) {
+                    // If local fetch fails, try relative path
+                    response = await fetch(gem.file);
+                }
+
+                if (!response.ok) {
+                    // If both fail, try GitHub raw URL as last resort
+                    const githubUrl = `https://raw.githubusercontent.com/nirzaf/gemini-gems/main/${gem.file}`;
+                    response = await fetch(githubUrl);
+                }
+
                 if (response.ok) {
                     this.gemContent = await response.text();
+                    // Parse markdown to HTML
+                    this.parsedContent = marked.parse(this.gemContent);
+                    this.loadingContent = false;
                 } else {
-                    this.gemContent = 'Error loading gem content. Please try downloading the file directly.';
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
             } catch (error) {
-                this.gemContent = 'Error loading gem content. Please check your internet connection and try again.';
+                console.error('Error loading gem content:', error);
+                this.loadingContent = false;
+
+                // Try to load content using a different approach for local files
+                await this.loadLocalFile(gem);
             }
+        },
+
+        async loadLocalFile(gem) {
+            try {
+                // For local development, we'll use a file input approach
+                // This is a workaround for CORS restrictions
+                const fileContent = await this.readLocalMarkdownFile(gem.file);
+                if (fileContent) {
+                    this.gemContent = fileContent;
+                    this.parsedContent = marked.parse(fileContent);
+                    return;
+                }
+            } catch (error) {
+                console.error('Local file loading failed:', error);
+            }
+
+            // If all methods fail, show error with instructions
+            this.errorMessage = `To preview complete markdown content, please run a local server. Click "Setup Guide" below for instructions.`;
+            this.showInstructionsContent(gem);
+        },
+
+        async readLocalMarkdownFile(filename) {
+            // This is a placeholder for local file reading
+            // In a real scenario, you'd need a local server or different approach
+            return null;
+        },
+
+        showInstructionsContent(gem) {
+            const instructionsContent = `# ${gem.name}
+
+**Category:** ${gem.category}
+
+## Description
+${gem.description}
+
+## Key Features
+${gem.features.map(feature => `- ${feature}`).join('\n')}
+
+## 📁 Access Complete Content
+
+Due to browser security restrictions, the full markdown content cannot be displayed in preview mode when running locally.
+
+### To access the complete gem content:
+
+1. **Download Method:**
+   - Click the "Download File" button below
+   - Open the downloaded \`${gem.file}\` file in any text editor
+   - Copy the entire content
+
+2. **GitHub Method:**
+   - Visit: [${gem.file} on GitHub](https://github.com/nirzaf/gemini-gems/blob/main/${gem.file})
+   - Click the "Raw" button to view the plain text
+   - Copy the entire content
+
+3. **Local Server Method:**
+   - Run a local web server (e.g., \`python -m http.server\` or \`npx serve\`)
+   - Access the page through \`http://localhost\` instead of \`file://\`
+
+## How to Use the Gem
+1. Copy the complete markdown content from the gem file
+2. Paste it into your Gemini conversation as a system prompt
+3. Start using your specialized AI assistant!
+
+---
+*This gem is part of the Gemini Gems collection - specialized AI personas for Google's Gemini models.*`;
+
+            this.gemContent = instructionsContent;
+            this.parsedContent = marked.parse(instructionsContent);
         },
         
         copyGemContent() {
@@ -257,21 +352,43 @@ function geminiGems() {
                 navigator.clipboard.writeText(this.gemContent).then(() => {
                     this.showToastMessage('Gem content copied to clipboard!');
                 }).catch(() => {
-                    this.showToastMessage('Failed to copy content to clipboard');
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = this.gemContent;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        this.showToastMessage('Gem content copied to clipboard!');
+                    } catch (err) {
+                        this.showToastMessage('Failed to copy content to clipboard');
+                    }
+                    document.body.removeChild(textArea);
                 });
+            } else {
+                this.showToastMessage('No content to copy');
             }
         },
         
+        isRunningOnServer() {
+            return window.location.protocol === 'http:' || window.location.protocol === 'https:';
+        },
+
         init() {
             // Initialize Lucide icons
             lucide.createIcons();
-            
+
             // Add fade-in animation to elements
             setTimeout(() => {
                 document.querySelectorAll('.fade-in').forEach(el => {
                     el.classList.add('animate-fade-in');
                 });
             }, 100);
+
+            // Show a helpful message if not running on server
+            if (!this.isRunningOnServer()) {
+                console.log('💡 Tip: For full markdown preview functionality, run a local server. See SERVER_SETUP.md for instructions.');
+            }
         }
     }
 }

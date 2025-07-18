@@ -222,19 +222,142 @@ body {
     }
 }
 
+/* Prose styling for markdown content */
+.prose {
+    color: #374151;
+    max-width: none;
+}
+
+.prose h1 {
+    color: #1f2937;
+    font-weight: 800;
+    font-size: 2.25rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.prose h2 {
+    color: #1f2937;
+    font-weight: 700;
+    font-size: 1.875rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+
+.prose h3 {
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+}
+
+.prose p {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    line-height: 1.7;
+}
+
+.prose ul, .prose ol {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+
+.prose li {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+.prose strong {
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.prose code {
+    color: #dc2626;
+    background-color: #f3f4f6;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.prose pre {
+    background-color: #1f2937;
+    color: #f9fafb;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.prose pre code {
+    background-color: transparent;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+    font-size: 0.875rem;
+}
+
+.prose blockquote {
+    border-left: 4px solid #6366f1;
+    padding-left: 1rem;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+    color: #6b7280;
+}
+
+.prose hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.prose a {
+    color: #6366f1;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.prose a:hover {
+    color: #4f46e5;
+}
+
 /* Responsive improvements */
 @media (max-width: 768px) {
     .header-description {
         padding: 16px 24px;
         font-size: 16px;
     }
-    
+
     .gem-card {
         padding: 24px;
     }
-    
+
     .modal-content {
         max-height: 50vh;
+    }
+
+    .prose h1 {
+        font-size: 1.875rem;
+    }
+
+    .prose h2 {
+        font-size: 1.5rem;
+    }
+
+    .prose h3 {
+        font-size: 1.25rem;
     }
 }
 
@@ -242,5 +365,13 @@ body {
     .header-description {
         padding: 12px 20px;
         font-size: 15px;
+    }
+
+    .prose h1 {
+        font-size: 1.5rem;
+    }
+
+    .prose h2 {
+        font-size: 1.25rem;
     }
 }
