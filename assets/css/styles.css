@@ -94,14 +94,14 @@ body {
 .header-description {
     color: #ffffff;
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7), 0 1px 3px rgba(0, 0, 0, 0.9);
-    font-weight: 700;
-    line-height: 1.6;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
-    backdrop-filter: blur(15px);
-    border-radius: 20px;
-    padding: 24px 36px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    font-weight: 600;
+    line-height: 1.5;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 16px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
 }
 
 .feature-list li {
@@ -161,15 +161,15 @@ body {
 .btn-primary {
     background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
     color: #1e40af;
-    font-weight: 800;
-    padding: 16px 32px;
-    border-radius: 16px;
-    border: 3px solid rgba(255, 255, 255, 0.8);
+    font-weight: 700;
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.8);
     transition: all 0.3s ease;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2), 0 4px 10px rgba(255, 255, 255, 0.1) inset;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15), 0 3px 8px rgba(255, 255, 255, 0.1) inset;
     text-shadow: none;
-    font-size: 16px;
-    letter-spacing: 0.5px;
+    font-size: 14px;
+    letter-spacing: 0.3px;
 }
 
 .btn-primary:hover {
@@ -182,16 +182,16 @@ body {
 .btn-secondary {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
     color: white;
-    font-weight: 800;
-    padding: 16px 32px;
-    border-radius: 16px;
-    border: 3px solid rgba(255, 255, 255, 0.6);
+    font-weight: 700;
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.6);
     transition: all 0.3s ease;
-    backdrop-filter: blur(15px);
+    backdrop-filter: blur(12px);
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    font-size: 16px;
-    letter-spacing: 0.5px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    letter-spacing: 0.3px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 .btn-secondary:hover {
