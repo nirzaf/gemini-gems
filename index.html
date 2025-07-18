@@ -17,63 +17,124 @@
     
     <!-- Custom Styles -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
         body {
             font-family: 'Inter', sans-serif;
+            background: #f8fafc;
         }
-        
+
         .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
+            position: relative;
         }
-        
+
+        .gradient-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+
+        .gradient-bg > * {
+            position: relative;
+            z-index: 2;
+        }
+
         .gem-card {
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.95);
         }
-        
+
         .gem-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border-color: rgba(99, 102, 241, 0.3);
         }
-        
+
         .search-input {
             backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(99, 102, 241, 0.1);
+            font-weight: 500;
         }
-        
+
+        .search-input:focus {
+            background: rgba(255, 255, 255, 1);
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
         .category-badge {
             transition: all 0.2s ease;
+            font-weight: 600;
+            border: 2px solid transparent;
         }
-        
+
         .category-badge:hover {
             transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        
+
+        .category-badge.active {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+            color: white !important;
+            border-color: #6366f1;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
         .hero-pattern {
-            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0);
-            background-size: 20px 20px;
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.2) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+
+        .text-shadow {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-list li {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .gem-description {
+            color: #4b5563;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .stats-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
 <body class="bg-gray-50" x-data="geminiGems()">
     <!-- Header -->
     <header class="gradient-bg hero-pattern">
-        <div class="container mx-auto px-6 py-16">
+        <div class="container mx-auto px-6 py-20">
             <div class="text-center text-white">
-                <h1 class="text-5xl font-bold mb-4">
-                    <i data-lucide="gem" class="inline-block w-12 h-12 mr-3"></i>
+                <h1 class="text-6xl font-bold mb-6 text-shadow">
+                    <i data-lucide="gem" class="inline-block w-14 h-14 mr-4"></i>
                     Gemini Gems
                 </h1>
-                <p class="text-xl mb-8 max-w-3xl mx-auto opacity-90">
-                    Transform your AI into specialized experts with our curated collection of system prompts. 
+                <p class="text-2xl mb-10 max-w-4xl mx-auto font-medium text-shadow leading-relaxed">
+                    Transform your AI into specialized experts with our curated collection of system prompts.
                     Each gem is a meticulously crafted persona designed to unlock the full potential of Google's Gemini models.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="#gems" class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                    <a href="#gems" class="bg-white text-indigo-600 px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all transform hover:scale-105 shadow-lg">
+                        <i data-lucide="sparkles" class="inline-block w-5 h-5 mr-2"></i>
                         Explore Gems
                     </a>
-                    <a href="https://github.com/nirzaf/gemini-gems" target="_blank" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition-colors">
+                    <a href="https://github.com/nirzaf/gemini-gems" target="_blank" class="border-3 border-white text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-white hover:text-indigo-600 transition-all transform hover:scale-105 shadow-lg">
                         <i data-lucide="github" class="inline-block w-5 h-5 mr-2"></i>
                         View on GitHub
                     </a>
@@ -83,65 +144,76 @@
     </header>
 
     <!-- Stats Section -->
-    <section class="py-12 bg-white">
+    <section class="py-16 bg-gradient-to-r from-slate-50 to-blue-50">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                <div class="p-6">
-                    <div class="text-4xl font-bold text-purple-600 mb-2" x-text="gems.length"></div>
-                    <div class="text-gray-600">Available Gems</div>
+                <div class="stats-card p-8 rounded-2xl shadow-lg">
+                    <div class="text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-3" x-text="gems.length"></div>
+                    <div class="text-gray-700 font-semibold text-lg">Available Gems</div>
+                    <div class="text-gray-500 text-sm mt-1">Ready to use AI personas</div>
                 </div>
-                <div class="p-6">
-                    <div class="text-4xl font-bold text-purple-600 mb-2" x-text="categories.length"></div>
-                    <div class="text-gray-600">Categories</div>
+                <div class="stats-card p-8 rounded-2xl shadow-lg">
+                    <div class="text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3" x-text="categories.length"></div>
+                    <div class="text-gray-700 font-semibold text-lg">Categories</div>
+                    <div class="text-gray-500 text-sm mt-1">Specialized domains</div>
                 </div>
-                <div class="p-6">
-                    <div class="text-4xl font-bold text-purple-600 mb-2">100%</div>
-                    <div class="text-gray-600">Open Source</div>
+                <div class="stats-card p-8 rounded-2xl shadow-lg">
+                    <div class="text-5xl font-bold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent mb-3">100%</div>
+                    <div class="text-gray-700 font-semibold text-lg">Open Source</div>
+                    <div class="text-gray-500 text-sm mt-1">Free for everyone</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Search and Filter Section -->
-    <section id="gems" class="py-12 bg-gray-50">
+    <section id="gems" class="py-16 bg-gradient-to-br from-gray-50 to-indigo-50">
         <div class="container mx-auto px-6">
-            <div class="max-w-4xl mx-auto mb-12">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Discover Your Perfect AI Persona</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Browse our collection of specialized gems and find the perfect AI assistant for your needs.</p>
+            </div>
+
+            <div class="max-w-5xl mx-auto mb-12">
                 <!-- Search Bar -->
-                <div class="relative mb-8">
-                    <input 
-                        type="text" 
+                <div class="relative mb-10">
+                    <input
+                        type="text"
                         x-model="searchQuery"
-                        placeholder="Search gems by name, description, or use case..."
-                        class="search-input w-full px-6 py-4 pl-12 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg"
+                        placeholder="Search gems by name, description, features, or use case..."
+                        class="search-input w-full px-8 py-5 pl-14 rounded-2xl text-lg placeholder-gray-500 shadow-lg"
                     >
-                    <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"></i>
+                    <i data-lucide="search" class="absolute left-5 top-1/2 transform -translate-y-1/2 text-indigo-400 w-6 h-6"></i>
                 </div>
 
                 <!-- Category Filters -->
-                <div class="flex flex-wrap gap-3 justify-center">
-                    <button 
+                <div class="flex flex-wrap gap-4 justify-center">
+                    <button
                         @click="selectedCategory = 'all'"
-                        :class="selectedCategory === 'all' ? 'bg-purple-600 text-white' : 'bg-white text-gray-700 hover:bg-purple-50'"
-                        class="category-badge px-6 py-2 rounded-full border border-gray-200 font-medium"
+                        :class="selectedCategory === 'all' ? 'active' : 'bg-white text-gray-700 hover:bg-indigo-50 hover:text-indigo-700'"
+                        class="category-badge px-8 py-3 rounded-full shadow-md"
                     >
+                        <i data-lucide="sparkles" class="inline-block w-4 h-4 mr-2"></i>
                         All Gems
                     </button>
                     <template x-for="category in categories" :key="category">
-                        <button 
+                        <button
                             @click="selectedCategory = category"
-                            :class="selectedCategory === category ? 'bg-purple-600 text-white' : 'bg-white text-gray-700 hover:bg-purple-50'"
-                            class="category-badge px-6 py-2 rounded-full border border-gray-200 font-medium"
-                            x-text="category"
-                        ></button>
+                            :class="selectedCategory === category ? 'active' : 'bg-white text-gray-700 hover:bg-indigo-50 hover:text-indigo-700'"
+                            class="category-badge px-8 py-3 rounded-full shadow-md"
+                        >
+                            <i :data-lucide="getCategoryIcon(category)" class="inline-block w-4 h-4 mr-2"></i>
+                            <span x-text="category"></span>
+                        </button>
                     </template>
                 </div>
             </div>
 
             <!-- Results Count -->
-            <div class="text-center mb-8">
-                <p class="text-gray-600">
-                    Showing <span class="font-semibold" x-text="filteredGems.length"></span> 
-                    of <span class="font-semibold" x-text="gems.length"></span> gems
+            <div class="text-center mb-10">
+                <p class="text-lg text-gray-700 font-medium">
+                    Showing <span class="font-bold text-indigo-600" x-text="filteredGems.length"></span>
+                    of <span class="font-bold text-indigo-600" x-text="gems.length"></span> gems
                 </p>
             </div>
 
