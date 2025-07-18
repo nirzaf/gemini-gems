@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Gems - AI Persona Collection</title>
+    <meta name="description" content="A curated collection of specialized AI personas for Google's Gemini models. Transform your AI into expert assistants for various tasks.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gem-card {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .gem-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .search-input {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .category-badge {
+            transition: all 0.2s ease;
+        }
+        
+        .category-badge:hover {
+            transform: scale(1.05);
+        }
+        
+        .hero-pattern {
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50" x-data="geminiGems()">
+    <!-- Header -->
+    <header class="gradient-bg hero-pattern">
+        <div class="container mx-auto px-6 py-16">
+            <div class="text-center text-white">
+                <h1 class="text-5xl font-bold mb-4">
+                    <i data-lucide="gem" class="inline-block w-12 h-12 mr-3"></i>
+                    Gemini Gems
+                </h1>
+                <p class="text-xl mb-8 max-w-3xl mx-auto opacity-90">
+                    Transform your AI into specialized experts with our curated collection of system prompts. 
+                    Each gem is a meticulously crafted persona designed to unlock the full potential of Google's Gemini models.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#gems" class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                        Explore Gems
+                    </a>
+                    <a href="https://github.com/nirzaf/gemini-gems" target="_blank" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition-colors">
+                        <i data-lucide="github" class="inline-block w-5 h-5 mr-2"></i>
+                        View on GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stats Section -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="p-6">
+                    <div class="text-4xl font-bold text-purple-600 mb-2" x-text="gems.length"></div>
+                    <div class="text-gray-600">Available Gems</div>
+                </div>
+                <div class="p-6">
+                    <div class="text-4xl font-bold text-purple-600 mb-2" x-text="categories.length"></div>
+                    <div class="text-gray-600">Categories</div>
+                </div>
+                <div class="p-6">
+                    <div class="text-4xl font-bold text-purple-600 mb-2">100%</div>
+                    <div class="text-gray-600">Open Source</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search and Filter Section -->
+    <section id="gems" class="py-12 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto mb-12">
+                <!-- Search Bar -->
+                <div class="relative mb-8">
+                    <input 
+                        type="text" 
+                        x-model="searchQuery"
+                        placeholder="Search gems by name, description, or use case..."
+                        class="search-input w-full px-6 py-4 pl-12 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg"
+                    >
+                    <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"></i>
+                </div>
+
+                <!-- Category Filters -->
+                <div class="flex flex-wrap gap-3 justify-center">
+                    <button 
+                        @click="selectedCategory = 'all'"
+                        :class="selectedCategory === 'all' ? 'bg-purple-600 text-white' : 'bg-white text-gray-700 hover:bg-purple-50'"
+                        class="category-badge px-6 py-2 rounded-full border border-gray-200 font-medium"
+                    >
+                        All Gems
+                    </button>
+                    <template x-for="category in categories" :key="category">
+                        <button 
+                            @click="selectedCategory = category"
+                            :class="selectedCategory === category ? 'bg-purple-600 text-white' : 'bg-white text-gray-700 hover:bg-purple-50'"
+                            class="category-badge px-6 py-2 rounded-full border border-gray-200 font-medium"
+                            x-text="category"
+                        ></button>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Results Count -->
+            <div class="text-center mb-8">
+                <p class="text-gray-600">
+                    Showing <span class="font-semibold" x-text="filteredGems.length"></span> 
+                    of <span class="font-semibold" x-text="gems.length"></span> gems
+                </p>
+            </div>
+
+            <!-- Gems Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <template x-for="gem in filteredGems" :key="gem.id">
+                    <div class="gem-card bg-white rounded-xl p-6 border border-gray-200 hover:border-purple-300">
+                        <!-- Gem Header -->
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-lg flex items-center justify-center mr-4" 
+                                     :class="gem.color">
+                                    <i :data-lucide="gem.icon" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold text-gray-900" x-text="gem.name"></h3>
+                                    <span class="inline-block px-3 py-1 text-xs font-medium rounded-full mt-1"
+                                          :class="getCategoryColor(gem.category)"
+                                          x-text="gem.category">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gem Description -->
+                        <p class="text-gray-600 mb-4 line-clamp-3" x-text="gem.description"></p>
+
+                        <!-- Gem Features -->
+                        <div class="mb-6">
+                            <h4 class="text-sm font-semibold text-gray-900 mb-2">Key Features:</h4>
+                            <ul class="space-y-1">
+                                <template x-for="feature in gem.features.slice(0, 3)" :key="feature">
+                                    <li class="text-sm text-gray-600 flex items-center">
+                                        <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2 flex-shrink-0"></i>
+                                        <span x-text="feature"></span>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+
+                        <!-- Gem Actions -->
+                        <div class="flex gap-3">
+                            <a :href="gem.file" 
+                               target="_blank"
+                               class="flex-1 bg-purple-600 text-white px-4 py-2 rounded-lg text-center font-medium hover:bg-purple-700 transition-colors">
+                                <i data-lucide="download" class="inline-block w-4 h-4 mr-2"></i>
+                                Get Gem
+                            </a>
+                            <button @click="copyToClipboard(gem.file)"
+                                    class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                                    title="Copy file path">
+                                <i data-lucide="copy" class="w-4 h-4 text-gray-600"></i>
+                            </button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- No Results -->
+            <div x-show="filteredGems.length === 0" class="text-center py-12">
+                <i data-lucide="search-x" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">No gems found</h3>
+                <p class="text-gray-600">Try adjusting your search or filter criteria</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Use Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8">How to Use a Gem</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-6">
+                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="download" class="w-8 h-8 text-purple-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">1. Choose & Download</h3>
+                        <p class="text-gray-600">Select the gem that matches your needs and download the markdown file.</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="copy" class="w-8 h-8 text-purple-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">2. Copy Content</h3>
+                        <p class="text-gray-600">Copy the entire content of the gem's markdown file to use as a system prompt.</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="sparkles" class="w-8 h-8 text-purple-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">3. Transform AI</h3>
+                        <p class="text-gray-600">Use the content as a system prompt with Gemini to activate the specialized persona.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">
+                        <i data-lucide="gem" class="inline-block w-6 h-6 mr-2"></i>
+                        Gemini Gems
+                    </h3>
+                    <p class="text-gray-400 mb-4">
+                        A community-driven collection of specialized AI personas for Google's Gemini models.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="https://github.com/nirzaf/gemini-gems" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                            <i data-lucide="github" class="w-6 h-6"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#gems" class="text-gray-400 hover:text-white transition-colors">Browse Gems</a></li>
+                        <li><a href="https://github.com/nirzaf/gemini-gems/blob/main/README.md" target="_blank" class="text-gray-400 hover:text-white transition-colors">Documentation</a></li>
+                        <li><a href="https://github.com/nirzaf/gemini-gems/issues" target="_blank" class="text-gray-400 hover:text-white transition-colors">Report Issues</a></li>
+                        <li><a href="https://github.com/nirzaf/gemini-gems/blob/main/CODE_OF_CONDUCT.md" target="_blank" class="text-gray-400 hover:text-white transition-colors">Code of Conduct</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contribute</h4>
+                    <p class="text-gray-400 mb-4">Help us grow this collection by contributing your own gems or improving existing ones.</p>
+                    <a href="https://github.com/nirzaf/gemini-gems/fork" target="_blank" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors inline-block">
+                        <i data-lucide="git-fork" class="inline-block w-4 h-4 mr-2"></i>
+                        Fork & Contribute
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                <p class="text-gray-400">
+                    &copy; 2025 Gemini Gems. Open source project under MIT License.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div x-show="showToast"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform translate-y-2"
+         x-transition:enter-end="opacity-100 transform translate-y-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 transform translate-y-0"
+         x-transition:leave-end="opacity-0 transform translate-y-2"
+         class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+        <div class="flex items-center">
+            <i data-lucide="check-circle" class="w-5 h-5 mr-2"></i>
+            <span x-text="toastMessage"></span>
+        </div>
+    </div>
+
+    <!-- Alpine.js Data and Methods -->
+    <script>
+        function geminiGems() {
+            return {
+                searchQuery: '',
+                selectedCategory: 'all',
+                showToast: false,
+                toastMessage: '',
+
+                gems: [
+                    {
+                        id: 'grammar-teacher',
+                        name: 'Grammar Teacher',
+                        description: 'A friendly and engaging grammar tutor for Grade 3 students. Conducts interactive quizzes, adapts to learning pace, and generates creative themed lessons.',
+                        category: 'Education',
+                        icon: 'book-open',
+                        color: 'bg-blue-500',
+                        file: 'grammar-teacher.md',
+                        features: [
+                            'Interactive grammar quizzes',
+                            'Adaptive learning pace',
+                            'Creative themed lessons',
+                            '42 structured lessons',
+                            'Fantasy and adventure themes'
+                        ]
+                    },
+                    {
+                        id: 'language-teacher',
+                        name: 'Language Teacher',
+                        description: 'An expert AI language teacher providing personalized lessons, interactive exercises, and constructive feedback for learning new languages.',
+                        category: 'Education',
+                        icon: 'globe',
+                        color: 'bg-green-500',
+                        file: 'language-teacher.md',
+                        features: [
+                            'Personalized lesson plans',
+                            'Interactive exercises',
+                            'Cultural insights',
+                            'Progress tracking',
+                            'Conversational practice'
+                        ]
+                    },
+                    {
+                        id: 'programming-copilot',
+                        name: 'Programming Co-pilot',
+                        description: 'An expert AI programming assistant helping with code review, debugging, best practices, and strategic guidance for developers.',
+                        category: 'Development',
+                        icon: 'code',
+                        color: 'bg-purple-500',
+                        file: 'programming-co-pilot.md',
+                        features: [
+                            'Code review and debugging',
+                            'Best practices guidance',
+                            'Multi-language support',
+                            'Step-by-step explanations',
+                            'Security-focused advice'
+                        ]
+                    },
+                    {
+                        id: 'system-architect',
+                        name: 'System Architect',
+                        description: 'Transforms high-level project ideas into comprehensive structured project requirements and guidelines documents.',
+                        category: 'Development',
+                        icon: 'building',
+                        color: 'bg-indigo-500',
+                        file: 'system-architect.md',
+                        features: [
+                            'Project requirements analysis',
+                            'Technical architecture planning',
+                            'Scope definition',
+                            'Risk assessment',
+                            'Technology recommendations'
+                        ]
+                    },
+                    {
+                        id: 'task-breakdown-manager',
+                        name: 'Task Breakdown Manager',
+                        description: 'Breaks down complex projects into manageable user stories formatted for AI coding agents and developers.',
+                        category: 'Development',
+                        icon: 'list-checks',
+                        color: 'bg-cyan-500',
+                        file: 'task-breakdown-manager.md',
+                        features: [
+                            'User story formatting',
+                            'Task dependency mapping',
+                            'Priority and complexity assessment',
+                            'AI-agent friendly structure',
+                            'Sprint planning support'
+                        ]
+                    },
+                    {
+                        id: 'github-branch-generator',
+                        name: 'GitHub Branch Name Generator',
+                        description: 'Generates standardized and meaningful GitHub branch names based on user story titles and numbers.',
+                        category: 'Development',
+                        icon: 'git-branch',
+                        color: 'bg-orange-500',
+                        file: 'github-branch-name-generator.md',
+                        features: [
+                            'Standardized naming conventions',
+                            'User story integration',
+                            'Date formatting',
+                            'Alternative suggestions',
+                            'Best practices compliance'
+                        ]
+                    },
+                    {
+                        id: 'professional-email-crafter',
+                        name: 'Professional Email Crafter',
+                        description: 'Crafts professional and effective emails for various business situations with proper tone and structure.',
+                        category: 'Business',
+                        icon: 'mail',
+                        color: 'bg-red-500',
+                        file: 'professional-email-crafter.md',
+                        features: [
+                            'Professional tone adaptation',
+                            'Structured email format',
+                            'Follow-up suggestions',
+                            'Action-oriented content',
+                            'Multiple business scenarios'
+                        ]
+                    },
+                    {
+                        id: 'marketing-strategist',
+                        name: 'Marketing Strategist',
+                        description: 'Creates comprehensive marketing strategies from basic ideas, including audience analysis and channel recommendations.',
+                        category: 'Business',
+                        icon: 'trending-up',
+                        color: 'bg-pink-500',
+                        file: 'marketing-strategist.md',
+                        features: [
+                            'Market analysis',
+                            'Target audience definition',
+                            'Channel strategy',
+                            'Budget allocation',
+                            'SMART objectives'
+                        ]
+                    },
+                    {
+                        id: 'storyteller-novelist',
+                        name: 'Storyteller/Novelist',
+                        description: 'Helps create compelling stories, develop rich characters, and write engaging narratives across various genres.',
+                        category: 'Creative',
+                        icon: 'feather',
+                        color: 'bg-amber-500',
+                        file: 'storyteller-novelist.md',
+                        features: [
+                            'Character development',
+                            'Plot structure guidance',
+                            'World-building assistance',
+                            'Writing style improvement',
+                            'Genre-specific advice'
+                        ]
+                    },
+                    {
+                        id: 'dua-generator',
+                        name: 'Dua Generator',
+                        description: 'Provides authentic Islamic prayers (duas) for various occasions, suitable for sharing via messaging platforms.',
+                        category: 'Spiritual',
+                        icon: 'heart',
+                        color: 'bg-emerald-500',
+                        file: 'dua-generator.md',
+                        features: [
+                            'Authentic Quran & Hadith sources',
+                            'WhatsApp-ready format',
+                            'Occasion-specific prayers',
+                            'Arabic with translations',
+                            'Cultural sensitivity'
+                        ]
+                    }
+                ],
+
+                get categories() {
+                    return [...new Set(this.gems.map(gem => gem.category))].sort();
+                },
+
+                get filteredGems() {
+                    let filtered = this.gems;
+
+                    // Filter by category
+                    if (this.selectedCategory !== 'all') {
+                        filtered = filtered.filter(gem => gem.category === this.selectedCategory);
+                    }
+
+                    // Filter by search query
+                    if (this.searchQuery.trim()) {
+                        const query = this.searchQuery.toLowerCase();
+                        filtered = filtered.filter(gem =>
+                            gem.name.toLowerCase().includes(query) ||
+                            gem.description.toLowerCase().includes(query) ||
+                            gem.category.toLowerCase().includes(query) ||
+                            gem.features.some(feature => feature.toLowerCase().includes(query))
+                        );
+                    }
+
+                    return filtered;
+                },
+
+                getCategoryColor(category) {
+                    const colors = {
+                        'Education': 'bg-blue-100 text-blue-800',
+                        'Development': 'bg-purple-100 text-purple-800',
+                        'Business': 'bg-green-100 text-green-800',
+                        'Creative': 'bg-yellow-100 text-yellow-800',
+                        'Spiritual': 'bg-emerald-100 text-emerald-800'
+                    };
+                    return colors[category] || 'bg-gray-100 text-gray-800';
+                },
+
+                copyToClipboard(filename) {
+                    navigator.clipboard.writeText(filename).then(() => {
+                        this.showToastMessage('File path copied to clipboard!');
+                    }).catch(() => {
+                        this.showToastMessage('Failed to copy to clipboard');
+                    });
+                },
+
+                showToastMessage(message) {
+                    this.toastMessage = message;
+                    this.showToast = true;
+                    setTimeout(() => {
+                        this.showToast = false;
+                    }, 3000);
+                },
+
+                init() {
+                    // Initialize Lucide icons
+                    lucide.createIcons();
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
