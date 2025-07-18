@@ -33,7 +33,7 @@
                 <button @click="toggleTheme()" 
                         class="theme-toggle-btn p-3 rounded-xl backdrop-filter backdrop-blur-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white hover:bg-opacity-30 transition-all duration-300 group"
                         :title="getThemeLabel()">
-                    <i :data-lucide="getThemeIcon()" class="w-5 h-5 group-hover:scale-110 transition-transform duration-200"></i>
+                    <i :class="getThemeIcon()" class="text-lg group-hover:scale-110 transition-transform duration-200"></i>
                 </button>
             </div>
             

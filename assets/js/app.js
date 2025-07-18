@@ -543,9 +543,9 @@ Due to browser security restrictions, the full markdown content cannot be displa
         },
         
         getThemeIcon() {
-            if (this.theme === 'light') return 'sun';
-            if (this.theme === 'dark') return 'moon';
-            return 'monitor'; // system
+            if (this.theme === 'light') return 'fas fa-sun';
+            if (this.theme === 'dark') return 'fas fa-moon';
+            return 'fas fa-desktop'; // system
         },
         
         getThemeLabel() {
@@ -558,7 +558,7 @@ Due to browser security restrictions, the full markdown content cannot be displa
             // Initialize theme first
             this.initTheme();
             
-            // Initialize Lucide icons
+            // Initialize Lucide icons (for category icons)
             lucide.createIcons();
 
             // Add fade-in animation to elements
