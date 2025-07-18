@@ -10,6 +10,9 @@ function geminiGems() {
         parsedContent: '',
         loadingContent: false,
         errorMessage: '',
+        // Theme management
+        theme: 'system',
+        isDarkMode: false,
         
         gems: [
             {
@@ -490,7 +493,71 @@ Due to browser security restrictions, the full markdown content cannot be displa
             return window.location.protocol === 'http:' || window.location.protocol === 'https:';
         },
 
+        // Theme management methods
+        initTheme() {
+            // Get saved theme preference or default to system
+            const savedTheme = localStorage.getItem('theme') || 'system';
+            this.theme = savedTheme;
+            this.applyTheme();
+            
+            // Listen for system theme changes
+            if (window.matchMedia) {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                    if (this.theme === 'system') {
+                        this.applyTheme();
+                    }
+                });
+            }
+        },
+        
+        applyTheme() {
+            if (this.theme === 'system') {
+                // Use system preference
+                this.isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            } else {
+                this.isDarkMode = this.theme === 'dark';
+            }
+            
+            // Apply theme to document
+            if (this.isDarkMode) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        },
+        
+        setTheme(newTheme) {
+            this.theme = newTheme;
+            localStorage.setItem('theme', newTheme);
+            this.applyTheme();
+        },
+        
+        toggleTheme() {
+            if (this.theme === 'light') {
+                this.setTheme('dark');
+            } else if (this.theme === 'dark') {
+                this.setTheme('system');
+            } else {
+                this.setTheme('light');
+            }
+        },
+        
+        getThemeIcon() {
+            if (this.theme === 'light') return 'sun';
+            if (this.theme === 'dark') return 'moon';
+            return 'monitor'; // system
+        },
+        
+        getThemeLabel() {
+            if (this.theme === 'light') return 'Light Mode';
+            if (this.theme === 'dark') return 'Dark Mode';
+            return 'System Theme';
+        },
+
         init() {
+            // Initialize theme first
+            this.initTheme();
+            
             // Initialize Lucide icons
             lucide.createIcons();
 
