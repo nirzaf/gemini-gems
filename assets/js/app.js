@@ -93,6 +93,22 @@ function geminiGems() {
                 ]
             },
             {
+                id: 'gem-creator',
+                name: 'Gem Creator (GemForge)',
+                description: 'Expert AI assistant for creating high-quality Gemini Gems based on user-provided personas. Transforms role descriptions into comprehensive system prompts.',
+                category: 'Development',
+                icon: 'gem',
+                color: 'bg-violet-500',
+                file: 'gem-creator.md',
+                features: [
+                    'Persona-to-prompt transformation',
+                    'Advanced prompt engineering',
+                    'Structured gem templates',
+                    'Quality assurance guidelines',
+                    'Best practice integration'
+                ]
+            },
+            {
                 id: 'github-branch-generator',
                 name: 'GitHub Branch Name Generator',
                 description: 'Generates standardized and meaningful GitHub branch names based on user story titles and numbers.',
