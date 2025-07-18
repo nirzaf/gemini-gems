@@ -308,6 +308,20 @@ function geminiGems() {
             return icons[category] || 'tag';
         },
         
+        getFontAwesomeIcon(category) {
+            const icons = {
+                'Education': 'fas fa-graduation-cap',
+                'Development': 'fas fa-code',
+                'Business': 'fas fa-briefcase',
+                'Creative': 'fas fa-palette',
+                'Spiritual': 'fas fa-heart',
+                'Lifestyle': 'fas fa-home',
+                'Finance': 'fas fa-dollar-sign',
+                'Wellness': 'fas fa-heartbeat'
+            };
+            return icons[category] || 'fas fa-tag';
+        },
+        
         copyToClipboard(filename) {
             navigator.clipboard.writeText(filename).then(() => {
                 this.showToastMessage('File path copied to clipboard!');
