@@ -8,169 +8,39 @@
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
+
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    
+
     <!-- Custom Styles -->
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f8fafc;
-        }
-
-        .gradient-bg {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
-            position: relative;
-        }
-
-        .gradient-bg::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.1);
-            z-index: 1;
-        }
-
-        .gradient-bg > * {
-            position: relative;
-            z-index: 2;
-        }
-
-        .gem-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        .gem-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-            border-color: rgba(99, 102, 241, 0.3);
-        }
-
-        .search-input {
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.95);
-            border: 2px solid rgba(99, 102, 241, 0.1);
-            font-weight: 500;
-        }
-
-        .search-input:focus {
-            background: rgba(255, 255, 255, 1);
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .category-badge {
-            transition: all 0.2s ease;
-            font-weight: 600;
-            border: 2px solid transparent;
-        }
-
-        .category-badge:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .category-badge.active {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
-            color: white !important;
-            border-color: #6366f1;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-        }
-
-        .hero-pattern {
-            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.2) 1px, transparent 0);
-            background-size: 24px 24px;
-        }
-
-        .text-shadow {
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .feature-list li {
-            font-weight: 500;
-            color: #374151;
-        }
-
-        .gem-description {
-            color: #4b5563;
-            font-weight: 500;
-            line-height: 1.6;
-        }
-
-        .stats-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .modal-content {
-            max-height: 60vh;
-            overflow-y: auto;
-        }
-
-        .modal-content::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .modal-content::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 4px;
-        }
-
-        .modal-content::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-
-        .modal-content::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        .gem-content-preview {
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            color: #1f2937;
-            background: #f8fafc;
-            border: 2px dashed #d1d5db;
-            border-radius: 12px;
-            padding: 24px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body class="bg-gray-50" x-data="geminiGems()">
     <!-- Header -->
     <header class="gradient-bg hero-pattern">
         <div class="container mx-auto px-6 py-12">
-            <div class="text-center text-white">
-                <h1 class="text-4xl font-bold mb-4 text-shadow">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-6 header-text-enhanced fade-in">
                     <i data-lucide="gem" class="inline-block w-10 h-10 mr-3"></i>
                     Gemini Gems
                 </h1>
-                <p class="text-lg mb-8 max-w-3xl mx-auto font-semibold text-shadow leading-relaxed" style="color: rgba(255, 255, 255, 0.95);">
-                    Transform your AI into specialized experts with our curated collection of system prompts.
-                    Each gem is a meticulously crafted persona designed to unlock the full potential of Google's Gemini models.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="#gems" class="bg-white text-indigo-700 px-8 py-3 rounded-lg font-bold hover:bg-gray-50 transition-all transform hover:scale-105 shadow-lg">
+                <div class="max-w-4xl mx-auto mb-8 slide-up">
+                    <p class="header-description text-lg leading-relaxed">
+                        🚀 <strong>Supercharge your AI conversations</strong> with our expertly crafted system prompts!<br>
+                        ✨ Each gem transforms Google's Gemini into a <strong>specialized expert assistant</strong><br>
+                        🎯 From coding copilots to creative writers - <strong>unlock unlimited AI potential</strong><br>
+                        💎 <strong>Professional-grade prompts</strong> ready to copy, paste, and deploy instantly
+                    </p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center fade-in">
+                    <a href="#gems" class="btn-primary">
                         <i data-lucide="sparkles" class="inline-block w-4 h-4 mr-2"></i>
                         Explore Gems
                     </a>
-                    <a href="https://github.com/nirzaf/gemini-gems" target="_blank" class="border-2 border-white text-white px-8 py-3 rounded-lg font-bold hover:bg-white hover:text-indigo-700 transition-all transform hover:scale-105 shadow-lg">
+                    <a href="https://github.com/nirzaf/gemini-gems" target="_blank" class="btn-secondary">
                         <i data-lucide="github" class="inline-block w-4 h-4 mr-2"></i>
                         View on GitHub
                     </a>
@@ -488,279 +358,8 @@
         </div>
     </div>
 
-    <!-- Alpine.js Data and Methods -->
-    <script>
-        function geminiGems() {
-            return {
-                searchQuery: '',
-                selectedCategory: 'all',
-                showToast: false,
-                toastMessage: '',
-                showPreview: false,
-                selectedGem: null,
-                gemContent: '',
-
-                gems: [
-                    {
-                        id: 'grammar-teacher',
-                        name: 'Grammar Teacher',
-                        description: 'A friendly and engaging grammar tutor for Grade 3 students. Conducts interactive quizzes, adapts to learning pace, and generates creative themed lessons.',
-                        category: 'Education',
-                        icon: 'book-open',
-                        color: 'bg-blue-500',
-                        file: 'grammar-teacher.md',
-                        features: [
-                            'Interactive grammar quizzes',
-                            'Adaptive learning pace',
-                            'Creative themed lessons',
-                            '42 structured lessons',
-                            'Fantasy and adventure themes'
-                        ]
-                    },
-                    {
-                        id: 'language-teacher',
-                        name: 'Language Teacher',
-                        description: 'An expert AI language teacher providing personalized lessons, interactive exercises, and constructive feedback for learning new languages.',
-                        category: 'Education',
-                        icon: 'globe',
-                        color: 'bg-green-500',
-                        file: 'language-teacher.md',
-                        features: [
-                            'Personalized lesson plans',
-                            'Interactive exercises',
-                            'Cultural insights',
-                            'Progress tracking',
-                            'Conversational practice'
-                        ]
-                    },
-                    {
-                        id: 'programming-copilot',
-                        name: 'Programming Co-pilot',
-                        description: 'An expert AI programming assistant helping with code review, debugging, best practices, and strategic guidance for developers.',
-                        category: 'Development',
-                        icon: 'code',
-                        color: 'bg-purple-500',
-                        file: 'programming-co-pilot.md',
-                        features: [
-                            'Code review and debugging',
-                            'Best practices guidance',
-                            'Multi-language support',
-                            'Step-by-step explanations',
-                            'Security-focused advice'
-                        ]
-                    },
-                    {
-                        id: 'system-architect',
-                        name: 'System Architect',
-                        description: 'Transforms high-level project ideas into comprehensive structured project requirements and guidelines documents.',
-                        category: 'Development',
-                        icon: 'building',
-                        color: 'bg-indigo-500',
-                        file: 'system-architect.md',
-                        features: [
-                            'Project requirements analysis',
-                            'Technical architecture planning',
-                            'Scope definition',
-                            'Risk assessment',
-                            'Technology recommendations'
-                        ]
-                    },
-                    {
-                        id: 'task-breakdown-manager',
-                        name: 'Task Breakdown Manager',
-                        description: 'Breaks down complex projects into manageable user stories formatted for AI coding agents and developers.',
-                        category: 'Development',
-                        icon: 'list-checks',
-                        color: 'bg-cyan-500',
-                        file: 'task-breakdown-manager.md',
-                        features: [
-                            'User story formatting',
-                            'Task dependency mapping',
-                            'Priority and complexity assessment',
-                            'AI-agent friendly structure',
-                            'Sprint planning support'
-                        ]
-                    },
-                    {
-                        id: 'github-branch-generator',
-                        name: 'GitHub Branch Name Generator',
-                        description: 'Generates standardized and meaningful GitHub branch names based on user story titles and numbers.',
-                        category: 'Development',
-                        icon: 'git-branch',
-                        color: 'bg-orange-500',
-                        file: 'github-branch-name-generator.md',
-                        features: [
-                            'Standardized naming conventions',
-                            'User story integration',
-                            'Date formatting',
-                            'Alternative suggestions',
-                            'Best practices compliance'
-                        ]
-                    },
-                    {
-                        id: 'professional-email-crafter',
-                        name: 'Professional Email Crafter',
-                        description: 'Crafts professional and effective emails for various business situations with proper tone and structure.',
-                        category: 'Business',
-                        icon: 'mail',
-                        color: 'bg-red-500',
-                        file: 'professional-email-crafter.md',
-                        features: [
-                            'Professional tone adaptation',
-                            'Structured email format',
-                            'Follow-up suggestions',
-                            'Action-oriented content',
-                            'Multiple business scenarios'
-                        ]
-                    },
-                    {
-                        id: 'marketing-strategist',
-                        name: 'Marketing Strategist',
-                        description: 'Creates comprehensive marketing strategies from basic ideas, including audience analysis and channel recommendations.',
-                        category: 'Business',
-                        icon: 'trending-up',
-                        color: 'bg-pink-500',
-                        file: 'marketing-strategist.md',
-                        features: [
-                            'Market analysis',
-                            'Target audience definition',
-                            'Channel strategy',
-                            'Budget allocation',
-                            'SMART objectives'
-                        ]
-                    },
-                    {
-                        id: 'storyteller-novelist',
-                        name: 'Storyteller/Novelist',
-                        description: 'Helps create compelling stories, develop rich characters, and write engaging narratives across various genres.',
-                        category: 'Creative',
-                        icon: 'feather',
-                        color: 'bg-amber-500',
-                        file: 'storyteller-novelist.md',
-                        features: [
-                            'Character development',
-                            'Plot structure guidance',
-                            'World-building assistance',
-                            'Writing style improvement',
-                            'Genre-specific advice'
-                        ]
-                    },
-                    {
-                        id: 'dua-generator',
-                        name: 'Dua Generator',
-                        description: 'Provides authentic Islamic prayers (duas) for various occasions, suitable for sharing via messaging platforms.',
-                        category: 'Spiritual',
-                        icon: 'heart',
-                        color: 'bg-emerald-500',
-                        file: 'dua-generator.md',
-                        features: [
-                            'Authentic Quran & Hadith sources',
-                            'WhatsApp-ready format',
-                            'Occasion-specific prayers',
-                            'Arabic with translations',
-                            'Cultural sensitivity'
-                        ]
-                    }
-                ],
-
-                get categories() {
-                    return [...new Set(this.gems.map(gem => gem.category))].sort();
-                },
-
-                get filteredGems() {
-                    let filtered = this.gems;
-
-                    // Filter by category
-                    if (this.selectedCategory !== 'all') {
-                        filtered = filtered.filter(gem => gem.category === this.selectedCategory);
-                    }
-
-                    // Filter by search query
-                    if (this.searchQuery.trim()) {
-                        const query = this.searchQuery.toLowerCase();
-                        filtered = filtered.filter(gem =>
-                            gem.name.toLowerCase().includes(query) ||
-                            gem.description.toLowerCase().includes(query) ||
-                            gem.category.toLowerCase().includes(query) ||
-                            gem.features.some(feature => feature.toLowerCase().includes(query))
-                        );
-                    }
-
-                    return filtered;
-                },
-
-                getCategoryColor(category) {
-                    const colors = {
-                        'Education': 'bg-blue-100 text-blue-800 border-blue-200',
-                        'Development': 'bg-purple-100 text-purple-800 border-purple-200',
-                        'Business': 'bg-green-100 text-green-800 border-green-200',
-                        'Creative': 'bg-amber-100 text-amber-800 border-amber-200',
-                        'Spiritual': 'bg-emerald-100 text-emerald-800 border-emerald-200'
-                    };
-                    return colors[category] || 'bg-gray-100 text-gray-800 border-gray-200';
-                },
-
-                getCategoryIcon(category) {
-                    const icons = {
-                        'Education': 'graduation-cap',
-                        'Development': 'code-2',
-                        'Business': 'briefcase',
-                        'Creative': 'palette',
-                        'Spiritual': 'heart'
-                    };
-                    return icons[category] || 'tag';
-                },
-
-                copyToClipboard(filename) {
-                    navigator.clipboard.writeText(filename).then(() => {
-                        this.showToastMessage('File path copied to clipboard!');
-                    }).catch(() => {
-                        this.showToastMessage('Failed to copy to clipboard');
-                    });
-                },
-
-                showToastMessage(message) {
-                    this.toastMessage = message;
-                    this.showToast = true;
-                    setTimeout(() => {
-                        this.showToast = false;
-                    }, 3000);
-                },
-
-                async previewGem(gem) {
-                    this.selectedGem = gem;
-                    this.gemContent = '';
-                    this.showPreview = true;
-
-                    try {
-                        const response = await fetch(gem.file);
-                        if (response.ok) {
-                            this.gemContent = await response.text();
-                        } else {
-                            this.gemContent = 'Error loading gem content. Please try downloading the file directly.';
-                        }
-                    } catch (error) {
-                        this.gemContent = 'Error loading gem content. Please check your internet connection and try again.';
-                    }
-                },
-
-                copyGemContent() {
-                    if (this.gemContent) {
-                        navigator.clipboard.writeText(this.gemContent).then(() => {
-                            this.showToastMessage('Gem content copied to clipboard!');
-                        }).catch(() => {
-                            this.showToastMessage('Failed to copy content to clipboard');
-                        });
-                    }
-                },
-
-                init() {
-                    // Initialize Lucide icons
-                    lucide.createIcons();
-                }
-            }
-        }
-    </script>
+    <!-- Custom JavaScript -->
+    <script src="assets/js/app.js"></script>
 
 </body>
 </html>
