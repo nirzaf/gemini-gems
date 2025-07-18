@@ -15,6 +15,9 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <!-- Custom Styles -->
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
@@ -328,12 +331,27 @@
 
             <!-- Modal Content -->
             <div class="modal-content p-6">
-                <div x-show="gemContent">
-                    <div class="gem-content-preview" x-text="gemContent"></div>
+                <div x-show="gemContent && !loadingContent">
+                    <div class="prose prose-lg max-w-none bg-white rounded-xl p-6 border shadow-sm" x-html="parsedContent"></div>
                 </div>
-                <div x-show="!gemContent" class="text-center py-12">
+                <div x-show="loadingContent" class="text-center py-12">
                     <div class="animate-spin w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full mx-auto mb-6"></div>
                     <p class="text-gray-600 text-lg">Loading gem content...</p>
+                </div>
+                <div x-show="!gemContent && !loadingContent && errorMessage" class="text-center py-12">
+                    <div class="text-amber-500 mb-4">
+                        <i data-lucide="server" class="w-12 h-12 mx-auto mb-4"></i>
+                    </div>
+                    <p class="text-amber-600 text-lg font-semibold mb-2">Local Server Required</p>
+                    <p class="text-gray-600 mb-4" x-text="errorMessage"></p>
+                    <div class="flex gap-3 justify-center">
+                        <button @click="previewGem(selectedGem)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors">
+                            Try Again
+                        </button>
+                        <a href="SERVER_SETUP.md" target="_blank" class="bg-amber-600 text-white px-6 py-2 rounded-lg hover:bg-amber-700 transition-colors">
+                            Setup Guide
+                        </a>
+                    </div>
                 </div>
             </div>
 
