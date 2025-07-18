@@ -24,27 +24,26 @@
 <body class="bg-gray-50" x-data="geminiGems()">
     <!-- Header -->
     <header class="gradient-bg hero-pattern">
-        <div class="container mx-auto px-6 py-8">
+        <div class="container mx-auto px-6 py-6">
             <div class="text-center">
-                <h1 class="text-4xl font-bold mb-4 header-text-enhanced fade-in">
-                    <i data-lucide="gem" class="inline-block w-10 h-10 mr-3"></i>
+                <h1 class="text-3xl md:text-4xl font-bold mb-3 header-text-enhanced fade-in">
+                    <i data-lucide="gem" class="inline-block w-8 h-8 mr-2"></i>
                     Gemini Gems
                 </h1>
-                <div class="max-w-4xl mx-auto mb-6 slide-up">
-                    <p class="header-description text-base leading-relaxed">
-                        🚀 <strong>Supercharge your AI conversations</strong> with our expertly crafted system prompts!<br>
-                        ✨ Each gem transforms Google's Gemini into a <strong>specialized expert assistant</strong><br>
-                        🎯 From coding copilots to creative writers - <strong>unlock unlimited AI potential</strong><br>
+                <div class="max-w-3xl mx-auto mb-4 slide-up">
+                    <p class="header-description text-sm md:text-base leading-relaxed">
+                        🚀 <strong>Supercharge your AI conversations</strong> with expertly crafted system prompts!<br>
+                        ✨ Transform Google's Gemini into <strong>specialized expert assistants</strong><br>
                         💎 <strong>Professional-grade prompts</strong> ready to copy, paste, and deploy instantly
                     </p>
                 </div>
-                <div class="flex flex-col sm:flex-row gap-6 justify-center fade-in">
+                <div class="flex flex-col sm:flex-row gap-4 justify-center fade-in">
                     <a href="#gems" class="btn-primary">
-                        <i data-lucide="sparkles" class="inline-block w-5 h-5 mr-2"></i>
+                        <i data-lucide="sparkles" class="inline-block w-4 h-4 mr-2"></i>
                         Explore Gems
                     </a>
                     <a href="https://github.com/nirzaf/gemini-gems" target="_blank" class="btn-secondary">
-                        <i data-lucide="github" class="inline-block w-5 h-5 mr-2"></i>
+                        <i data-lucide="github" class="inline-block w-4 h-4 mr-2"></i>
                         View on GitHub
                     </a>
                 </div>
@@ -53,65 +52,65 @@
     </header>
 
     <!-- Stats Section -->
-    <section class="py-16 bg-gradient-to-r from-slate-50 to-blue-50">
+    <section class="py-10 bg-gradient-to-r from-slate-50 to-blue-50">
         <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                <div class="stats-card p-8 rounded-2xl shadow-lg">
-                    <div class="text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-3" x-text="gems.length"></div>
-                    <div class="text-gray-700 font-semibold text-lg">Available Gems</div>
-                    <div class="text-gray-500 text-sm mt-1">Ready to use AI personas</div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div class="stats-card p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2" x-text="gems.length"></div>
+                    <div class="text-gray-700 font-semibold text-base">Available Gems</div>
+                    <div class="text-gray-500 text-xs mt-1">Ready to use AI personas</div>
                 </div>
-                <div class="stats-card p-8 rounded-2xl shadow-lg">
-                    <div class="text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3" x-text="categories.length"></div>
-                    <div class="text-gray-700 font-semibold text-lg">Categories</div>
-                    <div class="text-gray-500 text-sm mt-1">Specialized domains</div>
+                <div class="stats-card p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2" x-text="categories.length"></div>
+                    <div class="text-gray-700 font-semibold text-base">Categories</div>
+                    <div class="text-gray-500 text-xs mt-1">Specialized domains</div>
                 </div>
-                <div class="stats-card p-8 rounded-2xl shadow-lg">
-                    <div class="text-5xl font-bold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent mb-3">100%</div>
-                    <div class="text-gray-700 font-semibold text-lg">Open Source</div>
-                    <div class="text-gray-500 text-sm mt-1">Free for everyone</div>
+                <div class="stats-card p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="text-4xl font-bold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent mb-2">100%</div>
+                    <div class="text-gray-700 font-semibold text-base">Open Source</div>
+                    <div class="text-gray-500 text-xs mt-1">Free for everyone</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Search and Filter Section -->
-    <section id="gems" class="py-16 bg-gradient-to-br from-gray-50 to-indigo-50">
+    <section id="gems" class="py-12 bg-gradient-to-br from-gray-50 to-indigo-50">
         <div class="container mx-auto px-6">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Discover Your Perfect AI Persona</h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Browse our collection of specialized gems and find the perfect AI assistant for your needs.</p>
+            <div class="text-center mb-8">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Discover Your Perfect AI Persona</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Browse our collection of specialized gems and find the perfect AI assistant for your needs.</p>
             </div>
 
-            <div class="max-w-5xl mx-auto mb-12">
+            <div class="max-w-4xl mx-auto mb-8">
                 <!-- Search Bar -->
-                <div class="relative mb-10">
+                <div class="relative mb-6">
                     <input
                         type="text"
                         x-model="searchQuery"
                         placeholder="Search gems by name, description, features, or use case..."
-                        class="search-input w-full px-8 py-5 pl-14 rounded-2xl text-lg placeholder-gray-500 shadow-lg"
+                        class="search-input w-full px-6 py-4 pl-12 rounded-xl text-base placeholder-gray-500 shadow-md"
                     >
-                    <i data-lucide="search" class="absolute left-5 top-1/2 transform -translate-y-1/2 text-indigo-400 w-6 h-6"></i>
+                    <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-indigo-400 w-5 h-5"></i>
                 </div>
 
                 <!-- Category Filters -->
-                <div class="flex flex-wrap gap-4 justify-center">
+                <div class="flex flex-wrap gap-3 justify-center">
                     <button
                         @click="selectedCategory = 'all'"
                         :class="selectedCategory === 'all' ? 'active' : 'bg-white text-gray-700 hover:bg-indigo-50 hover:text-indigo-700'"
-                        class="category-badge px-8 py-3 rounded-full shadow-md"
+                        class="category-badge px-6 py-2 rounded-full shadow-sm text-sm"
                     >
-                        <i data-lucide="sparkles" class="inline-block w-4 h-4 mr-2"></i>
+                        <i data-lucide="sparkles" class="inline-block w-3 h-3 mr-1"></i>
                         All Gems
                     </button>
                     <template x-for="category in categories" :key="category">
                         <button
                             @click="selectedCategory = category"
                             :class="selectedCategory === category ? 'active' : 'bg-white text-gray-700 hover:bg-indigo-50 hover:text-indigo-700'"
-                            class="category-badge px-8 py-3 rounded-full shadow-md"
+                            class="category-badge px-6 py-2 rounded-full shadow-sm text-sm"
                         >
-                            <i :data-lucide="getCategoryIcon(category)" class="inline-block w-4 h-4 mr-2"></i>
+                            <i :data-lucide="getCategoryIcon(category)" class="inline-block w-3 h-3 mr-1"></i>
                             <span x-text="category"></span>
                         </button>
                     </template>
@@ -119,8 +118,8 @@
             </div>
 
             <!-- Results Count -->
-            <div class="text-center mb-10">
-                <p class="text-lg text-gray-700 font-medium">
+            <div class="text-center mb-6">
+                <p class="text-base text-gray-700 font-medium">
                     Showing <span class="font-bold text-indigo-600" x-text="filteredGems.length"></span>
                     of <span class="font-bold text-indigo-600" x-text="gems.length"></span> gems
                 </p>
