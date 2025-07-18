@@ -171,6 +171,86 @@ function geminiGems() {
                     'Arabic with translations',
                     'Cultural sensitivity'
                 ]
+            },
+            {
+                id: 'diy-tinkerer',
+                name: 'DIY Tinkerer (Fix-It Felix)',
+                description: 'Expert AI for DIY home repair and improvement projects. Guides users through step-by-step repairs with safety protocols and tool recommendations.',
+                category: 'Lifestyle',
+                icon: 'wrench',
+                color: 'bg-orange-500',
+                file: 'diy-tinkerer.md',
+                features: [
+                    'Step-by-step repair guides',
+                    'Safety-first approach',
+                    'Tool and materials lists',
+                    'Problem diagnosis from descriptions',
+                    'Professional vs DIY guidance'
+                ]
+            },
+            {
+                id: 'personal-finance-navigator',
+                name: 'Personal Finance Navigator (CoinWise)',
+                description: 'Personal finance and investment educator that helps create budgets, understand financial products, and develop investment strategies.',
+                category: 'Finance',
+                icon: 'piggy-bank',
+                color: 'bg-green-600',
+                file: 'personal-finance-navigator.md',
+                features: [
+                    'Budget creation and planning',
+                    'Investment education',
+                    'Risk tolerance assessment',
+                    'Retirement planning guidance',
+                    'Financial literacy focus'
+                ]
+            },
+            {
+                id: 'gameforge-master',
+                name: 'GameForge Master',
+                description: 'AI assistant for tabletop RPG and video game design. Helps brainstorm mechanics, design characters, and build compelling game worlds.',
+                category: 'Creative',
+                icon: 'dice-6',
+                color: 'bg-purple-600',
+                file: 'gameforge-master.md',
+                features: [
+                    'Game mechanics design',
+                    'Character and world building',
+                    'Balance and playtesting guidance',
+                    'Narrative integration',
+                    'TTRPG and video game support'
+                ]
+            },
+            {
+                id: 'sous-chef',
+                name: 'Sous Chef (Chef Gusteau)',
+                description: 'Culinary assistant that creates recipes from available ingredients, scales portions, and provides cooking techniques and substitutions.',
+                category: 'Lifestyle',
+                icon: 'chef-hat',
+                color: 'bg-red-500',
+                file: 'sous-chef.md',
+                features: [
+                    'Pantry-to-plate cooking',
+                    'Real-time recipe adaptation',
+                    'Dietary restriction substitutions',
+                    'Cooking technique education',
+                    'Ingredient optimization'
+                ]
+            },
+            {
+                id: 'wellness-mindfulness-coach',
+                name: 'Wellness & Mindfulness Coach (Serene)',
+                description: 'Mindfulness and mental wellness coach providing meditation exercises, breathing techniques, and stress management strategies.',
+                category: 'Wellness',
+                icon: 'heart-pulse',
+                color: 'bg-teal-500',
+                file: 'wellness-mindfulness-coach.md',
+                features: [
+                    'Personalized meditation guidance',
+                    'Stress management techniques',
+                    'Emotional regulation support',
+                    'Breathing exercises',
+                    'Mindfulness integration'
+                ]
             }
         ],
         
@@ -206,7 +286,10 @@ function geminiGems() {
                 'Development': 'bg-purple-100 text-purple-800 border-purple-200',
                 'Business': 'bg-green-100 text-green-800 border-green-200',
                 'Creative': 'bg-amber-100 text-amber-800 border-amber-200',
-                'Spiritual': 'bg-emerald-100 text-emerald-800 border-emerald-200'
+                'Spiritual': 'bg-emerald-100 text-emerald-800 border-emerald-200',
+                'Lifestyle': 'bg-orange-100 text-orange-800 border-orange-200',
+                'Finance': 'bg-green-100 text-green-800 border-green-200',
+                'Wellness': 'bg-teal-100 text-teal-800 border-teal-200'
             };
             return colors[category] || 'bg-gray-100 text-gray-800 border-gray-200';
         },
@@ -217,7 +300,10 @@ function geminiGems() {
                 'Development': 'code-2',
                 'Business': 'briefcase',
                 'Creative': 'palette',
-                'Spiritual': 'heart'
+                'Spiritual': 'heart',
+                'Lifestyle': 'home',
+                'Finance': 'dollar-sign',
+                'Wellness': 'heart-pulse'
             };
             return icons[category] || 'tag';
         },
