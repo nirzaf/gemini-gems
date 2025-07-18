@@ -24,10 +24,19 @@
     <!-- Custom Styles -->
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
-<body class="bg-gray-50" x-data="geminiGems()">
+<body class="transition-colors duration-300" x-data="geminiGems()">
     <!-- Header -->
     <header class="gradient-bg hero-pattern">
         <div class="container mx-auto px-6 py-6">
+            <!-- Theme Toggle Button -->
+            <div class="flex justify-end mb-4">
+                <button @click="toggleTheme()" 
+                        class="theme-toggle-btn p-3 rounded-xl backdrop-filter backdrop-blur-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white hover:bg-opacity-30 transition-all duration-300 group"
+                        :title="getThemeLabel()">
+                    <i :data-lucide="getThemeIcon()" class="w-5 h-5 group-hover:scale-110 transition-transform duration-200"></i>
+                </button>
+            </div>
+            
             <div class="text-center">
                 <h1 class="text-3xl md:text-4xl font-bold mb-3 header-text-enhanced fade-in">
                     <i data-lucide="gem" class="inline-block w-8 h-8 mr-2"></i>
@@ -55,7 +64,7 @@
     </header>
 
     <!-- Stats Section -->
-    <section class="py-10 bg-gradient-to-r from-slate-50 to-blue-50">
+    <section class="py-10 bg-gradient-to-r from-slate-50 to-blue-50 transition-colors duration-300">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
                 <div class="stats-card p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
@@ -78,11 +87,11 @@
     </section>
 
     <!-- Search and Filter Section -->
-    <section id="gems" class="py-12 bg-gradient-to-br from-gray-50 to-indigo-50">
+    <section id="gems" class="py-12 bg-gradient-to-br from-gray-50 to-indigo-50 transition-colors duration-300">
         <div class="container mx-auto px-6">
             <div class="text-center mb-8">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Discover Your Perfect AI Persona</h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Browse our collection of specialized gems and find the perfect AI assistant for your needs.</p>
+                <h2 class="text-3xl md:text-4xl font-bold mb-3" style="color: var(--text-primary);">Discover Your Perfect AI Persona</h2>
+                <p class="text-lg max-w-2xl mx-auto" style="color: var(--text-secondary);">Browse our collection of specialized gems and find the perfect AI assistant for your needs.</p>
             </div>
 
             <div class="max-w-6xl mx-auto mb-8">
@@ -123,7 +132,7 @@
 
             <!-- Results Count -->
             <div class="text-center mb-6">
-                <p class="text-base text-gray-700 font-medium">
+                <p class="text-base font-medium" style="color: var(--text-secondary);">
                     Showing <span class="font-bold text-indigo-600" x-text="filteredGems.length"></span>
                     of <span class="font-bold text-indigo-600" x-text="gems.length"></span> gems
                 </p>
