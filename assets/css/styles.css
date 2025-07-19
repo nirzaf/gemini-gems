@@ -163,11 +163,21 @@ body {
     color: #ffffff;
     text-shadow: 0 3px 15px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.8);
     font-weight: 800;
-    background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+}
+
+/* Enhanced dark mode styling for header text */
+.dark .header-text-enhanced {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 20%, #e2e8f0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9));
+    text-shadow: 0 4px 20px rgba(255, 255, 255, 0.3), 0 2px 8px rgba(255, 255, 255, 0.2);
 }
 
 .header-description {
@@ -316,6 +326,13 @@ body {
 /* Header section improvements */
 .header-text-enhanced .lucide {
     filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+}
+
+/* Enhanced icon visibility in dark mode */
+.dark .header-text-enhanced .lucide,
+.dark .header-text-enhanced [data-lucide="gem"] {
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8)) drop-shadow(0 2px 4px rgba(255, 255, 255, 0.1));
+    color: #ffffff;
 }
 
 /* Button container spacing and alignment */
@@ -510,6 +527,10 @@ body {
 /* Dark mode specific adjustments */
 .dark .gradient-bg {
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #475569 75%, #64748b 100%);
+}
+
+.dark .gradient-bg::before {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.3) 100%);
 }
 
 .dark .hero-pattern {
