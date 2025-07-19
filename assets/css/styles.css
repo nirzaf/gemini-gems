@@ -605,6 +605,24 @@ body {
     color: var(--text-tertiary) !important;
 }
 
+/* Fix category badge text visibility in dark mode */
+.dark .category-badge {
+    color: var(--text-primary) !important;
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-primary) !important;
+}
+
+.dark .category-badge:hover {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}
+
+.dark .category-badge.active {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+    color: white !important;
+    border-color: #6366f1 !important;
+}
+
 @media (max-width: 480px) {
     .gem-card {
         min-height: 300px;
