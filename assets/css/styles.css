@@ -31,8 +31,8 @@
     --bg-secondary: #1e293b;
     --bg-tertiary: #334155;
     --text-primary: #ffffff;
-    --text-secondary: #e2e8f0;
-    --text-tertiary: #cbd5e1;
+    --text-secondary: #f1f5f9;
+    --text-tertiary: #e2e8f0;
     --border-primary: #334155;
     --border-secondary: #475569;
     --shadow-light: rgba(0, 0, 0, 0.3);
@@ -44,7 +44,7 @@
     --search-input-bg: rgba(30, 41, 59, 0.95);
     --modal-bg: #1e293b;
     --code-bg: #334155;
-    --code-text: #f87171;
+    --code-text: #f1f5f9;
     --pre-bg: #0f172a;
     --pre-text: #ffffff;
     --input-bg: #334155;
@@ -527,6 +527,68 @@ body {
 
 .dark .bg-gradient-to-r.from-gray-900.to-gray-800 {
     background: linear-gradient(to right, #000000, #1a1a1a) !important;
+}
+
+/* Dark mode text color overrides */
+.dark .prose a {
+    color: #a5b4fc !important;
+}
+
+.dark .prose a:hover {
+    color: #c7d2fe !important;
+}
+
+.dark .btn-primary {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #3730a3 0%, #1e40af 100%) !important;
+}
+
+.dark .btn-primary:hover {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #4338ca 0%, #2563eb 100%) !important;
+}
+
+.dark .btn-secondary:hover {
+    color: #ffffff !important;
+}
+
+/* Ensure all text elements are white/near-white in dark mode */
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+    color: #ffffff !important;
+}
+
+.dark p,
+.dark span,
+.dark div {
+    color: var(--text-secondary) !important;
+}
+
+.dark .text-gray-600,
+.dark .text-gray-500,
+.dark .text-gray-400 {
+    color: var(--text-secondary) !important;
+}
+
+.dark .text-gray-700,
+.dark .text-gray-800,
+.dark .text-gray-900 {
+    color: var(--text-primary) !important;
+}
+
+/* Ensure gem card titles and descriptions are properly visible */
+.dark .gem-card h3,
+.dark .gem-card .font-bold {
+    color: #ffffff !important;
+}
+
+.dark .gem-card p,
+.dark .gem-description {
+    color: var(--text-secondary) !important;
 }
 
 @media (max-width: 480px) {
