@@ -644,6 +644,27 @@ body {
     border-color: #6366f1 !important;
 }
 
+/* Enhanced category tags on gem cards */
+.gem-card span[x-text="gem.category"] {
+    transition: all 0.3s ease;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    backdrop-filter: blur(4px);
+}
+
+.gem-card:hover span[x-text="gem.category"] {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Ensure category tags remain visible in dark mode */
+.dark .gem-card span[class*="bg-gradient-to-r"] {
+    opacity: 0.95;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
 @media (max-width: 480px) {
     .gem-card {
         min-height: 300px;
