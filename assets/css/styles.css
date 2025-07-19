@@ -582,13 +582,27 @@ body {
 
 /* Ensure gem card titles and descriptions are properly visible */
 .dark .gem-card h3,
-.dark .gem-card .font-bold {
+.dark .gem-card .font-bold,
+.dark .text-gray-900 {
     color: #ffffff !important;
 }
 
 .dark .gem-card p,
 .dark .gem-description {
     color: var(--text-secondary) !important;
+}
+
+/* Fix specific Tailwind text color classes in dark mode */
+.dark .text-gray-700 {
+    color: var(--text-secondary) !important;
+}
+
+.dark .text-gray-600 {
+    color: var(--text-secondary) !important;
+}
+
+.dark .text-gray-500 {
+    color: var(--text-tertiary) !important;
 }
 
 @media (max-width: 480px) {
