@@ -64,19 +64,17 @@ Our collection features **13 specialized gems** across multiple categories, each
 ## 🚀 Quick Start
 
 ### Option 1: Browse Online (Recommended)
-1. **Start Local Server** (for full functionality):
+1. **Clone the Repository**:
    ```bash
-   # Clone the repository
    git clone https://github.com/nirzaf/gemini-gems.git
    cd gemini-gems
-
-   # Start the server (choose one)
-   python3 serve.py        # Python server
-   node serve.js          # Node.js server
-   ./start-server.sh      # Auto-detect server
    ```
 
-2. **Open Browser**: Navigate to `http://localhost:8000`
+2. **Open the Website**: Simply open `index.html` in your web browser
+   - **Double-click** `index.html` file, or
+   - **Right-click** → "Open with" → Your preferred browser, or
+   - **Drag and drop** `index.html` into your browser window
+
 3. **Explore Gems**: Browse, preview, and copy gems with one click
 4. **Use in Gemini**: Paste the copied prompt as your system message
 
@@ -212,10 +210,10 @@ cd gemini-gems
 # 3. Create a new branch for your gem
 git checkout -b feature/your-gem-name
 
-# 4. Start the development server
-python3 serve.py  # or node serve.js
-
-# 5. Open http://localhost:8000 to test
+# 4. Open the website for testing
+# Simply open index.html in your web browser
+open index.html  # macOS
+# or double-click index.html in file explorer
 ```
 
 #### **Step 5: Adding Your Gem**
@@ -365,14 +363,11 @@ Brief description of what this gem does and who it's for.
 ```
 gemini-gems/
 ├── README.md                    # This file
+├── CODE_OF_CONDUCT.md          # Community guidelines
 ├── index.html                   # Main application interface
 ├── assets/
 │   ├── css/styles.css          # Styling and themes
 │   └── js/app.js               # Application logic
-├── serve.py                     # Python development server
-├── serve.js                     # Node.js development server
-├── start-server.sh             # Auto-start script
-├── SERVER_SETUP.md             # Server setup instructions
 └── *.md                        # Individual gem files
 ```
 
@@ -405,10 +400,10 @@ gemini-gems/
 - **Marked.js** - Markdown parsing and rendering
 - **Lucide Icons** - Consistent iconography
 
-**Development Servers:**
-- **Python** - Built-in HTTP server with CORS support
-- **Node.js** - Express-like server with MIME types
-- **Auto-detection** - Smart server selection script
+**Deployment:**
+- **Static Website** - No server required, runs directly in browser
+- **File-based** - All gems stored as individual markdown files
+- **Client-side Rendering** - Dynamic content loaded via JavaScript
 
 **Browser Support:**
 - **Modern Browsers** - Chrome, Firefox, Safari, Edge
@@ -463,7 +458,7 @@ We are committed to providing a welcoming and inclusive environment for all cont
 
 **🚀 Ready to contribute? Start by exploring our existing gems, then create your own!**
 
-[🌟 Browse Gems](http://localhost:8000) • [🤝 Start Contributing](#-contributing-guidelines) • [📖 Read Docs](#-documentation)
+[🌟 Browse Gems](#-available-gems) • [🤝 Start Contributing](#-contributing-guidelines) • [📖 Read Docs](#-documentation)
 
 **Made with ❤️ by the Gemini Gems community**
 
