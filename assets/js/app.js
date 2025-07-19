@@ -301,16 +301,16 @@ function geminiGems() {
         
         getCategoryColor(category) {
             const colors = {
-                'Education': 'bg-blue-100 text-blue-800 border-blue-200',
-                'Development': 'bg-purple-100 text-purple-800 border-purple-200',
-                'Business': 'bg-green-100 text-green-800 border-green-200',
-                'Creative': 'bg-amber-100 text-amber-800 border-amber-200',
-                'Spiritual': 'bg-emerald-100 text-emerald-800 border-emerald-200',
-                'Lifestyle': 'bg-orange-100 text-orange-800 border-orange-200',
-                'Finance': 'bg-green-100 text-green-800 border-green-200',
-                'Wellness': 'bg-teal-100 text-teal-800 border-teal-200'
+                'Education': 'bg-gradient-to-r from-blue-500 to-blue-600 text-white border-blue-400',
+                'Development': 'bg-gradient-to-r from-purple-500 to-purple-600 text-white border-purple-400',
+                'Business': 'bg-gradient-to-r from-green-500 to-green-600 text-white border-green-400',
+                'Creative': 'bg-gradient-to-r from-amber-500 to-amber-600 text-white border-amber-400',
+                'Spiritual': 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white border-emerald-400',
+                'Lifestyle': 'bg-gradient-to-r from-orange-500 to-orange-600 text-white border-orange-400',
+                'Finance': 'bg-gradient-to-r from-green-500 to-green-600 text-white border-green-400',
+                'Wellness': 'bg-gradient-to-r from-teal-500 to-teal-600 text-white border-teal-400'
             };
-            return colors[category] || 'bg-gray-100 text-gray-800 border-gray-200';
+            return colors[category] || 'bg-gradient-to-r from-gray-500 to-gray-600 text-white border-gray-400';
         },
         
         getCategoryIcon(category) {
