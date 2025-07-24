@@ -665,6 +665,16 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
+/* Dark mode preview modal */
+.dark .preview-modal {
+    background: var(--bg-secondary) !important;
+}
+
+.dark .preview-modal .prose {
+    color: var(--text-primary) !important;
+    background: var(--bg-tertiary) !important;
+}
+
 @media (max-width: 480px) {
     .gem-card {
         min-height: 300px;
