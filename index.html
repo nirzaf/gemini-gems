@@ -286,8 +286,9 @@
             <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
-                        <div class="w-12 h-12 rounded-xl flex items-center justify-center mr-4 bg-white bg-opacity-20">
-                            <i :data-lucide="selectedGem?.icon" class="w-6 h-6 text-white"></i>
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center mr-4 bg-white bg-opacity-20"
+                            :class="selectedGem?.color">
+                            <i :class="getFontAwesomeIcon(selectedGem?.category)" class="text-xl text-white"></i>
                         </div>
                         <div>
                             <h3 class="text-2xl font-bold" x-text="selectedGem?.name"></h3>
@@ -339,10 +340,6 @@
                     <i data-lucide="download" class="inline-block w-4 h-4 mr-2"></i>
                     Download File
                 </a>
-                <button @click="showPreview = false"
-                        class="px-6 py-3 border-2 border-gray-300 rounded-xl hover:bg-gray-100 transition-all font-bold text-gray-700">
-                    Close
-                </button>
             </div>
         </div>
     </div>
