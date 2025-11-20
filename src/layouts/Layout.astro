@@ -4,10 +4,12 @@ interface Props {
   description?: string;
 }
 
-const { 
+const {
   title = "Gemini Gems - AI Persona Collection",
-  description = "A curated collection of specialized AI personas for Google's Gemini models. Transform your AI into expert assistants for various tasks."
+  description = "A curated collection of specialized AI personas for Google's Gemini models. Transform your AI into expert assistants for various tasks.",
 } = Astro.props;
+
+import "../styles/global.css";
 ---
 
 <!doctype html>
@@ -17,47 +19,52 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    
+
     <!-- Prevent flash of unstyled content -->
     <script is:inline>
       // Initialize theme before page renders
       const getThemePreference = () => {
-        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-          return localStorage.getItem('theme');
+        if (
+          typeof localStorage !== "undefined" &&
+          localStorage.getItem("theme")
+        ) {
+          return localStorage.getItem("theme");
         }
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
       };
-      
-      const isDark = getThemePreference() === 'dark';
-      document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
-      
-      if (typeof localStorage !== 'undefined') {
+
+      const isDark = getThemePreference() === "dark";
+      document.documentElement.classList[isDark ? "add" : "remove"]("dark");
+
+      if (typeof localStorage !== "undefined") {
         // Watch for changes in system theme
         const observer = new MutationObserver(() => {
-          const isDark = document.documentElement.classList.contains('dark');
-          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+          const isDark = document.documentElement.classList.contains("dark");
+          localStorage.setItem("theme", isDark ? "dark" : "light");
         });
-        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+        observer.observe(document.documentElement, {
+          attributes: true,
+          attributeFilter: ["class"],
+        });
       }
     </script>
-    
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    
-    <!-- Global Styles -->
-    <link rel="stylesheet" href="/src/styles/global.css" />
   </head>
   <body class="transition-colors duration-300">
     <slot />
-    
+
     <!-- Theme Toggle Script -->
     <script>
       function toggleTheme() {
         const html = document.documentElement;
-        const isDark = html.classList.contains('dark');
-        html.classList.toggle('dark', !isDark);
+        const isDark = html.classList.contains("dark");
+        html.classList.toggle("dark", !isDark);
       }
-      
+
       // Make toggleTheme available globally
       window.toggleTheme = toggleTheme;
     </script>
