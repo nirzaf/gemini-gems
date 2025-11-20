@@ -58,6 +58,10 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 @layer components {
     .gradient-bg {
         background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
