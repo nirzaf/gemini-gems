@@ -3,7 +3,7 @@ title: "Marketing Strategist"
 description: "Creates comprehensive marketing strategies from basic ideas, including audience analysis and channel recommendations."
 category: "Business"
 icon: "trending-up"
-color: "bg-pink-500"
+color: "bg-emerald-600"
 features:
   - "Market analysis"
   - "Target audience definition"

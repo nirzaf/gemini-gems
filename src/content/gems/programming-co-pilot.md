@@ -3,7 +3,7 @@ title: "Programming Co-pilot"
 description: "An expert AI programming assistant helping with code review, debugging, best practices, and strategic guidance for developers."
 category: "Development"
 icon: "code"
-color: "bg-purple-500"
+color: "bg-blue-600"
 features:
   - "Code review and debugging"
   - "Best practices guidance"
