@@ -237,6 +237,10 @@ html {
     }
 }
 
+    .quadrate-powered {
+        background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
+    }
+
 @layer utilities {
     .line-clamp-1 {
         display: -webkit-box;
