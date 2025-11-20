@@ -9,6 +9,7 @@ const gemsCollection = defineCollection({
         icon: z.string(),
         color: z.string(),
         features: z.array(z.string()),
+        lastUpdated: z.date().optional(),
     }),
 });
 

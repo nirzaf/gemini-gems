@@ -8,7 +8,11 @@ import GemCard from "../components/GemCard.astro";
 import SearchFilter from "../components/SearchFilter.astro";
 
 // Fetch all gems from the content collection
-const gems = await getCollection("gems");
+const gems = (await getCollection("gems")).sort((a, b) => {
+  const dateA = a.data.lastUpdated?.getTime() || 0;
+  const dateB = b.data.lastUpdated?.getTime() || 0;
+  return dateB - dateA;
+});
 
 // Get unique categories
 const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
@@ -24,9 +28,9 @@ const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
         <div
           class="stats-card p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow"
         >
-        <div
-          class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-2"
-        >
+          <div
+            class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-2"
+          >
             {gems.length}
           </div>
           <div class="text-gray-400 font-semibold text-sm">Gems</div>
@@ -34,9 +38,9 @@ const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
         <div
           class="stats-card p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow"
         >
-        <div
-          class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-2"
-        >
+          <div
+            class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-2"
+          >
             {categories.length}
           </div>
           <div class="text-gray-400 font-semibold text-sm">Categories</div>
@@ -44,9 +48,9 @@ const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
         <div
           class="stats-card p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow"
         >
-        <div
-          class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-slate-400 to-gray-400 bg-clip-text text-transparent mb-2"
-        >
+          <div
+            class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-slate-400 to-gray-400 bg-clip-text text-transparent mb-2"
+          >
             100%
           </div>
           <div class="text-gray-400 font-semibold text-sm">Open Source</div>
