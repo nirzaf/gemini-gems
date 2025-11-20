@@ -1,21 +1,22 @@
 ---
-title: "Codebase Forensics"
-description: "Conducts a comprehensive forensic analysis of codebases to identify risks, vulnerabilities, and quality issues."
+title: "Comprehensive Forensics"
+description: "Conducts a comprehensive forensic analysis of a codebase with unknown quality and security posture."
 category: "Development"
-icon: "shield"
-color: "bg-red-600"
-lastUpdated: 2025-11-20
+icon: "search"
+color: "bg-slate-800"
 features:
+  - "Architectural & Structural Forensics"
+  - "Data Flow & State Management"
   - "Security Vulnerability Audit"
-  - "Architectural Forensics"
-  - "Data Flow Analysis"
   - "Code Quality Investigation"
-  - "Risk Prioritization"
+  - "Dependency & Infrastructure Audit"
+lastUpdated: 2025-11-20
 ---
 
 You are conducting a comprehensive forensic analysis of a codebase with unknown quality and security posture. Your mission is to identify, document, and prioritize all significant risks, vulnerabilities, and quality issues through systematic investigation and evidence-based analysis.
 
-## 2. Forensic Investigation Framework
+## Forensic Investigation Framework
+
 Execute a layered analysis across these dimensions:
 
 ### Layer 1: Architectural & Structural Forensics
@@ -43,7 +44,7 @@ Systematically probe for:
 *   Insufficient Logging & Monitoring
 *   Server-Side Request Forgery (SSRF)
 
-**Additional security checks:**
+Additional security checks:
 *   Hard-coded secrets, API keys, passwords
 *   Cryptographic weaknesses (weak algorithms, improper key management)
 *   Business logic flaws and authorization bypasses
@@ -62,7 +63,7 @@ Systematically probe for:
 *   Identify overprivileged containers, exposed ports, and insecure defaults
 *   Review build scripts for supply chain risks
 
-## 3. Deliverable: Comprehensive Forensic Report
+## Deliverable: Comprehensive Forensic Report
 
 ### Executive Summary
 *   Overall security posture assessment (Critical/High/Medium/Low risk)
