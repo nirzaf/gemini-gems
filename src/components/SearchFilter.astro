@@ -1,0 +1,122 @@
+---
+interface Props {
+    categories: string[];
+    initialCount: number;
+}
+
+const { categories, initialCount } = Astro.props;
+---
+
+<div class="max-w-4xl mx-auto mb-8">
+    <div class="flex items-center gap-3 mb-4">
+        <input
+            id="searchInput"
+            type="text"
+            placeholder="Search gems by name, description, features..."
+            class="search-input w-full px-4 py-3 rounded-xl"
+        />
+    </div>
+    <div
+        id="categoryFilters"
+        class="flex flex-wrap items-center justify-center gap-2"
+    >
+        <button
+            data-category="All"
+            class="category-badge active px-3 py-1 rounded-full text-xs"
+            >All</button
+        >
+        {
+            categories.map((cat) => (
+                <button
+                    data-category={cat}
+                    class="category-badge px-3 py-1 rounded-full text-xs"
+                >
+                    {cat}
+                </button>
+            ))
+        }
+    </div>
+    <div class="text-center mt-3 text-xs text-gray-400" id="resultsCounter">
+        Showing <span id="visibleCount">{initialCount}</span> of {initialCount} gems
+    </div>
+</div>
+
+<script>
+    // Wrap in a function to avoid global scope pollution and allow multiple instances if needed (though IDs prevent that currently)
+    function initSearchFilter() {
+        const searchInput = document.getElementById(
+            "searchInput",
+        ) as HTMLInputElement;
+        const filters = document.getElementById("categoryFilters");
+        const visibleCountSpan = document.getElementById("visibleCount");
+        // We select cards from the document since they are siblings/outside this component
+        const cards = Array.from(
+            document.querySelectorAll(".gem-card"),
+        ) as HTMLElement[];
+
+        if (!searchInput || !filters || !visibleCountSpan) return;
+
+        let selectedCategory = "All";
+        let query = "";
+
+        const normalize = (s: string | null) => (s || "").toLowerCase();
+
+        const matchesQuery = (el: HTMLElement, q: string) => {
+            if (!q) return true;
+            const title = normalize(el.getAttribute("data-title"));
+            const desc = normalize(el.getAttribute("data-description"));
+            const feats = normalize(el.getAttribute("data-features"));
+            return title.includes(q) || desc.includes(q) || feats.includes(q);
+        };
+
+        const matchesCategory = (el: HTMLElement, cat: string) => {
+            if (!cat || cat === "All") return true;
+            return (
+                normalize(el.getAttribute("data-category")) === normalize(cat)
+            );
+        };
+
+        const applyFilter = () => {
+            let visible = 0;
+            cards.forEach((card) => {
+                const show =
+                    matchesCategory(card, selectedCategory) &&
+                    matchesQuery(card, query);
+                card.style.display = show ? "" : "none";
+                if (show) visible++;
+            });
+            visibleCountSpan.textContent = visible.toString();
+        };
+
+        // Search
+        searchInput.addEventListener("input", (e) => {
+            const target = e.target as HTMLInputElement;
+            query = normalize(target.value);
+            applyFilter();
+        });
+
+        // Category filters
+        filters.addEventListener("click", (e) => {
+            const target = e.target as HTMLElement;
+            const btn = target.closest("button[data-category]");
+            if (!btn) return;
+
+            selectedCategory = btn.getAttribute("data-category") || "All";
+
+            // Update active state
+            filters
+                .querySelectorAll("button")
+                .forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+
+            applyFilter();
+        });
+
+        // Initial apply
+        applyFilter();
+    }
+
+    // Run on load and after Astro view transitions if enabled
+    document.addEventListener("DOMContentLoaded", initSearchFilter);
+    document.addEventListener("astro:page-load", initSearchFilter);
+</script>
