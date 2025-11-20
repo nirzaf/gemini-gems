@@ -23,7 +23,7 @@ const { Content } = await gem.render();
 // Map category to gradient colors
 const categoryColors: Record<string, string> = {
   Education: "from-blue-500 to-blue-600",
-  Development: "from-purple-500 to-purple-600",
+  Development: "from-blue-600 to-cyan-600",
   Business: "from-green-500 to-green-600",
   Creative: "from-amber-500 to-amber-600",
   Spiritual: "from-emerald-500 to-emerald-600",
@@ -50,7 +50,7 @@ const categoryGradient =
       <!-- Back Button -->
       <a
         href="/gemini-gems/"
-        class="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 mb-6 font-semibold transition-colors"
+        class="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 mb-6 font-semibold transition-colors"
       >
         <ArrowLeft class="w-4 h-4" />
         Back to Gems
@@ -92,7 +92,7 @@ const categoryGradient =
         <a
           href={`https://raw.githubusercontent.com/nirzaf/gemini-gems/main/${gem.slug}.md`}
           target="_blank"
-          class="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-xl font-bold hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg inline-flex items-center justify-center gap-2"
+          class="flex-1 bg-gradient-to-r from-blue-700 to-cyan-600 text-white px-6 py-3 rounded-xl font-bold hover:from-blue-800 hover:to-cyan-700 transition-all transform hover:scale-105 shadow-lg inline-flex items-center justify-center gap-2"
         >
           <Download class="w-5 h-5" />
           Download File

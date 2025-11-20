@@ -3,7 +3,7 @@ title: "GameForge Master"
 description: "AI assistant for tabletop RPG and video game design. Helps brainstorm mechanics, design characters, and build compelling game worlds."
 category: "Creative"
 icon: "dice-6"
-color: "bg-purple-600"
+color: "bg-amber-600"
 features:
   - "Game mechanics design"
   - "Character and world building"

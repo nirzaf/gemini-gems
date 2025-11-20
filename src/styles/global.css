@@ -1,15 +1,19 @@
-        background: var(--bg-primary);
-        color: var(--text-primary);
-        transition: background-color 0.3s ease,
-        color 0.3s ease;
-        }
-        }
+body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease,
+    color 0.3s ease;
+}
 
         @layer components {
             .gradient-bg {
-                background: linear-gradient(135deg, #1a1f2e 0%, #0f1419 100%);
+                background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
                 position: relative;
                 min-height: auto;
+            }
+
+            .dark .gradient-bg {
+                background: linear-gradient(135deg, #0b1220 0%, #121826 100%);
             }
 
             .gradient-bg::before {
@@ -41,7 +45,7 @@
             .gem-card:hover {
                 transform: translateY(-4px);
                 box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-                border-color: rgba(99, 102, 241, 0.4);
+                border-color: rgba(14, 165, 233, 0.35);
             }
 
             .search-input {
@@ -54,8 +58,8 @@
 
             .search-input:focus {
                 background: var(--bg-tertiary);
-                border-color: #6366f1;
-                box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+                border-color: #0ea5e9;
+                box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
                 outline: none;
             }
 
@@ -79,10 +83,10 @@
             }
 
             .category-badge.active {
-                background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+                background: linear-gradient(135deg, #2563eb, #0ea5e9) !important;
                 color: white !important;
-                border-color: #6366f1;
-                box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+                border-color: #2563eb;
+                box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
             }
 
             .hero-pattern {
@@ -126,22 +130,22 @@
             }
 
             .btn-primary {
-                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+                background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
                 color: #ffffff;
                 font-weight: 700;
                 padding: 10px 20px;
                 border-radius: 8px;
                 border: none;
                 transition: all 0.3s ease;
-                box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+                box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
                 font-size: 14px;
                 letter-spacing: 0.3px;
             }
 
             .btn-primary:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
-                background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+                box-shadow: 0 6px 20px rgba(14, 165, 233, 0.35);
+                background: linear-gradient(135deg, #1d4ed8 0%, #0891b2 100%);
             }
 
             .btn-secondary {
@@ -316,7 +320,7 @@
         }
 
         .prose blockquote {
-            border-left: 4px solid #6366f1;
+            border-left: 4px solid #0ea5e9;
             padding-left: 1rem;
             margin-left: 0;
             margin-right: 0;
@@ -334,13 +338,13 @@
         }
 
         .prose a {
-            color: #6366f1;
+            color: #0ea5e9;
             text-decoration: underline;
             font-weight: 500;
         }
 
         .prose a:hover {
-            color: #8b5cf6;
+            color: #0891b2;
         }
 
         /* Responsive improvements */
