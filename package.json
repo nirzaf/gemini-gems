@@ -9,9 +9,11 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.17",
     "astro": "^5.15.9",
-    "lucide-astro": "^0.554.0",
-    "tailwindcss": "^4.1.17"
+    "lucide-astro": "^0.554.0"
+  },
+  "devDependencies": {
+    "@astrojs/tailwind": "^6.0.2",
+    "tailwindcss": "^3.4.18"
   }
 }
