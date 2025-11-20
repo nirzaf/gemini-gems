@@ -1,0 +1,141 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { ArrowLeft, Copy, Download } from 'lucide-astro';
+
+export async function getStaticPaths() {
+  const gems = await getCollection('gems');
+  return gems.map((gem) => ({
+    params: { slug: gem.slug },
+    props: { gem },
+  }));
+}
+
+interface Props {
+  gem: CollectionEntry<'gems'>;
+}
+
+const { gem } = Astro.props;
+const { Content } = await gem.render();
+
+// Map category to gradient colors
+const categoryColors: Record<string, string> = {
+  'Education': 'from-blue-500 to-blue-600',
+  'Development': 'from-purple-500 to-purple-600',
+  'Business': 'from-green-500 to-green-600',
+  'Creative': 'from-amber-500 to-amber-600',
+  'Spiritual': 'from-emerald-500 to-emerald-600',
+  'Lifestyle': 'from-orange-500 to-orange-600',
+  'Finance': 'from-green-500 to-green-600',
+  'Wellness': 'from-teal-500 to-teal-600'
+};
+
+const categoryGradient = categoryColors[gem.data.category] || 'from-gray-500 to-gray-600';
+---
+
+<Layout title={`${gem.data.title} - Gemini Gems`} description={gem.data.description}>
+  <Header />
+
+  <!-- Gem Detail Section -->
+  <section class="py-8 bg-[#0f1419] min-h-screen transition-colors duration-300">
+    <div class="container mx-auto px-4 max-w-4xl">
+      <!-- Back Button -->
+      <a href="/" class="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 mb-6 font-semibold transition-colors">
+        <ArrowLeft class="w-4 h-4" />
+        Back to Gems
+      </a>
+
+      <!-- Gem Header -->
+      <div class={`bg-gradient-to-r ${categoryGradient} text-white rounded-2xl p-6 mb-6 shadow-xl`}>
+        <div class="flex items-center mb-4">
+          <h1 class="text-3xl md:text-4xl font-bold">{gem.data.title}</h1>
+        </div>
+        <p class="text-lg mb-4 opacity-90">{gem.data.description}</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="px-3 py-1 bg-white bg-opacity-20 rounded-full text-sm font-semibold">
+            {gem.data.category}
+          </span>
+          {gem.data.features.map((feature) => (
+            <span class="px-3 py-1 bg-white bg-opacity-10 rounded-full text-xs">
+              {feature}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row gap-3 mb-6">
+        <button
+          id="copyButton"
+          class="flex-1 bg-gradient-to-r from-emerald-600 to-green-600 text-white px-6 py-3 rounded-xl font-bold hover:from-emerald-700 hover:to-green-700 transition-all transform hover:scale-105 shadow-lg inline-flex items-center justify-center gap-2"
+        >
+          <Copy class="w-5 h-5" />
+          Copy System Prompt
+        </button>
+        <a
+          href={`https://raw.githubusercontent.com/nirzaf/gemini-gems/main/${gem.slug}.md`}
+          target="_blank"
+          class="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-xl font-bold hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg inline-flex items-center justify-center gap-2"
+        >
+          <Download class="w-5 h-5" />
+          Download File
+        </a>
+      </div>
+
+      <!-- Gem Content -->
+      <div class="prose prose-lg max-w-none bg-white dark:bg-gray-800 rounded-xl p-6 border shadow-sm">
+        <Content />
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+
+  <!-- Toast Notification -->
+  <div
+    id="toast"
+    class="fixed bottom-6 right-6 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-8 py-4 rounded-2xl shadow-2xl z-50 backdrop-blur-sm transform translate-y-32 opacity-0 transition-all duration-300"
+  >
+    <div class="flex items-center gap-3">
+      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+      </svg>
+      <span class="font-semibold text-lg">Content copied to clipboard!</span>
+    </div>
+  </div>
+
+  <script>
+    // Get the gem content (the markdown content without frontmatter)
+    const gemContent = document.querySelector('.prose')?.textContent || '';
+    
+    // Copy to clipboard functionality
+    document.getElementById('copyButton')?.addEventListener('click', async () => {
+      try {
+        // Get the raw markdown content from the prose section
+        const proseElement = document.querySelector('.prose');
+        if (proseElement) {
+          // Try to copy the text content
+          await navigator.clipboard.writeText(proseElement.textContent || '');
+          
+          // Show toast
+          const toast = document.getElementById('toast');
+          if (toast) {
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            
+            // Hide toast after 3 seconds
+            setTimeout(() => {
+              toast.classList.add('translate-y-32', 'opacity-0');
+              toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 3000);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to copy:', err);
+        alert('Failed to copy to clipboard. Please try again.');
+      }
+    });
+  </script>
+</Layout>
