@@ -1,0 +1,125 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import GemCard from '../components/GemCard.astro';
+
+// Fetch all gems from the content collection
+const gems = await getCollection('gems');
+
+// Get unique categories
+const categories = [...new Set(gems.map(gem => gem.data.category))].sort();
+---
+
+<Layout>
+  <Header />
+
+  <!-- Stats Section -->
+  <section class="py-8 bg-[#0f1419] transition-colors duration-300">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-3 gap-4 text-center max-w-4xl mx-auto">
+        <div class="stats-card p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+          <div class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent mb-2">{gems.length}</div>
+          <div class="text-gray-400 font-semibold text-sm">Gems</div>
+        </div>
+        <div class="stats-card p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+          <div class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">{categories.length}</div>
+          <div class="text-gray-400 font-semibold text-sm">Categories</div>
+        </div>
+        <div class="stats-card p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+          <div class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-pink-400 to-red-400 bg-clip-text text-transparent mb-2">100%</div>
+          <div class="text-gray-400 font-semibold text-sm">Open Source</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gems Section -->
+  <section id="gems" class="py-12 bg-[#0f1419] min-h-screen transition-colors duration-300">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl md:text-4xl font-bold mb-3 text-white">Discover Your Perfect AI Persona</h2>
+        <p class="text-base md:text-lg max-w-2xl mx-auto text-gray-400">Browse specialized gems and find your perfect AI assistant.</p>
+      </div>
+
+      <!-- Search & Filters -->
+      <div class="max-w-4xl mx-auto mb-8">
+        <div class="flex items-center gap-3 mb-4">
+          <input id="searchInput" type="text" placeholder="Search gems by name, description, features..." class="search-input w-full px-4 py-3 rounded-xl" />
+        </div>
+        <div id="categoryFilters" class="flex flex-wrap items-center justify-center gap-2">
+          <button data-category="All" class="category-badge active px-3 py-1 rounded-full text-xs">All</button>
+          {categories.map((cat) => (
+            <button data-category={cat} class="category-badge px-3 py-1 rounded-full text-xs">{cat}</button>
+          ))}
+        </div>
+        <div class="text-center mt-3 text-xs text-gray-400" id="resultsCounter">Showing {gems.length} of {gems.length} gems</div>
+      </div>
+
+      <!-- Gems Grid -->
+      <div id="gemsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {gems.map((gem) => (
+          <GemCard gem={gem} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('searchInput');
+    const filters = document.getElementById('categoryFilters');
+    const resultsCounter = document.getElementById('resultsCounter');
+    const cards = Array.from(document.querySelectorAll('.gem-card'));
+
+    let selectedCategory = 'All';
+    let query = '';
+
+    const normalize = (s) => (s || '').toLowerCase();
+
+    const matchesQuery = (el, q) => {
+      if (!q) return true;
+      const title = normalize(el.getAttribute('data-title'));
+      const desc = normalize(el.getAttribute('data-description'));
+      const feats = normalize(el.getAttribute('data-features'));
+      return title.includes(q) || desc.includes(q) || feats.includes(q);
+    };
+
+    const matchesCategory = (el, cat) => {
+      if (!cat || cat === 'All') return true;
+      return normalize(el.getAttribute('data-category')) === normalize(cat);
+    };
+
+    const applyFilter = () => {
+      let visible = 0;
+      cards.forEach((card) => {
+        const show = matchesCategory(card, selectedCategory) && matchesQuery(card, query);
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      resultsCounter.textContent = `Showing ${visible} of ${cards.length} gems`;
+    };
+
+    // Search
+    searchInput.addEventListener('input', (e) => {
+      query = normalize(e.target.value);
+      applyFilter();
+    });
+
+    // Category filters
+    filters.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-category]');
+      if (!btn) return;
+      selectedCategory = btn.getAttribute('data-category');
+      filters.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilter();
+    });
+
+    applyFilter();
+  });
+</script>
