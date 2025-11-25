@@ -1,5 +1,5 @@
 ---
-import { Eye, Download, Copy } from "lucide-astro";
+import { Eye, Download, Copy, Pin, Palette } from "lucide-astro";
 
 interface Props {
   gem: {
@@ -34,30 +34,83 @@ const categoryIcon = categoryIcons[gem.data.category] || "fas fa-tag";
 ---
 
 <div
-  class="gem-card rounded-xl p-4 shadow-lg flex flex-col h-full"
+  class="gem-card rounded-xl p-4 shadow-lg flex flex-col h-full relative group"
   data-title={gem.data.title}
   data-description={gem.data.description}
   data-category={gem.data.category}
   data-features={gem.data.features.join(" ")}
+  data-slug={gem.slug}
+  id={`card-${gem.slug}`}
 >
   <!-- Icon, Title and Quick Action -->
   <div class="flex items-center gap-3 mb-3">
     <div
-      class={`w-10 h-10 rounded-lg flex items-center justify-center shadow-md flex-shrink-0 ${gem.data.color}`}
+      class={`w-10 h-10 rounded-lg flex items-center justify-center shadow-md flex-shrink-0 ${gem.data.color} icon-box transition-colors duration-300`}
     >
       <i class={`${categoryIcon} text-base text-white`}></i>
     </div>
     <h3 class="text-sm font-bold text-white flex-1 line-clamp-2 leading-tight">
       {gem.data.title}
     </h3>
-    <button
-      data-gem-slug={gem.slug}
-      class="copy-gem-btn p-2 rounded-md bg-white/10 border border-white/20 text-white hover:bg-white/20 transition inline-flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
-      title="Copy gem content"
-      aria-label="Copy gem content"
-    >
-      <Copy class="w-3.5 h-3.5" />
-    </button>
+
+    <div class="flex items-center gap-1">
+      <button
+        class="pin-btn text-white/40 hover:text-yellow-400 transition-colors p-1"
+        data-slug={gem.slug}
+        title="Pin to top"
+      >
+        <Pin class="w-3.5 h-3.5" />
+      </button>
+
+      <div class="relative">
+        <button
+          class="color-btn text-white/40 hover:text-pink-400 transition-colors p-1"
+          data-slug={gem.slug}
+          title="Change Color"
+          onclick="this.nextElementSibling.classList.toggle('hidden')"
+        >
+          <Palette class="w-3.5 h-3.5" />
+        </button>
+        <!-- Color Palette -->
+        <div
+          class="color-palette hidden absolute right-0 top-full mt-2 bg-gray-900 border border-white/10 rounded-lg p-2 shadow-xl z-50 grid grid-cols-3 gap-2 w-32"
+        >
+          <button
+            class="w-6 h-6 rounded-full bg-pink-500 hover:scale-110 transition-transform border border-white/20"
+            data-color="bg-pink-500"
+            data-slug={gem.slug}></button>
+          <button
+            class="w-6 h-6 rounded-full bg-purple-500 hover:scale-110 transition-transform border border-white/20"
+            data-color="bg-purple-500"
+            data-slug={gem.slug}></button>
+          <button
+            class="w-6 h-6 rounded-full bg-blue-500 hover:scale-110 transition-transform border border-white/20"
+            data-color="bg-blue-500"
+            data-slug={gem.slug}></button>
+          <button
+            class="w-6 h-6 rounded-full bg-green-500 hover:scale-110 transition-transform border border-white/20"
+            data-color="bg-green-500"
+            data-slug={gem.slug}></button>
+          <button
+            class="w-6 h-6 rounded-full bg-yellow-500 hover:scale-110 transition-transform border border-white/20"
+            data-color="bg-yellow-500"
+            data-slug={gem.slug}></button>
+          <button
+            class="w-6 h-6 rounded-full bg-red-500 hover:scale-110 transition-transform border border-white/20"
+            data-color="bg-red-500"
+            data-slug={gem.slug}></button>
+        </div>
+      </div>
+
+      <button
+        data-gem-slug={gem.slug}
+        class="copy-gem-btn p-2 rounded-md bg-white/10 border border-white/20 text-white hover:bg-white/20 transition inline-flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+        title="Copy gem content"
+        aria-label="Copy gem content"
+      >
+        <Copy class="w-3.5 h-3.5" />
+      </button>
+    </div>
   </div>
 
   <!-- Category Badge -->
@@ -180,8 +233,8 @@ const categoryIcon = categoryIcons[gem.data.category] || "fas fa-tag";
   }
 
   // Initialize once
-  if (!window.hasInitCopyButtons) {
-    window.hasInitCopyButtons = true;
+  if (!(window as any).hasInitCopyButtons) {
+    (window as any).hasInitCopyButtons = true;
     initCopyButtons();
   }
 </script>

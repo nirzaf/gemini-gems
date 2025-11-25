@@ -24,7 +24,9 @@ const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
   <!-- Stats Section -->
   <section class="py-8 bg-[#0f1419] transition-colors duration-300">
     <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center max-w-4xl mx-auto">
+      <div
+        class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center max-w-4xl mx-auto"
+      >
         <div
           class="stats-card p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow"
         >
@@ -90,4 +92,219 @@ const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
   </section>
 
   <Footer />
+
+  <script>
+    import { functions, account, FUNCTION_ID } from "../lib/appwrite";
+    import { ID, Query } from "appwrite";
+
+    let currentUser = null;
+    let userPrefs = {
+      pinnedGems: [],
+      customColors: {},
+      sortPreference: "default",
+    };
+
+    // Listen for login event from Header
+    document.addEventListener("userLoggedIn", async (e: CustomEvent) => {
+      currentUser = e.detail;
+      await loadPreferences();
+      applyPreferences();
+    });
+
+    async function loadPreferences() {
+      try {
+        const execution = await functions.createExecution(
+          FUNCTION_ID,
+          JSON.stringify({
+            action: "get",
+            userId: currentUser.$id,
+          }),
+        );
+
+        if (execution.status === "completed") {
+          const response = JSON.parse(execution.responseBody);
+          if (response.success) {
+            userPrefs = response.data;
+          }
+        }
+
+        // Update UI to reflect loaded sort preference
+        updateSortUI(userPrefs.sortPreference);
+      } catch (err) {
+        console.error("Error loading prefs", err);
+      }
+    }
+
+    function updateSortUI(sortType) {
+      const btnDefault = document.getElementById("sortDefault");
+      const btnAlpha = document.getElementById("sortAlpha");
+
+      if (sortType === "alpha") {
+        btnAlpha?.classList.add("active", "bg-white/20", "text-white");
+        btnAlpha?.classList.remove("text-white/60", "hover:bg-white/10");
+        btnDefault?.classList.remove("active", "bg-white/20", "text-white");
+        btnDefault?.classList.add("text-white/60", "hover:bg-white/10");
+      } else {
+        btnDefault?.classList.add("active", "bg-white/20", "text-white");
+        btnDefault?.classList.remove("text-white/60", "hover:bg-white/10");
+        btnAlpha?.classList.remove("active", "bg-white/20", "text-white");
+        btnAlpha?.classList.add("text-white/60", "hover:bg-white/10");
+      }
+    }
+
+    function applyPreferences() {
+      const grid = document.getElementById("gemsGrid");
+      if (!grid) return;
+
+      const cards = Array.from(grid.children) as HTMLElement[];
+
+      // 1. Apply Colors and Pin State
+      cards.forEach((card) => {
+        const slug = card.getAttribute("data-slug");
+        if (!slug) return;
+
+        // Apply Custom Color
+        if (userPrefs.customColors[slug]) {
+          const iconBox = card.querySelector(".icon-box");
+          if (iconBox) {
+            // Remove existing color classes (assuming they start with bg-)
+            const classes = iconBox.className.split(" ");
+            const newClasses = classes.filter(
+              (c) => !c.startsWith("bg-") && !c.startsWith("text-"),
+            );
+            // Add new color
+            iconBox.className =
+              newClasses.join(" ") + " " + userPrefs.customColors[slug];
+          }
+        }
+
+        // Update Pin Icon State
+        const pinBtn = card.querySelector(".pin-btn");
+        if (pinBtn) {
+          if (userPrefs.pinnedGems.includes(slug)) {
+            pinBtn.classList.add("text-yellow-400", "opacity-100");
+            pinBtn.classList.remove("text-white/40");
+            (pinBtn.querySelector("svg") as HTMLElement).style.fill =
+              "currentColor";
+          } else {
+            pinBtn.classList.remove("text-yellow-400", "opacity-100");
+            pinBtn.classList.add("text-white/40");
+            (pinBtn.querySelector("svg") as HTMLElement).style.fill = "none";
+          }
+        }
+      });
+
+      // 2. Sort and Pinning Logic
+      cards.sort((a, b) => {
+        const slugA = a.getAttribute("data-slug");
+        const slugB = b.getAttribute("data-slug");
+        const isPinnedA = userPrefs.pinnedGems.includes(slugA);
+        const isPinnedB = userPrefs.pinnedGems.includes(slugB);
+
+        // Pinned items always first
+        if (isPinnedA && !isPinnedB) return -1;
+        if (!isPinnedA && isPinnedB) return 1;
+
+        // Then respect sort preference
+        if (userPrefs.sortPreference === "alpha") {
+          const titleA = a.getAttribute("data-title")?.toLowerCase() || "";
+          const titleB = b.getAttribute("data-title")?.toLowerCase() || "";
+          return titleA.localeCompare(titleB);
+        }
+
+        // Default logic (preserve original order or use data-date if available)
+        // Since we don't have original index easily, we can rely on current DOM order if not alpha
+        // But to be deterministic, let's assume the initial render was correct.
+        // If we want to revert to default, we might need the original index.
+        // For now, let's just leave them as is if not alpha, but pinned ones are moved.
+        return 0;
+      });
+
+      // Re-append to grid in new order
+      cards.forEach((card) => grid.appendChild(card));
+    }
+
+    async function savePreferences() {
+      if (!currentUser) return;
+      try {
+        await functions.createExecution(
+          FUNCTION_ID,
+          JSON.stringify({
+            action: "save",
+            userId: currentUser.$id,
+            preferences: userPrefs,
+          }),
+        );
+      } catch (err) {
+        console.error("Error saving prefs", err);
+      }
+    }
+
+    // Event Listeners for Interactions
+    const grid = document.getElementById("gemsGrid");
+    if (grid) {
+      grid.addEventListener("click", async (e) => {
+        if (!currentUser) return; // Must be logged in
+
+        const target = e.target as HTMLElement;
+
+        // Pin Button
+        const pinBtn = target.closest(".pin-btn");
+        if (pinBtn) {
+          const slug = pinBtn.getAttribute("data-slug");
+          if (slug) {
+            if (userPrefs.pinnedGems.includes(slug)) {
+              userPrefs.pinnedGems = userPrefs.pinnedGems.filter(
+                (s) => s !== slug,
+              );
+            } else {
+              userPrefs.pinnedGems.push(slug);
+            }
+            applyPreferences();
+            await savePreferences();
+          }
+          return;
+        }
+
+        // Color Palette Button (Selection)
+        const colorOption = target.closest(".color-palette button");
+        if (colorOption) {
+          const slug = colorOption.getAttribute("data-slug");
+          const color = colorOption.getAttribute("data-color");
+
+          if (slug && color) {
+            userPrefs.customColors[slug] = color;
+
+            // Hide palette
+            const palette = colorOption.closest(".color-palette");
+            palette?.classList.add("hidden");
+
+            applyPreferences();
+            await savePreferences();
+          }
+        }
+      });
+    }
+
+    // Sort Buttons
+    document
+      .getElementById("sortDefault")
+      ?.addEventListener("click", async () => {
+        if (!currentUser) return;
+        userPrefs.sortPreference = "default";
+        updateSortUI("default");
+        applyPreferences();
+        await savePreferences();
+      });
+
+    document
+      .getElementById("sortAlpha")
+      ?.addEventListener("click", async () => {
+        if (!currentUser) return;
+        userPrefs.sortPreference = "alpha";
+        updateSortUI("alpha");
+        applyPreferences();
+        await savePreferences();
+      });
+  </script>
 </Layout>

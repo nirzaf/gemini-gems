@@ -8,13 +8,28 @@ const { categories, initialCount } = Astro.props;
 ---
 
 <div class="max-w-4xl mx-auto mb-8">
-    <div class="flex items-center gap-3 mb-4">
+    <div class="flex flex-col sm:flex-row items-center gap-3 mb-4">
         <input
             id="searchInput"
             type="text"
             placeholder="Search gems by name, description, features..."
             class="search-input w-full px-4 py-3 rounded-xl"
         />
+        <div
+            class="flex items-center gap-2 bg-white/5 rounded-xl px-3 py-3 border border-white/10 shrink-0"
+        >
+            <span class="text-xs text-white/60">Sort:</span>
+            <button
+                id="sortDefault"
+                class="sort-btn active text-xs font-bold text-white px-2 py-1 rounded bg-white/20 transition-colors"
+                data-sort="default">Default</button
+            >
+            <button
+                id="sortAlpha"
+                class="sort-btn text-xs font-bold text-white/60 px-2 py-1 rounded hover:bg-white/10 transition-colors"
+                data-sort="alpha">A-Z</button
+            >
+        </div>
     </div>
     <div
         id="categoryFilters"
