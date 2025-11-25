@@ -1,0 +1,10 @@
+{
+    "name": "manage-preferences",
+    "version": "1.0.0",
+    "description": "Manage user preferences",
+    "main": "src/main.js",
+    "type": "module",
+    "dependencies": {
+        "node-appwrite": "^14.0.0"
+    }
+}

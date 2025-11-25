@@ -1,0 +1,58 @@
+{
+    "projectId": "69229a6d00111a3423e8",
+    "projectName": "Gemini Gems",
+    "databases": [
+        {
+            "$id": "gemini_gems_db",
+            "name": "Gemini Gems",
+            "collections": [
+                {
+                    "$id": "user_preferences",
+                    "name": "User Preferences",
+                    "permissions": [
+                        {
+                            "role": "users",
+                            "type": "document",
+                            "read": true,
+                            "write": true,
+                            "create": true,
+                            "update": true,
+                            "delete": true
+                        }
+                    ],
+                    "attributes": [
+                        {
+                            "key": "userId",
+                            "type": "string",
+                            "required": true,
+                            "size": 255,
+                            "array": false
+                        },
+                        {
+                            "key": "pinnedGems",
+                            "type": "string",
+                            "required": false,
+                            "size": 10000,
+                            "array": false
+                        },
+                        {
+                            "key": "customColors",
+                            "type": "string",
+                            "required": false,
+                            "size": 10000,
+                            "array": false
+                        },
+                        {
+                            "key": "sortPreference",
+                            "type": "string",
+                            "required": false,
+                            "size": 50,
+                            "default": "default",
+                            "array": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
