@@ -130,29 +130,19 @@ const categoryGradient =
     document.getElementById("copyButton")?.addEventListener("click", async () => {
       try {
         const proseElement = document.querySelector(".prose");
-        let textToCopy = "";
-        if (proseElement) {
-          const paragraphs = Array.from(proseElement.querySelectorAll("p"));
-          const youAreParagraph = paragraphs.find((p) =>
-            (p.textContent || "").trim().toLowerCase().startsWith("you are")
-          );
-          if (youAreParagraph) {
-            textToCopy = (youAreParagraph.textContent || "").trim();
-          } else if (paragraphs.length > 0) {
-            textToCopy = (paragraphs[0].textContent || "").trim();
-          } else {
-            textToCopy = (proseElement.textContent || "").trim();
-          }
-          await navigator.clipboard.writeText(textToCopy);
-          const toast = document.getElementById("toast");
-          if (toast) {
-            toast.classList.remove("translate-y-32", "opacity-0");
-            toast.classList.add("translate-y-0", "opacity-100");
-            setTimeout(() => {
-              toast.classList.add("translate-y-32", "opacity-0");
-              toast.classList.remove("translate-y-0", "opacity-100");
-            }, 3000);
-          }
+        if (!proseElement) return;
+        const fullText = proseElement.innerText || "";
+        const idx = fullText.toLowerCase().indexOf("you are");
+        const textToCopy = (idx >= 0 ? fullText.slice(idx) : fullText).trim();
+        await navigator.clipboard.writeText(textToCopy);
+        const toast = document.getElementById("toast");
+        if (toast) {
+          toast.classList.remove("translate-y-32", "opacity-0");
+          toast.classList.add("translate-y-0", "opacity-100");
+          setTimeout(() => {
+            toast.classList.add("translate-y-32", "opacity-0");
+            toast.classList.remove("translate-y-0", "opacity-100");
+          }, 3000);
         }
       } catch (err) {
         console.error("Failed to copy:", err);
