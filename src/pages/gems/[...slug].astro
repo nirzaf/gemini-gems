@@ -127,37 +127,37 @@ const categoryGradient =
   </div>
 
   <script>
-    // Get the gem content (the markdown content without frontmatter)
-    const gemContent = document.querySelector(".prose")?.textContent || "";
-
-    // Copy to clipboard functionality
-    document
-      .getElementById("copyButton")
-      ?.addEventListener("click", async () => {
-        try {
-          // Get the raw markdown content from the prose section
-          const proseElement = document.querySelector(".prose");
-          if (proseElement) {
-            // Try to copy the text content
-            await navigator.clipboard.writeText(proseElement.textContent || "");
-
-            // Show toast
-            const toast = document.getElementById("toast");
-            if (toast) {
-              toast.classList.remove("translate-y-32", "opacity-0");
-              toast.classList.add("translate-y-0", "opacity-100");
-
-              // Hide toast after 3 seconds
-              setTimeout(() => {
-                toast.classList.add("translate-y-32", "opacity-0");
-                toast.classList.remove("translate-y-0", "opacity-100");
-              }, 3000);
-            }
+    document.getElementById("copyButton")?.addEventListener("click", async () => {
+      try {
+        const proseElement = document.querySelector(".prose");
+        let textToCopy = "";
+        if (proseElement) {
+          const paragraphs = Array.from(proseElement.querySelectorAll("p"));
+          const youAreParagraph = paragraphs.find((p) =>
+            (p.textContent || "").trim().toLowerCase().startsWith("you are")
+          );
+          if (youAreParagraph) {
+            textToCopy = (youAreParagraph.textContent || "").trim();
+          } else if (paragraphs.length > 0) {
+            textToCopy = (paragraphs[0].textContent || "").trim();
+          } else {
+            textToCopy = (proseElement.textContent || "").trim();
           }
-        } catch (err) {
-          console.error("Failed to copy:", err);
-          alert("Failed to copy to clipboard. Please try again.");
+          await navigator.clipboard.writeText(textToCopy);
+          const toast = document.getElementById("toast");
+          if (toast) {
+            toast.classList.remove("translate-y-32", "opacity-0");
+            toast.classList.add("translate-y-0", "opacity-100");
+            setTimeout(() => {
+              toast.classList.add("translate-y-32", "opacity-0");
+              toast.classList.remove("translate-y-0", "opacity-100");
+            }, 3000);
+          }
         }
-      });
+      } catch (err) {
+        console.error("Failed to copy:", err);
+        alert("Failed to copy to clipboard. Please try again.");
+      }
+    });
   </script>
 </Layout>

@@ -16,6 +16,8 @@ features:
 lastUpdated: 2025-11-27
 ---
 
+You are an expert technical architect who analyzes a codebase and generates project-specific Senior Tech Lead coding guidelines.
+
 # Meta-Prompt: Generate Coding Agent Guidelines from Codebase
 
 ```markdown
@@ -240,6 +242,12 @@ Before output, verify:
 
 ---
 
+### Save Output
+
+- Save the generated guidelines as a Markdown file at the project root.
+- Suggested filename: `[PROJECT_NAME]-coding-agent-guidelines.md`.
+
+---
+
 → **Execute:** Analyze → Extract → Generate → Validate → Output complete guidelines document
 ```
-
