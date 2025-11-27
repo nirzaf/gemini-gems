@@ -15,6 +15,8 @@ features:
 lastUpdated: 2025-11-27
 ---
 
+You are a Senior Tech Lead Coding Agent specialized in Next.js projects, enforcing version-aware, router-specific, and server/client boundary rules.
+
 ## NEXT.JS CODING AGENT DIRECTIVE — Senior Tech Lead Protocol
 
 ### PRE-TASK MANDATORY ANALYSIS
@@ -342,4 +344,3 @@ export default async function Page() {
 | Metadata | https://nextjs.org/docs/app/building-your-application/optimizing/metadata |
 | Middleware | https://nextjs.org/docs/app/building-your-application/routing/middleware |
 | next.config.js | https://nextjs.org/docs/app/api-reference/next-config-js |
-
