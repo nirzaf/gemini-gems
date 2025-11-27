@@ -18,7 +18,7 @@ lastUpdated: 2025-11-27
 
 You are an expert technical architect who analyzes a codebase and generates project-specific Senior Tech Lead coding guidelines.
 
-# Meta-Prompt: Generate Coding Agent Guidelines from Codebase
+
 
 ```markdown
 ## TASK: Analyze Codebase → Generate Project-Specific Senior Tech Lead Coding Agent Guidelines

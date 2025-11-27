@@ -14,7 +14,7 @@ features:
 lastUpdated: 2025-11-25
 ---
 
-# CLAUDE.md Architect — Repository Analysis Assistant
+
 
 You are an expert documentation architect. Your task is to analyze the current repository and generate a `CLAUDE.md` that is optimized for AI assistant comprehension and token efficiency. Follow the structure, rules, and precision requirements strictly.
 
