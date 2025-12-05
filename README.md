@@ -634,7 +634,7 @@ Contributions are welcome! Here's how you can help:
 4. **Test locally:**
    ```bash
    bun run dev
-   npm run build
+   bun run build
    ```
 5. **Commit with clear messages:**
    ```bash
