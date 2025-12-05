@@ -87,8 +87,8 @@ By open-sourcing these templates, Gemini Gems democratizes access to advanced pr
 - **CI/CD Pipeline:** GitHub Actions
 - **Workflow File:** `.github/workflows/deploy.yml`
 - **Deployment Trigger:** Push to `main` branch or manual dispatch
-- **Node Version:** 20.x (LTS)
-- **Package Manager:** npm
+- **Bun Version:** 1.3.x
+- **Package Manager:** Bun
 
 ---
 
@@ -130,10 +130,10 @@ By open-sourcing these templates, Gemini Gems democratizes access to advanced pr
 
 ### Dependency Management Notes
 
-- **Package Manager:** npm (with package-lock.json for version locking)
-- **Lock File:** package-lock.json (207.3KB)
-- **Node Version Requirement:** 20.x or higher
-- **Installation Command:** `npm install` or `npm ci` (for CI/CD)
+- **Package Manager:** Bun (with `bun.lock` for version locking)
+- **Lock File:** bun.lock
+- **Runtime Requirement:** Bun 1.3.x
+- **Installation Command:** `bun install`
 - **No Known Conflicts:** All dependencies are compatible and regularly updated
 
 ---
@@ -197,7 +197,7 @@ gemini-gems/
 ├── DEPLOYMENT.md                   # Deployment documentation
 ├── migrate.js                      # Migration script for content restructuring
 ├── package.json                    # Project dependencies and scripts
-├── package-lock.json               # Locked dependency versions
+├── bun.lock                        # Locked dependency versions (Bun)
 ├── README.md                       # This file
 ├── tailwind.config.mjs             # Tailwind CSS configuration
 └── tsconfig.json                   # TypeScript configuration
@@ -377,8 +377,7 @@ The system currently supports **8 categories**:
 
 ### Prerequisites
 
-- **Node.js:** 20.x or higher
-- **Package Manager:** npm (comes with Node.js)
+- **Bun:** 1.3.x
 - **Git:** For cloning and version control
 
 ### Installation
@@ -391,14 +390,14 @@ git clone https://github.com/nirzaf/gemini-gems.git
 cd gemini-gems
 
 # Install dependencies
-npm install
+bun install
 ```
 
 ### Development Server
 
 ```bash
 # Start local development server
-npm run dev
+bun run dev
 ```
 
 **Server Details:**
@@ -410,7 +409,7 @@ npm run dev
 
 ```bash
 # Build static site
-npm run build
+bun run build
 ```
 
 **Build Output:**
@@ -425,7 +424,7 @@ npm run build
 
 ```bash
 # Preview production build locally
-npm run preview
+bun run preview
 ```
 
 ---
@@ -436,12 +435,12 @@ npm run preview
 
 | Command | Action |
 |---------|--------|
-| `npm install` | Install dependencies |
-| `npm run dev` | Start dev server at localhost:4321 |
-| `npm run build` | Build production site to ./dist/ |
-| `npm run preview` | Preview production build locally |
-| `npm run astro ...` | Run Astro CLI commands |
-| `npm run astro -- --help` | Get Astro CLI help |
+| `bun install` | Install dependencies |
+| `bun run dev` | Start dev server at localhost:4321 |
+| `bun run build` | Build production site to ./dist/ |
+| `bun run preview` | Preview production build locally |
+| `bun run astro ...` | Run Astro CLI commands |
+| `bunx astro -- --help` | Get Astro CLI help |
 
 ### Adding a New Gem
 
@@ -521,12 +520,11 @@ The site automatically deploys to GitHub Pages when you push to the `main` branc
 
 **Build Steps:**
 1. Checkout code
-2. Setup Node.js 20
-3. Detect package manager (npm/yarn)
-4. Install dependencies
-5. Build Astro site
-6. Upload artifact
-7. Deploy to GitHub Pages
+2. Setup Bun 1.3.x
+3. Install dependencies with Bun
+4. Build Astro site via `bunx astro`
+5. Upload artifact
+6. Deploy to GitHub Pages
 
 **Permissions Required:**
 - `contents: read`
@@ -635,7 +633,7 @@ Contributions are welcome! Here's how you can help:
 3. **Make your changes**
 4. **Test locally:**
    ```bash
-   npm run dev
+   bun run dev
    npm run build
    ```
 5. **Commit with clear messages:**
