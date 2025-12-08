@@ -13,9 +13,11 @@
     "@astrojs/netlify": "^6.6.3",
     "@libsql/client": "^0.14.0",
     "@neondatabase/serverless": "^1.0.2",
+    "@types/ws": "^8.18.1",
     "astro": "^5.16.4",
     "drizzle-orm": "^0.45.0",
-    "lucide-astro": "^0.554.0"
+    "lucide-astro": "^0.554.0",
+    "ws": "^8.18.3"
   },
   "devDependencies": {
     "@astrojs/tailwind": "^6.0.2",

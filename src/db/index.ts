@@ -1,6 +1,10 @@
-import { drizzle } from 'drizzle-orm/libsql';
-import { createClient } from '@libsql/client';
+import { drizzle } from 'drizzle-orm/neon-serverless';
+import { Pool, neonConfig } from '@neondatabase/serverless';
 import * as schema from './schema';
+import ws from 'ws';
+
+// Configure Neon to use WebSocket for local development
+neonConfig.webSocketConstructor = ws;
 
 // Get environment variables (works in both dev and production)
 const getEnvVar = (key: string): string => {
@@ -8,24 +12,19 @@ const getEnvVar = (key: string): string => {
   return import.meta.env?.[key] || process.env[key] || '';
 };
 
-const TURSO_DB_URL = getEnvVar('TURSO_DB_URL');
-const TURSO_DB_TOKEN = getEnvVar('TURSO_DB_TOKEN');
+const DATABASE_URL = getEnvVar('DATABASE_URL');
 
 // Build-friendly: only initialize DB when credentials exist.
 let dbInstance: ReturnType<typeof drizzle> | null = null;
 
-if (!TURSO_DB_URL) {
+if (!DATABASE_URL) {
   console.warn(
-    '⚠️ TURSO_DB_URL not set; continuing without DB (fallback data only).',
+    '⚠️ DATABASE_URL not set; continuing without DB (fallback data only).',
   );
 } else {
-  const client = createClient({
-    url: TURSO_DB_URL,
-    authToken: TURSO_DB_TOKEN || undefined,
-  });
-
-  dbInstance = drizzle(client, { schema });
-  console.log('✅ Drizzle ORM initialized with Turso DB');
+  const pool = new Pool({ connectionString: DATABASE_URL });
+  dbInstance = drizzle(pool, { schema });
+  console.log('✅ Drizzle ORM initialized with Neon PostgreSQL');
 }
 
 export const db = dbInstance;
