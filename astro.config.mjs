@@ -2,8 +2,8 @@
 import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
-  site: 'https://nirzaf.github.io',
-  base: '/gemini-gems',
+  site: 'https://geminigems.netlify.app',
+  base: '/',
   output: 'static',
   integrations: [tailwind()]
 });
