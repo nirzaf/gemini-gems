@@ -14,48 +14,38 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
-env:
-  BUILD_PATH: "." # default value when not using subfolders
-
 jobs:
   build:
-    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@v1
         with:
-          bun-version: "1.3.2"
-          
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v4
-        
+          bun-version: latest
+      
       - name: Install dependencies
-        run: bun install --frozen-lockfile
-        working-directory: ${{ env.BUILD_PATH }}
-        
+        run: bun install
+      
       - name: Build with Astro
-        run: |
-          bunx astro build \
-            --site "${{ steps.pages.outputs.origin }}" \
-            --base "${{ steps.pages.outputs.base_path }}"
-        working-directory: ${{ env.BUILD_PATH }}
-        
+        env:
+          TURSO_DB_URL: ${{ secrets.TURSO_DB_URL }}
+          TURSO_DB_TOKEN: ${{ secrets.TURSO_DB_TOKEN }}
+        run: bun run build
+      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ${{ env.BUILD_PATH }}/dist
+          path: ./dist
 
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
     runs-on: ubuntu-latest
-    name: Deploy
+    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
