@@ -1,20 +1,64 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import GemCard from "../components/GemCard.astro";
 import SearchFilter from "../components/SearchFilter.astro";
 
-// Fetch all gems from the content collection
-const gems = (await getCollection("gems")).sort((a, b) => {
-  const dateA = a.data.lastUpdated?.getTime() || 0;
-  const dateB = b.data.lastUpdated?.getTime() || 0;
-  return dateB - dateA;
-});
+// Fetch all gems from database via API
+let gems: any[] = [];
+let categories: string[] = [];
 
-// Get unique categories
-const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
+try {
+  const response = await fetch(`${Astro.url.origin}/api/gems`);
+  if (response.ok) {
+    const data = await response.json();
+    if (data.success && data.gems) {
+      gems = data.gems.map((gem: any) => {
+        // Parse features if it's a string
+        let features = gem.features;
+        if (typeof features === "string") {
+          try {
+            features = JSON.parse(features);
+          } catch (e) {
+            console.warn(`Failed to parse features for ${gem.slug}:`, e);
+            features = [];
+          }
+        }
+
+        return {
+          id: gem.id?.toString() || gem.slug,
+          slug: gem.slug,
+          data: {
+            title: gem.title || "Untitled",
+            description: gem.description || "",
+            category: gem.category || "General",
+            icon: gem.icon || "file",
+            color: gem.color || "bg-gray-500",
+            features: Array.isArray(features) ? features : [],
+            lastUpdated: gem.lastUpdated
+              ? new Date(gem.lastUpdated)
+              : new Date(),
+          },
+        };
+      });
+
+      // Sort by lastUpdated
+      gems.sort((a, b) => {
+        const dateA = a.data.lastUpdated?.getTime() || 0;
+        const dateB = b.data.lastUpdated?.getTime() || 0;
+        return dateB - dateA;
+      });
+
+      // Get unique categories
+      categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
+    }
+  }
+} catch (error) {
+  console.error("Failed to fetch gems from database:", error);
+}
+
+console.log("📊 Loaded", gems.length, "gems from database");
 ---
 
 <Layout>
@@ -85,13 +129,9 @@ const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
         id="gemsGrid"
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
       >
-        {
-          gems.map((gem) => (
-            <div data-gem-slug={gem.slug}>
-              <GemCard gem={gem} />
-            </div>
-          ))
-        }
+      {gems.map((gem) => (
+        <GemCard gem={gem} />
+      ))}
       </div>
     </div>
   </section>

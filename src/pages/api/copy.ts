@@ -1,8 +1,9 @@
 import type { APIRoute } from 'astro';
-import { incrementCopyCount, getGemStats } from '../../lib/db-utils';
+import { db } from '../../db';
+import { gemsStats } from '../../db/schema';
+import { eq } from 'drizzle-orm';
 
 // POST: Increment copy count for a gem
-// GET: Retrieve copy statistics
 export const POST: APIRoute = async ({ request }) => {
     try {
         const body = await request.json();
@@ -15,13 +16,31 @@ export const POST: APIRoute = async ({ request }) => {
             );
         }
 
-        await incrementCopyCount(gemSlug);
+        // Check if gem exists
+        const existing = await db.select().from(gemsStats).where(eq(gemsStats.gemSlug, gemSlug)).limit(1);
+
+        if (existing.length === 0) {
+            // Insert new record
+            await db.insert(gemsStats).values({
+                gemSlug,
+                copyCount: 1,
+                viewCount: 0,
+            });
+        } else {
+            // Update existing record
+            await db.update(gemsStats)
+                .set({
+                    copyCount: existing[0].copyCount + 1,
+                    updatedAt: new Date().toISOString(),
+                })
+                .where(eq(gemsStats.gemSlug, gemSlug));
+        }
 
         // Get updated stats
-        const stats = await getGemStats(gemSlug);
+        const stats = await db.select().from(gemsStats).where(eq(gemsStats.gemSlug, gemSlug)).limit(1);
 
         return new Response(
-            JSON.stringify({ success: true, stats }),
+            JSON.stringify({ success: true, stats: stats[0] }),
             { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
     } catch (error) {
@@ -33,15 +52,24 @@ export const POST: APIRoute = async ({ request }) => {
     }
 };
 
+// GET: Retrieve copy statistics
 export const GET: APIRoute = async ({ url }) => {
     try {
         const gemSlug = url.searchParams.get('gemSlug');
-        const stats = await getGemStats(gemSlug || undefined);
 
-        return new Response(
-            JSON.stringify({ success: true, stats }),
-            { status: 200, headers: { 'Content-Type': 'application/json' } }
-        );
+        if (gemSlug) {
+            const stats = await db.select().from(gemsStats).where(eq(gemsStats.gemSlug, gemSlug)).limit(1);
+            return new Response(
+                JSON.stringify({ success: true, stats: stats[0] || null }),
+                { status: 200, headers: { 'Content-Type': 'application/json' } }
+            );
+        } else {
+            const stats = await db.select().from(gemsStats);
+            return new Response(
+                JSON.stringify({ success: true, stats }),
+                { status: 200, headers: { 'Content-Type': 'application/json' } }
+            );
+        }
     } catch (error) {
         console.error('Error in copy API:', error);
         return new Response(

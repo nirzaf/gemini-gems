@@ -35,6 +35,7 @@ const categoryIcon = categoryIcons[gem.data.category] || "fas fa-tag";
 
 <div
   class="gem-card rounded-xl p-4 shadow-lg flex flex-col h-full"
+  data-gem-slug={gem.slug}
   data-title={gem.data.title}
   data-description={gem.data.description}
   data-category={gem.data.category}

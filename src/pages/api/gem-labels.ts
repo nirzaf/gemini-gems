@@ -1,5 +1,7 @@
 import type { APIRoute } from 'astro';
-import { getGemLabels, assignLabelToGem, removeLabelFromGem, getGemsByLabel } from '../../lib/db-utils';
+import { db } from '../../db';
+import { gemLabels, gemLabelMappings } from '../../db/schema';
+import { eq } from 'drizzle-orm';
 
 // GET: Fetch labels for a specific gem or gems by label
 export const GET: APIRoute = async ({ url }) => {
@@ -9,14 +11,25 @@ export const GET: APIRoute = async ({ url }) => {
 
         if (gemSlug) {
             // Get labels for specific gem
-            const labels = await getGemLabels(gemSlug);
+            const mappings = await db.select()
+                .from(gemLabelMappings)
+                .innerJoin(gemLabels, eq(gemLabelMappings.labelId, gemLabels.id))
+                .where(eq(gemLabelMappings.gemSlug, gemSlug));
+
+            const labels = mappings.map(m => m.gem_labels);
+
             return new Response(
                 JSON.stringify({ success: true, labels }),
                 { status: 200, headers: { 'Content-Type': 'application/json' } }
             );
         } else if (labelId) {
             // Get gems by label
-            const gems = await getGemsByLabel(parseInt(labelId));
+            const mappings = await db.select()
+                .from(gemLabelMappings)
+                .where(eq(gemLabelMappings.labelId, parseInt(labelId)));
+
+            const gems = mappings.map(m => m.gemSlug);
+
             return new Response(
                 JSON.stringify({ success: true, gems }),
                 { status: 200, headers: { 'Content-Type': 'application/json' } }
@@ -49,7 +62,7 @@ export const POST: APIRoute = async ({ request }) => {
             );
         }
 
-        await assignLabelToGem(gemSlug, labelId);
+        await db.insert(gemLabelMappings).values({ gemSlug, labelId }).onConflictDoNothing();
 
         return new Response(
             JSON.stringify({ success: true }),
@@ -77,7 +90,9 @@ export const DELETE: APIRoute = async ({ request }) => {
             );
         }
 
-        await removeLabelFromGem(gemSlug, labelId);
+        await db.delete(gemLabelMappings)
+            .where(eq(gemLabelMappings.gemSlug, gemSlug))
+            .where(eq(gemLabelMappings.labelId, labelId));
 
         return new Response(
             JSON.stringify({ success: true }),

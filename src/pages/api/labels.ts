@@ -1,10 +1,12 @@
 import type { APIRoute } from 'astro';
-import { getLabels, createLabel, updateLabel, deleteLabel } from '../../lib/db-utils';
+import { db } from '../../db';
+import { gemLabels } from '../../db/schema';
+import { eq } from 'drizzle-orm';
 
 // GET: Fetch all labels
 export const GET: APIRoute = async () => {
     try {
-        const labels = await getLabels();
+        const labels = await db.select().from(gemLabels);
 
         return new Response(
             JSON.stringify({ success: true, labels }),
@@ -32,10 +34,10 @@ export const POST: APIRoute = async ({ request }) => {
             );
         }
 
-        const label = await createLabel(name, color, description);
+        const result = await db.insert(gemLabels).values({ name, color, description }).returning();
 
         return new Response(
-            JSON.stringify({ success: true, label }),
+            JSON.stringify({ success: true, label: result[0] }),
             { status: 201, headers: { 'Content-Type': 'application/json' } }
         );
     } catch (error) {
@@ -60,10 +62,13 @@ export const PUT: APIRoute = async ({ request }) => {
             );
         }
 
-        const label = await updateLabel(id, name, color, description);
+        const result = await db.update(gemLabels)
+            .set({ name, color, description, updatedAt: new Date().toISOString() })
+            .where(eq(gemLabels.id, id))
+            .returning();
 
         return new Response(
-            JSON.stringify({ success: true, label }),
+            JSON.stringify({ success: true, label: result[0] }),
             { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
     } catch (error) {
@@ -88,7 +93,7 @@ export const DELETE: APIRoute = async ({ request }) => {
             );
         }
 
-        await deleteLabel(id);
+        await db.delete(gemLabels).where(eq(gemLabels.id, id));
 
         return new Response(
             JSON.stringify({ success: true }),
