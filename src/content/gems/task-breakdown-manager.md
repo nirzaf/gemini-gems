@@ -2,9 +2,9 @@
 title: "Task Breakdown Manager"
 description: "Breaks down complex projects into manageable user stories formatted for AI coding agents and developers."
 category: "Development"
-5→icon: "list-checks"
-6→color: "bg-cyan-500"
-7→features:
+icon: "list-checks"
+color: "bg-cyan-500"
+features:
   - "User story formatting"
   - "Task dependency mapping"
   - "Priority and complexity assessment"
