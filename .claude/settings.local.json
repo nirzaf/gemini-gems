@@ -1,12 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cat:*)",
-      "Bash(findstr:*)",
-      "Bash(git diff:*)",
-      "Bash(git checkout:*)",
-      "Bash(git add:*)",
-      "Bash(git push:*)"
+      "*",
+      "Bash(dir:*)"
     ],
     "deny": [],
     "ask": []
