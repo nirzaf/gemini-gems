@@ -63,7 +63,7 @@ export const PUT: APIRoute = async ({ request }) => {
         }
 
         const result = await db.update(gemLabels)
-            .set({ name, color, description, updatedAt: new Date().toISOString() })
+            .set({ name, color, description, updatedAt: new Date() })
             .where(eq(gemLabels.id, id))
             .returning();
 

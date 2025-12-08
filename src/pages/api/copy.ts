@@ -38,7 +38,7 @@ export const POST: APIRoute = async ({ request }) => {
             await db.update(gemsStats)
                 .set({
                     copyCount: existing[0].copyCount + 1,
-                    updatedAt: new Date().toISOString(),
+                    updatedAt: new Date(),
                 })
                 .where(eq(gemsStats.gemSlug, gemSlug));
         }
