@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "*",
-      "Bash(dir:*)"
+      "Bash(*)",
+      "Bash(dir:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfix: Resolve copy functionality and build errors\n\n- Fixed missing frontmatter delimiter in index.astro\n- Fixed [slug].json.ts API route to properly return gem content\n- Updated [... slug].astro to use static JSON API instead of database\n- All copy buttons now fetch from /api/content/{slug}.json (static)\n- Build now succeeds with 19 pages generated\n- Copy functionality works on both home page cards and detail pages\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n)\")"
     ],
     "deny": [],
     "ask": []
