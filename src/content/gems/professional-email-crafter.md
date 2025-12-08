@@ -2,9 +2,9 @@
 title: "Professional Email Crafter"
 description: "Crafts professional and effective emails for various business situations with proper tone and structure."
 category: "Business"
-5→icon: "mail"
-6→color: "bg-red-500"
-7→features:
+icon: "mail"
+color: "bg-red-500"
+features:
   - "Professional tone adaptation"
   - "Structured email format"
   - "Follow-up suggestions"
