@@ -10,6 +10,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/netlify": "^6.6.3",
     "@libsql/client": "^0.14.0",
     "astro": "^5.16.4",
     "drizzle-orm": "^0.45.0",
