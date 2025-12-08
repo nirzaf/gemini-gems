@@ -3,35 +3,43 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import GemCard from "../components/GemCard.astro";
 import SearchFilter from "../components/SearchFilter.astro";
-import { db } from "../db";
-import { gems as gemsSchema } from "../db/schema";
+import fs from "node:fs";
+import path from "node:path";
 
-// Fetch gems from database
-if (!db) {
-  throw new Error("Database connection not available");
-}
-const dbGems = await db.select().from(gemsSchema);
+// Read gems from JSON file
+const gemsPath = path.join(process.cwd(), "src", "data", "gems.json");
+const gemsData = JSON.parse(fs.readFileSync(gemsPath, "utf-8"));
+// const gemsData = [{
+//   id: "1",
+//   slug: "test-gem",
+//   title: "Test Gem",
+//   description: "Test Description",
+//   category: "Development",
+//   icon: "code",
+//   color: "bg-blue-500",
+//   features: "[\"Feature 1\"]",
+//   content: "Test Content",
+//   lastUpdated: new Date().toISOString()
+// }];
 
-// Map DB gems to the format expected by GemCard
-const gems = dbGems
-  .map((gem) => ({
-    id: gem.id.toString(),
-    slug: gem.slug,
-    data: {
-      title: gem.title,
-      description: gem.description,
-      category: gem.category,
-      icon: gem.icon,
-      color: gem.color,
-      features: JSON.parse(gem.features),
-      lastUpdated: gem.lastUpdated,
-    },
-  }))
-  .sort((a, b) => {
-    const dateA = a.data.lastUpdated?.getTime() || 0;
-    const dateB = b.data.lastUpdated?.getTime() || 0;
-    return dateB - dateA;
-  });
+// Map JSON gems to the format expected by GemCard
+const gems = gemsData.map(gem => ({
+  id: gem.id.toString(),
+  slug: gem.slug,
+  data: {
+    title: gem.title,
+    description: gem.description,
+    category: gem.category,
+    icon: gem.icon,
+    color: gem.color,
+    features: JSON.parse(gem.features),
+    lastUpdated: new Date(gem.lastUpdated)
+  }
+})).sort((a, b) => {
+  const dateA = a.data.lastUpdated?.getTime() || 0;
+  const dateB = b.data.lastUpdated?.getTime() || 0;
+  return dateB - dateA;
+});
 
 const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
 ---

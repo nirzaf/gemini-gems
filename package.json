@@ -10,20 +10,21 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/netlify": "^6.6.3",
+    "@astrojs/netlify": "^5.5.1",
     "@libsql/client": "^0.15.15",
     "@neondatabase/serverless": "^1.0.2",
     "@types/ws": "^8.18.1",
-    "astro": "^5.16.4",
-    "drizzle-orm": "^0.45.0",
+    "astro": "^4.15.0",
+    "drizzle-orm": "^0.33.0",
     "gray-matter": "^4.0.3",
     "lucide-astro": "^0.554.0",
-    "marked": "^17.0.1",
-    "ws": "^8.18.3"
+    "marked": "^14.0.0",
+    "ws": "^8.18.3",
+    "shiki": "^1.0.0"
   },
   "devDependencies": {
-    "@astrojs/tailwind": "^6.0.2",
-    "drizzle-kit": "^0.31.8",
-    "tailwindcss": "^3.4.18"
+    "@astrojs/tailwind": "^5.1.0",
+    "drizzle-kit": "^0.24.0",
+    "tailwindcss": "^3.4.1"
   }
 }

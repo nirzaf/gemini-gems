@@ -1,6 +1,6 @@
 ---
-import { db } from "../../db";
-import { gems as gemsSchema } from "../../db/schema";
+import fs from "node:fs";
+import path from "node:path";
 import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
@@ -8,15 +8,17 @@ import { ArrowLeft, Copy, Download } from "lucide-astro";
 import { marked } from "marked";
 
 export async function getStaticPaths() {
-  const gems = await db.select().from(gemsSchema);
-  return gems.map((gem) => ({
+  const gemsPath = path.join(process.cwd(), "src", "data", "gems.json");
+  const gemsData = JSON.parse(fs.readFileSync(gemsPath, "utf-8"));
+
+  return gemsData.map((gem: any) => ({
     params: { slug: gem.slug },
     props: { gem },
   }));
 }
 
 interface Props {
-  gem: typeof gemsSchema.$inferSelect;
+  gem: any;
 }
 
 const { gem } = Astro.props;
@@ -42,8 +44,8 @@ const categoryGradient =
 ---
 
 <Layout
-  title={`${gem.data.title} - Gemini Gems`}
-  description={gem.data.description}
+  title={`${gem.title} - Gemini Gems`}
+  description={gem.description}
 >
   <Header />
 
@@ -66,17 +68,17 @@ const categoryGradient =
         class={`bg-gradient-to-r ${categoryGradient} text-white rounded-2xl p-6 mb-6 shadow-xl`}
       >
         <div class="flex items-center mb-4">
-          <h1 class="text-3xl md:text-4xl font-bold">{gem.data.title}</h1>
+          <h1 class="text-3xl md:text-4xl font-bold">{gem.title}</h1>
         </div>
-        <p class="text-lg mb-4 opacity-90">{gem.data.description}</p>
+        <p class="text-lg mb-4 opacity-90">{gem.description}</p>
         <div class="flex flex-wrap gap-2">
           <span
             class="px-3 py-1 bg-white bg-opacity-20 rounded-full text-sm font-semibold"
           >
-            {gem.data.category}
+            {gem.category}
           </span>
           {
-            gem.data.features.map((feature) => (
+            features.map((feature: string) => (
               <span class="px-3 py-1 bg-white bg-opacity-10 rounded-full text-xs">
                 {feature}
               </span>
@@ -89,6 +91,7 @@ const categoryGradient =
       <div class="flex flex-col sm:flex-row gap-3 mb-6">
         <button
           id="copyButton"
+          data-gem-slug={gem.slug}
           class="flex-1 bg-gradient-to-r from-emerald-600 to-green-600 text-white px-6 py-3 rounded-xl font-bold hover:from-emerald-700 hover:to-green-700 transition-all transform hover:scale-105 shadow-lg inline-flex items-center justify-center gap-2"
         >
           <Copy class="w-5 h-5" />
@@ -107,8 +110,8 @@ const categoryGradient =
       <!-- Gem Content -->
       <div
         class="prose prose-lg max-w-none bg-white dark:bg-gray-800 rounded-xl p-6 border shadow-sm"
+        set:html={contentHtml}
       >
-        <Content />
       </div>
     </div>
   </section>
@@ -136,12 +139,27 @@ const categoryGradient =
       .getElementById("copyButton")
       ?.addEventListener("click", async () => {
         try {
-          const proseElement = document.querySelector(".prose");
-          if (!proseElement) return;
-          const fullText = proseElement.innerText || "";
-          const idx = fullText.toLowerCase().indexOf("you are");
-          const textToCopy = (idx >= 0 ? fullText.slice(idx) : fullText).trim();
-          await navigator.clipboard.writeText(textToCopy);
+          const button = document.getElementById("copyButton");
+          const slug = button?.getAttribute("data-gem-slug");
+
+          if (!slug) {
+            throw new Error("Gem slug not found");
+          }
+
+          // Fetch content from local static JSON API
+          const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+          const response = await fetch(`${base}/api/content/${slug}.json`);
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch content");
+          }
+
+          const data = await response.json();
+
+          // Copy raw markdown to clipboard
+          await navigator.clipboard.writeText(data.content);
+
+          // Show toast notification
           const toast = document.getElementById("toast");
           if (toast) {
             toast.classList.remove("translate-y-32", "opacity-0");
