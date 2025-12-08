@@ -2,45 +2,80 @@ import type { APIRoute } from 'astro';
 import { db } from '../../db';
 import { gems } from '../../db/schema';
 import { eq } from 'drizzle-orm';
+import { getCollection } from 'astro:content';
 
 // GET: Fetch all gems or a specific gem by slug
 export const GET: APIRoute = async ({ url }) => {
     try {
         const slug = url.searchParams.get('slug');
 
-        if (slug) {
-            // Fetch specific gem
-            const gem = await db.select().from(gems).where(eq(gems.slug, slug)).limit(1);
+        // If DB credentials are missing, fall back to content collection
+        const useFallback = !db;
 
-            if (gem.length === 0) {
+        if (slug) {
+            if (!useFallback) {
+                const gem = await db.select().from(gems).where(eq(gems.slug, slug)).limit(1);
+
+                if (gem.length === 0) {
+                    return new Response(
+                        JSON.stringify({ error: 'Gem not found' }),
+                        { status: 404, headers: { 'Content-Type': 'application/json' } }
+                    );
+                }
+
+                const gemData = {
+                    ...gem[0],
+                    features: JSON.parse(gem[0].features),
+                };
+
+                return new Response(
+                    JSON.stringify({ success: true, gem: gemData }),
+                    { status: 200, headers: { 'Content-Type': 'application/json' } }
+                );
+            }
+
+            const contentGem = (await getCollection('gems')).find((g) => g.slug === slug);
+            if (!contentGem) {
                 return new Response(
                     JSON.stringify({ error: 'Gem not found' }),
                     { status: 404, headers: { 'Content-Type': 'application/json' } }
                 );
             }
 
-            // Parse features from JSON string
-            const gemData = {
-                ...gem[0],
-                features: JSON.parse(gem[0].features),
-            };
-
             return new Response(
-                JSON.stringify({ success: true, gem: gemData }),
+                JSON.stringify({ success: true, gem: { ...contentGem.data, slug: contentGem.slug } }),
                 { status: 200, headers: { 'Content-Type': 'application/json' } }
             );
         } else {
-            // Fetch all gems
-            const allGems = await db.select().from(gems);
+            if (!useFallback) {
+                const allGems = await db.select().from(gems);
+                const gemsData = allGems.map(gem => ({
+                    ...gem,
+                    features: JSON.parse(gem.features),
+                }));
 
-            // Parse features for all gems
-            const gemsData = allGems.map(gem => ({
-                ...gem,
-                features: JSON.parse(gem.features),
+                return new Response(
+                    JSON.stringify({ success: true, gems: gemsData }),
+                    { status: 200, headers: { 'Content-Type': 'application/json' } }
+                );
+            }
+
+            const contentGems = await getCollection('gems');
+            const fallback = contentGems.map((g) => ({
+                id: g.id,
+                slug: g.slug,
+                title: g.data.title,
+                description: g.data.description,
+                category: g.data.category,
+                icon: g.data.icon || 'file',
+                color: g.data.color || 'bg-gray-500',
+                features: g.data.features || [],
+                content: g.body,
+                lastUpdated: g.data.lastUpdated || g.data.date || null,
             }));
 
             return new Response(
-                JSON.stringify({ success: true, gems: gemsData }),
+                JSON.stringify({ success: true, gems: fallback }),
                 { status: 200, headers: { 'Content-Type': 'application/json' } }
             );
         }
@@ -55,6 +90,13 @@ export const GET: APIRoute = async ({ url }) => {
 
 // POST: Create new gem
 export const POST: APIRoute = async ({ request }) => {
+    if (!db) {
+        return new Response(
+            JSON.stringify({ error: 'Database not configured' }),
+            { status: 503, headers: { 'Content-Type': 'application/json' } }
+        );
+    }
+
     try {
         const body = await request.json();
         const { slug, title, description, category, icon, color, features, content } = body;
@@ -92,6 +134,13 @@ export const POST: APIRoute = async ({ request }) => {
 
 // PUT: Update existing gem
 export const PUT: APIRoute = async ({ request }) => {
+    if (!db) {
+        return new Response(
+            JSON.stringify({ error: 'Database not configured' }),
+            { status: 503, headers: { 'Content-Type': 'application/json' } }
+        );
+    }
+
     try {
         const body = await request.json();
         const { slug, title, description, category, icon, color, features, content } = body;
@@ -132,6 +181,13 @@ export const PUT: APIRoute = async ({ request }) => {
 
 // DELETE: Remove gem
 export const DELETE: APIRoute = async ({ request }) => {
+    if (!db) {
+        return new Response(
+            JSON.stringify({ error: 'Database not configured' }),
+            { status: 503, headers: { 'Content-Type': 'application/json' } }
+        );
+    }
+
     try {
         const body = await request.json();
         const { slug } = body;

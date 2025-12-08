@@ -5,6 +5,13 @@ import { eq } from 'drizzle-orm';
 
 // POST: Increment copy count for a gem
 export const POST: APIRoute = async ({ request }) => {
+    if (!db) {
+        return new Response(
+            JSON.stringify({ error: 'Database not configured' }),
+            { status: 503, headers: { 'Content-Type': 'application/json' } }
+        );
+    }
+
     try {
         const body = await request.json();
         const { gemSlug } = body;
@@ -54,6 +61,13 @@ export const POST: APIRoute = async ({ request }) => {
 
 // GET: Retrieve copy statistics
 export const GET: APIRoute = async ({ url }) => {
+    if (!db) {
+        return new Response(
+            JSON.stringify({ success: true, stats: [] }),
+            { status: 200, headers: { 'Content-Type': 'application/json' } }
+        );
+    }
+
     try {
         const gemSlug = url.searchParams.get('gemSlug');
 

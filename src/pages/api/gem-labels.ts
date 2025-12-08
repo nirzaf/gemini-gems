@@ -9,6 +9,13 @@ export const GET: APIRoute = async ({ url }) => {
         const gemSlug = url.searchParams.get('gemSlug');
         const labelId = url.searchParams.get('labelId');
 
+        if (!db) {
+            return new Response(
+                JSON.stringify({ success: true, labels: [], gems: [] }),
+                { status: 200, headers: { 'Content-Type': 'application/json' } }
+            );
+        }
+
         if (gemSlug) {
             // Get labels for specific gem
             const mappings = await db.select()
@@ -51,6 +58,13 @@ export const GET: APIRoute = async ({ url }) => {
 
 // POST: Assign label to gem
 export const POST: APIRoute = async ({ request }) => {
+    if (!db) {
+        return new Response(
+            JSON.stringify({ error: 'Database not configured' }),
+            { status: 503, headers: { 'Content-Type': 'application/json' } }
+        );
+    }
+
     try {
         const body = await request.json();
         const { gemSlug, labelId } = body;
@@ -79,6 +93,13 @@ export const POST: APIRoute = async ({ request }) => {
 
 // DELETE: Remove label from gem
 export const DELETE: APIRoute = async ({ request }) => {
+    if (!db) {
+        return new Response(
+            JSON.stringify({ error: 'Database not configured' }),
+            { status: 503, headers: { 'Content-Type': 'application/json' } }
+        );
+    }
+
     try {
         const body = await request.json();
         const { gemSlug, labelId } = body;
