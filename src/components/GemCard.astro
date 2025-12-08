@@ -35,11 +35,11 @@ const categoryIcon = categoryIcons[gem.data.category] || "fas fa-tag";
 
 <div
   class="gem-card rounded-xl p-4 shadow-lg flex flex-col h-full"
-  data-gem-slug={gem.slug}
   data-title={gem.data.title}
   data-description={gem.data.description}
   data-category={gem.data.category}
   data-features={gem.data.features.join(" ")}
+  data-gem-slug={gem.slug}
 >
   <!-- Icon, Title and Quick Action -->
   <div class="flex items-center gap-3 mb-3">

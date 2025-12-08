@@ -2,11 +2,12 @@
 async function loadGemData() {
     try {
         // Fetch all gem stats
-        const statsResponse = await fetch('/api/copy');
+        const base = (import.meta as any)?.env?.BASE_URL || '/';
+        const statsResponse = await fetch(`${base}api/copy`);
         const statsData = await statsResponse.json();
 
         // Fetch all labels
-        const labelsResponse = await fetch('/api/labels');
+        const labelsResponse = await fetch(`${base}api/labels`);
         const labelsData = await labelsResponse.json();
 
         if (!statsData.success || !labelsData.success) {
@@ -49,7 +50,7 @@ async function loadGemData() {
 
             // Fetch and add labels for this gem
             try {
-                const gemLabelsResponse = await fetch(`/api/gem-labels?gemSlug=${gemSlug}`);
+                const gemLabelsResponse = await fetch(`${base}api/gem-labels?gemSlug=${gemSlug}`);
                 const gemLabelsData = await gemLabelsResponse.json();
 
                 if (gemLabelsData.success && gemLabelsData.labels && gemLabelsData.labels.length > 0) {
