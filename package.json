@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@astrojs/netlify": "^6.6.3",
-    "@libsql/client": "^0.14.0",
+    "@libsql/client": "^0.15.15",
     "@neondatabase/serverless": "^1.0.2",
     "@types/ws": "^8.18.1",
     "astro": "^5.16.4",
