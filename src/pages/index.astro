@@ -19,7 +19,9 @@ const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
   <Header />
 
   <!-- Stats Section -->
-  <section class="py-8 bg-[#0f1419] transition-colors duration-300">
+  <section
+    class="py-8 bg-gray-50 dark:bg-[#0f1419] transition-colors duration-300"
+  >
     <div class="container mx-auto px-4">
       <div
         class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center max-w-4xl mx-auto"
@@ -32,7 +34,9 @@ const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
           >
             {gems.length}
           </div>
-          <div class="text-gray-400 font-semibold text-sm">Gems</div>
+          <div class="text-gray-600 dark:text-gray-400 font-semibold text-sm">
+            Gems
+          </div>
         </div>
         <div
           class="stats-card p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow"
@@ -42,7 +46,9 @@ const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
           >
             {categories.length}
           </div>
-          <div class="text-gray-400 font-semibold text-sm">Categories</div>
+          <div class="text-gray-600 dark:text-gray-400 font-semibold text-sm">
+            Categories
+          </div>
         </div>
         <div
           class="stats-card p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow"
@@ -52,7 +58,9 @@ const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
           >
             100%
           </div>
-          <div class="text-gray-400 font-semibold text-sm">Open Source</div>
+          <div class="text-gray-600 dark:text-gray-400 font-semibold text-sm">
+            Open Source
+          </div>
         </div>
       </div>
     </div>
@@ -61,14 +69,18 @@ const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
   <!-- Gems Section -->
   <section
     id="gems"
-    class="py-12 bg-[#0f1419] min-h-screen transition-colors duration-300"
+    class="py-12 bg-gray-50 dark:bg-[#0f1419] min-h-screen transition-colors duration-300"
   >
     <div class="container mx-auto px-4">
       <div class="text-center mb-8">
-        <h2 class="text-3xl md:text-4xl font-bold mb-3 text-white">
+        <h2
+          class="text-3xl md:text-4xl font-bold mb-3 text-gray-900 dark:text-white"
+        >
           Find the right expert Gem
         </h2>
-        <p class="text-base md:text-lg max-w-2xl mx-auto text-gray-400">
+        <p
+          class="text-base md:text-lg max-w-2xl mx-auto text-gray-600 dark:text-gray-400"
+        >
           Search, filter by category, and launch a ready-to-use AI persona.
         </p>
       </div>
@@ -83,9 +95,7 @@ const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
         id="gemsGrid"
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
       >
-      {gems.map((gem) => (
-        <GemCard gem={gem} />
-      ))}
+        {gems.map((gem) => <GemCard gem={gem} />)}
       </div>
     </div>
   </section>

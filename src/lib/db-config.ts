@@ -11,7 +11,10 @@ const stub = {
   },
 };
 
-const tursoClient = url && authToken ? createClient({ url, authToken }) : (stub as any);
+const tursoClient = url ? createClient({
+  url,
+  authToken: authToken || undefined
+}) : (stub as any);
 
 export default tursoClient;
 

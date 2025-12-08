@@ -14,14 +14,14 @@ const TURSO_DB_TOKEN = getEnvVar('TURSO_DB_TOKEN');
 // Build-friendly: only initialize DB when credentials exist.
 let dbInstance: ReturnType<typeof drizzle> | null = null;
 
-if (!TURSO_DB_URL || !TURSO_DB_TOKEN) {
+if (!TURSO_DB_URL) {
   console.warn(
-    '⚠️ TURSO_DB_URL or TURSO_DB_TOKEN not set; continuing without DB (fallback data only).',
+    '⚠️ TURSO_DB_URL not set; continuing without DB (fallback data only).',
   );
 } else {
   const client = createClient({
     url: TURSO_DB_URL,
-    authToken: TURSO_DB_TOKEN,
+    authToken: TURSO_DB_TOKEN || undefined,
   });
 
   dbInstance = drizzle(client, { schema });
