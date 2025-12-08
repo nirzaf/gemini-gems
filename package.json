@@ -16,7 +16,9 @@
     "@types/ws": "^8.18.1",
     "astro": "^5.16.4",
     "drizzle-orm": "^0.45.0",
+    "gray-matter": "^4.0.3",
     "lucide-astro": "^0.554.0",
+    "marked": "^17.0.1",
     "ws": "^8.18.3"
   },
   "devDependencies": {

@@ -1,16 +1,37 @@
----
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import GemCard from "../components/GemCard.astro";
 import SearchFilter from "../components/SearchFilter.astro";
-import { getCollection } from "astro:content";
+import { db } from "../db";
+import { gems as gemsSchema } from "../db/schema";
 
-const gems = (await getCollection("gems")).sort((a, b) => {
-  const dateA = a.data.lastUpdated?.getTime() || 0;
-  const dateB = b.data.lastUpdated?.getTime() || 0;
-  return dateB - dateA;
-});
+// Fetch gems from database
+if (!db) {
+  throw new Error("Database connection not available");
+}
+const dbGems = await db.select().from(gemsSchema);
+
+// Map DB gems to the format expected by GemCard
+const gems = dbGems
+  .map((gem) => ({
+    id: gem.id.toString(),
+    slug: gem.slug,
+    data: {
+      title: gem.title,
+      description: gem.description,
+      category: gem.category,
+      icon: gem.icon,
+      color: gem.color,
+      features: JSON.parse(gem.features),
+      lastUpdated: gem.lastUpdated,
+    },
+  }))
+  .sort((a, b) => {
+    const dateA = a.data.lastUpdated?.getTime() || 0;
+    const dateB = b.data.lastUpdated?.getTime() || 0;
+    return dateB - dateA;
+  });
 
 const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
 ---

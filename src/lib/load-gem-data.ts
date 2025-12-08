@@ -7,28 +7,9 @@ async function loadGemData() {
         let statsData = { success: false, stats: [] };
         let labelsData = { success: false, labels: [] };
 
-        // Try to fetch stats, but don't fail if API doesn't exist (static build)
-        try {
-            const statsResponse = await fetch(`${base}api/copy`);
-            if (statsResponse.ok) {
-                statsData = await statsResponse.json();
-            }
-        } catch (error) {
-            console.log('Stats API not available (static build)');
-        }
-
-        // Try to fetch labels, but don't fail if API doesn't exist (static build)
-        try {
-            const labelsResponse = await fetch(`${base}api/labels`);
-            if (labelsResponse.ok) {
-                labelsData = await labelsResponse.json();
-            }
-        } catch (error) {
-            console.log('Labels API not available (static build)');
-        }
-
-        if (!statsData.success || !labelsData.success) {
-            console.warn('Failed to fetch gem data');
+        // Skip processing if no data (which is expected for static build)
+        if (!statsData.success && !labelsData.success) {
+            // console.warn('Gem data fetching disabled for static build');
             return;
         }
 
@@ -41,8 +22,6 @@ async function loadGemData() {
 
         // Update each gem card with stats and labels
         const cards = document.querySelectorAll('.gem-card');
-
-
 
         for (const card of cards) {
             const gemSlug = (card as HTMLElement).dataset.gemSlug;
@@ -64,29 +43,6 @@ async function loadGemData() {
             ${copyCount}
           `;
                 card.appendChild(copyBadge);
-            }
-
-            // Fetch and add labels for this gem
-            try {
-                const gemLabelsResponse = await fetch(`${base}api/gem-labels?gemSlug=${gemSlug}`);
-                const gemLabelsData = await gemLabelsResponse.json();
-
-                if (gemLabelsData.success && gemLabelsData.labels && gemLabelsData.labels.length > 0) {
-                    const categoryBadgeContainer = card.querySelector('.mb-3.flex.items-center.gap-2.flex-wrap');
-                    if (categoryBadgeContainer) {
-                        // Add up to 2 labels
-                        gemLabelsData.labels.slice(0, 2).forEach((label: any) => {
-                            const labelBadge = document.createElement('span');
-                            labelBadge.className = 'inline-block px-2 py-0.5 text-xs font-semibold rounded text-white border';
-                            labelBadge.style.backgroundColor = `${label.color}20`;
-                            labelBadge.style.borderColor = `${label.color}50`;
-                            labelBadge.textContent = label.name;
-                            categoryBadgeContainer.appendChild(labelBadge);
-                        });
-                    }
-                }
-            } catch (error) {
-                console.warn(`Failed to fetch labels for ${gemSlug}:`, error);
             }
         }
     } catch (error) {

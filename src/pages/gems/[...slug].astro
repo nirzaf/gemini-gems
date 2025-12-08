@@ -1,12 +1,14 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
+import { db } from "../../db";
+import { gems as gemsSchema } from "../../db/schema";
 import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import { ArrowLeft, Copy, Download } from "lucide-astro";
+import { marked } from "marked";
 
 export async function getStaticPaths() {
-  const gems = await getCollection("gems");
+  const gems = await db.select().from(gemsSchema);
   return gems.map((gem) => ({
     params: { slug: gem.slug },
     props: { gem },
@@ -14,11 +16,14 @@ export async function getStaticPaths() {
 }
 
 interface Props {
-  gem: CollectionEntry<"gems">;
+  gem: typeof gemsSchema.$inferSelect;
 }
 
 const { gem } = Astro.props;
-const { Content } = await gem.render();
+const contentHtml = marked.parse(gem.content);
+
+// Parse features JSON
+const features = JSON.parse(gem.features);
 
 // Map category to gradient colors
 const categoryColors: Record<string, string> = {
@@ -33,7 +38,7 @@ const categoryColors: Record<string, string> = {
 };
 
 const categoryGradient =
-  categoryColors[gem.data.category] || "from-gray-500 to-gray-600";
+  categoryColors[gem.category] || "from-gray-500 to-gray-600";
 ---
 
 <Layout
@@ -127,27 +132,29 @@ const categoryGradient =
   </div>
 
   <script>
-    document.getElementById("copyButton")?.addEventListener("click", async () => {
-      try {
-        const proseElement = document.querySelector(".prose");
-        if (!proseElement) return;
-        const fullText = proseElement.innerText || "";
-        const idx = fullText.toLowerCase().indexOf("you are");
-        const textToCopy = (idx >= 0 ? fullText.slice(idx) : fullText).trim();
-        await navigator.clipboard.writeText(textToCopy);
-        const toast = document.getElementById("toast");
-        if (toast) {
-          toast.classList.remove("translate-y-32", "opacity-0");
-          toast.classList.add("translate-y-0", "opacity-100");
-          setTimeout(() => {
-            toast.classList.add("translate-y-32", "opacity-0");
-            toast.classList.remove("translate-y-0", "opacity-100");
-          }, 3000);
+    document
+      .getElementById("copyButton")
+      ?.addEventListener("click", async () => {
+        try {
+          const proseElement = document.querySelector(".prose");
+          if (!proseElement) return;
+          const fullText = proseElement.innerText || "";
+          const idx = fullText.toLowerCase().indexOf("you are");
+          const textToCopy = (idx >= 0 ? fullText.slice(idx) : fullText).trim();
+          await navigator.clipboard.writeText(textToCopy);
+          const toast = document.getElementById("toast");
+          if (toast) {
+            toast.classList.remove("translate-y-32", "opacity-0");
+            toast.classList.add("translate-y-0", "opacity-100");
+            setTimeout(() => {
+              toast.classList.add("translate-y-32", "opacity-0");
+              toast.classList.remove("translate-y-0", "opacity-100");
+            }, 3000);
+          }
+        } catch (err) {
+          console.error("Failed to copy:", err);
+          alert("Failed to copy to clipboard. Please try again.");
         }
-      } catch (err) {
-        console.error("Failed to copy:", err);
-        alert("Failed to copy to clipboard. Please try again.");
-      }
-    });
+      });
   </script>
 </Layout>
