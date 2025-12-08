@@ -25,6 +25,8 @@ async function loadGemData() {
         // Update each gem card with stats and labels
         const cards = document.querySelectorAll('.gem-card');
 
+
+
         for (const card of cards) {
             const gemSlug = (card as HTMLElement).dataset.gemSlug;
             if (!gemSlug) continue;
@@ -32,19 +34,18 @@ async function loadGemData() {
             // Add copy count badge if count > 0
             const stats = gemStats[gemSlug];
             if (stats && stats.copy_count > 0) {
-                const categoryBadgeContainer = card.querySelector('.mb-3.flex.items-center.gap-2.flex-wrap');
-                if (categoryBadgeContainer && !categoryBadgeContainer.querySelector('.bg-orange-500\\/20')) {
-                    const copyBadge = document.createElement('span');
-                    copyBadge.className = 'inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded bg-orange-500/20 text-orange-300 border border-orange-500/30';
+                // Check if badge already exists
+                if (!card.querySelector('.copy-count-badge')) {
+                    const copyBadge = document.createElement('div');
+                    copyBadge.className = 'copy-count-badge absolute -top-2 -right-2 inline-flex items-center gap-1 px-2 py-1 text-xs font-bold rounded-full bg-white dark:bg-[#0f1419] text-orange-500 border border-orange-200 dark:border-orange-500/30 shadow-sm z-10';
                     copyBadge.title = `Copied ${stats.copy_count} times`;
                     copyBadge.innerHTML = `
             <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
-              <polyline points="16 7 22 7 22 13"></polyline>
+              <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
             ${stats.copy_count}
           `;
-                    categoryBadgeContainer.appendChild(copyBadge);
+                    card.appendChild(copyBadge);
                 }
             }
 
