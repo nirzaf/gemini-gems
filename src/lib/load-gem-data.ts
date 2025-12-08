@@ -3,12 +3,29 @@ async function loadGemData() {
     try {
         // Fetch all gem stats
         const base = (import.meta as any)?.env?.BASE_URL || '/';
-        const statsResponse = await fetch(`${base}api/copy`);
-        const statsData = await statsResponse.json();
 
-        // Fetch all labels
-        const labelsResponse = await fetch(`${base}api/labels`);
-        const labelsData = await labelsResponse.json();
+        let statsData = { success: false, stats: [] };
+        let labelsData = { success: false, labels: [] };
+
+        // Try to fetch stats, but don't fail if API doesn't exist (static build)
+        try {
+            const statsResponse = await fetch(`${base}api/copy`);
+            if (statsResponse.ok) {
+                statsData = await statsResponse.json();
+            }
+        } catch (error) {
+            console.log('Stats API not available (static build)');
+        }
+
+        // Try to fetch labels, but don't fail if API doesn't exist (static build)
+        try {
+            const labelsResponse = await fetch(`${base}api/labels`);
+            if (labelsResponse.ok) {
+                labelsData = await labelsResponse.json();
+            }
+        } catch (error) {
+            console.log('Labels API not available (static build)');
+        }
 
         if (!statsData.success || !labelsData.success) {
             console.warn('Failed to fetch gem data');
