@@ -1,10 +1,11 @@
 ---
 interface Props {
     categories: string[];
+    labels?: Array<{ id: number; name: string; color: string }>;
     initialCount: number;
 }
 
-const { categories, initialCount } = Astro.props;
+const { categories, labels = [], initialCount } = Astro.props;
 ---
 
 <div class="max-w-4xl mx-auto mb-8">
@@ -15,10 +16,15 @@ const { categories, initialCount } = Astro.props;
             placeholder="Search gems by name, description, features..."
             class="search-input w-full px-4 py-3 rounded-xl"
         />
+        <select id="sortSelect" class="search-input px-4 py-3 rounded-xl">
+            <option value="default">Sort: Default</option>
+            <option value="most-copied">Most Copied</option>
+            <option value="alphabetical">A-Z</option>
+        </select>
     </div>
     <div
         id="categoryFilters"
-        class="flex flex-wrap items-center justify-center gap-2"
+        class="flex flex-wrap items-center justify-center gap-2 mb-3"
     >
         <button
             data-category="All"
@@ -36,6 +42,32 @@ const { categories, initialCount } = Astro.props;
             ))
         }
     </div>
+    {
+        labels.length > 0 && (
+            <div
+                id="labelFilters"
+                class="flex flex-wrap items-center justify-center gap-2 mb-3"
+            >
+                <span class="text-xs text-gray-400 mr-2">Filter by label:</span>
+                <button
+                    data-label="all"
+                    class="label-badge active px-3 py-1 rounded-full text-xs border"
+                    style="background-color: #1f2937; border-color: #374151;"
+                >
+                    All Labels
+                </button>
+                {labels.map((label) => (
+                    <button
+                        data-label={label.id}
+                        class="label-badge px-3 py-1 rounded-full text-xs border"
+                        style={`background-color: ${label.color}30; border-color: ${label.color};`}
+                    >
+                        {label.name}
+                    </button>
+                ))}
+            </div>
+        )
+    }
     <div class="text-center mt-3 text-xs text-gray-400" id="resultsCounter">
         Showing <span id="visibleCount">{initialCount}</span> of {initialCount} gems
     </div>
@@ -47,16 +79,21 @@ const { categories, initialCount } = Astro.props;
         const searchInput = document.getElementById(
             "searchInput",
         ) as HTMLInputElement;
-        const filters = document.getElementById("categoryFilters");
+        const sortSelect = document.getElementById(
+            "sortSelect",
+        ) as HTMLSelectElement;
+        const categoryFilters = document.getElementById("categoryFilters");
+        const labelFilters = document.getElementById("labelFilters");
         const visibleCountSpan = document.getElementById("visibleCount");
         // We select cards from the document since they are siblings/outside this component
         const cards = Array.from(
             document.querySelectorAll(".gem-card"),
         ) as HTMLElement[];
 
-        if (!searchInput || !filters || !visibleCountSpan) return;
+        if (!searchInput || !categoryFilters || !visibleCountSpan) return;
 
         let selectedCategory = "All";
+        let selectedLabel = "all";
         let query = "";
 
         const normalize = (s: string | null) => (s || "").toLowerCase();
@@ -76,27 +113,94 @@ const { categories, initialCount } = Astro.props;
             );
         };
 
+        const matchesLabel = (el: HTMLElement, labelId: string) => {
+            if (!labelId || labelId === "all") return true;
+            // Check if the card has a label badge with the selected label
+            const labelBadges = el.querySelectorAll(
+                ".inline-block.px-2.py-0\\.5.text-xs.font-semibold.rounded.text-white.border",
+            );
+            return Array.from(labelBadges).some((badge) => {
+                const badgeText = badge.textContent?.trim();
+                const labelButtons = document.querySelectorAll(
+                    `[data-label="${labelId}"]`,
+                );
+                return Array.from(labelButtons).some(
+                    (btn) => btn.textContent?.trim() === badgeText,
+                );
+            });
+        };
+
         const applyFilter = () => {
             let visible = 0;
+            const visibleCards: HTMLElement[] = [];
+
             cards.forEach((card) => {
                 const show =
                     matchesCategory(card, selectedCategory) &&
-                    matchesQuery(card, query);
+                    matchesQuery(card, query) &&
+                    matchesLabel(card, selectedLabel);
                 card.style.display = show ? "" : "none";
-                if (show) visible++;
+                if (show) {
+                    visible++;
+                    visibleCards.push(card);
+                }
             });
+
             visibleCountSpan.textContent = visible.toString();
+            return visibleCards;
+        };
+
+        const applySort = () => {
+            const sortValue = sortSelect?.value || "default";
+            const grid = document.getElementById("gemsGrid");
+            if (!grid) return;
+
+            const visibleCards = applyFilter();
+
+            if (sortValue === "most-copied") {
+                // Sort by copy count (highest to lowest)
+                visibleCards.sort((a, b) => {
+                    const aCount = parseInt(
+                        a
+                            .querySelector(".bg-orange-500\\/20")
+                            ?.textContent?.trim() || "0",
+                    );
+                    const bCount = parseInt(
+                        b
+                            .querySelector(".bg-orange-500\\/20")
+                            ?.textContent?.trim() || "0",
+                    );
+                    return bCount - aCount;
+                });
+            } else if (sortValue === "alphabetical") {
+                // Sort alphabetically by title
+                visibleCards.sort((a, b) => {
+                    const aTitle = a.getAttribute("data-title") || "";
+                    const bTitle = b.getAttribute("data-title") || "";
+                    return aTitle.localeCompare(bTitle);
+                });
+            }
+
+            // Reorder cards in the DOM
+            visibleCards.forEach((card) => grid.appendChild(card));
         };
 
         // Search
         searchInput.addEventListener("input", (e) => {
             const target = e.target as HTMLInputElement;
             query = normalize(target.value);
-            applyFilter();
+            applySort();
         });
 
+        // Sort
+        if (sortSelect) {
+            sortSelect.addEventListener("change", () => {
+                applySort();
+            });
+        }
+
         // Category filters
-        filters.addEventListener("click", (e) => {
+        categoryFilters.addEventListener("click", (e) => {
             const target = e.target as HTMLElement;
             const btn = target.closest("button[data-category]");
             if (!btn) return;
@@ -104,16 +208,35 @@ const { categories, initialCount } = Astro.props;
             selectedCategory = btn.getAttribute("data-category") || "All";
 
             // Update active state
-            filters
+            categoryFilters
                 .querySelectorAll("button")
                 .forEach((b) => b.classList.remove("active"));
             btn.classList.add("active");
 
-            applyFilter();
+            applySort();
         });
 
+        // Label filters
+        if (labelFilters) {
+            labelFilters.addEventListener("click", (e) => {
+                const target = e.target as HTMLElement;
+                const btn = target.closest("button[data-label]");
+                if (!btn) return;
+
+                selectedLabel = btn.getAttribute("data-label") || "all";
+
+                // Update active state
+                labelFilters
+                    .querySelectorAll("button")
+                    .forEach((b) => b.classList.remove("active"));
+                btn.classList.add("active");
+
+                applySort();
+            });
+        }
+
         // Initial apply
-        applyFilter();
+        applySort();
     }
 
     // Run on load and after Astro view transitions if enabled

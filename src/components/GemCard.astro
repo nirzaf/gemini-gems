@@ -1,5 +1,5 @@
 ---
-import { Eye, Download, Copy } from "lucide-astro";
+import { Eye, Download, Copy, TrendingUp } from "lucide-astro";
 
 interface Props {
   gem: {
@@ -61,12 +61,13 @@ const categoryIcon = categoryIcons[gem.data.category] || "fas fa-tag";
   </div>
 
   <!-- Category Badge -->
-  <div class="mb-3">
+  <div class="mb-3 flex items-center gap-2 flex-wrap">
     <span
       class={`inline-block px-2 py-0.5 text-xs font-semibold rounded ${gem.data.color} bg-opacity-20 text-white border border-current border-opacity-30`}
     >
       {gem.data.category}
     </span>
+    <!-- Copy count and labels will be added dynamically via client-side script -->
   </div>
 
   <!-- Description -->
@@ -146,6 +147,18 @@ const categoryIcon = categoryIcons[gem.data.category] || "fas fa-tag";
         // Copy to clipboard
         await navigator.clipboard.writeText(content);
 
+        // Track copy event in database
+        try {
+          await fetch("/api/copy", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ gemSlug: slug }),
+          });
+        } catch (apiError) {
+          console.warn("Failed to track copy event:", apiError);
+          // Don't fail the copy operation if tracking fails
+        }
+
         // Show success feedback
         const originalHTML = button.innerHTML;
         button.innerHTML =
@@ -180,8 +193,8 @@ const categoryIcon = categoryIcons[gem.data.category] || "fas fa-tag";
   }
 
   // Initialize once
-  if (!window.hasInitCopyButtons) {
-    window.hasInitCopyButtons = true;
+  if (!(window as any).hasInitCopyButtons) {
+    (window as any).hasInitCopyButtons = true;
     initCopyButtons();
   }
 </script>

@@ -4,7 +4,6 @@ import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import GemCard from "../components/GemCard.astro";
-
 import SearchFilter from "../components/SearchFilter.astro";
 
 // Fetch all gems from the content collection
@@ -24,7 +23,9 @@ const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
   <!-- Stats Section -->
   <section class="py-8 bg-[#0f1419] transition-colors duration-300">
     <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center max-w-4xl mx-auto">
+      <div
+        class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center max-w-4xl mx-auto"
+      >
         <div
           class="stats-card p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow"
         >
@@ -84,10 +85,19 @@ const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
         id="gemsGrid"
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
       >
-        {gems.map((gem) => <GemCard gem={gem} />)}
+        {
+          gems.map((gem) => (
+            <div data-gem-slug={gem.slug}>
+              <GemCard gem={gem} />
+            </div>
+          ))
+        }
       </div>
     </div>
   </section>
 
   <Footer />
+
+  <!-- Load gem data client-side -->
+  <script src="../lib/load-gem-data.ts"></script>
 </Layout>
