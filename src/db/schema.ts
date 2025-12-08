@@ -1,47 +1,47 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+import { pgTable, serial, varchar, text, integer, timestamp } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 
 // Gems content table - stores the actual gem markdown content
-export const gems = sqliteTable('gems', {
-    id: integer('id').primaryKey({ autoIncrement: true }),
-    slug: text('slug').notNull().unique(),
-    title: text('title').notNull(),
+export const gems = pgTable('gems', {
+    id: serial('id').primaryKey(),
+    slug: varchar('slug', { length: 255 }).notNull().unique(),
+    title: varchar('title', { length: 500 }).notNull(),
     description: text('description').notNull(),
-    category: text('category').notNull(),
-    icon: text('icon').notNull(),
-    color: text('color').notNull(),
+    category: varchar('category', { length: 100 }).notNull(),
+    icon: varchar('icon', { length: 100 }).notNull(),
+    color: varchar('color', { length: 50 }).notNull(),
     features: text('features').notNull(), // JSON string array
     content: text('content').notNull(), // Full markdown content
-    lastUpdated: text('last_updated').default(sql`CURRENT_TIMESTAMP`),
-    createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+    lastUpdated: timestamp('last_updated').defaultNow(),
+    createdAt: timestamp('created_at').defaultNow(),
 });
 
 // Gem statistics table
-export const gemsStats = sqliteTable('gems_stats', {
-    id: integer('id').primaryKey({ autoIncrement: true }),
-    gemSlug: text('gem_slug').notNull().unique(),
+export const gemsStats = pgTable('gems_stats', {
+    id: serial('id').primaryKey(),
+    gemSlug: varchar('gem_slug', { length: 255 }).notNull().unique(),
     copyCount: integer('copy_count').notNull().default(0),
     viewCount: integer('view_count').notNull().default(0),
-    createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
-    updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow(),
 });
 
 // Labels table
-export const gemLabels = sqliteTable('gem_labels', {
-    id: integer('id').primaryKey({ autoIncrement: true }),
-    name: text('name').notNull().unique(),
-    color: text('color').notNull().default('#3B82F6'),
+export const gemLabels = pgTable('gem_labels', {
+    id: serial('id').primaryKey(),
+    name: varchar('name', { length: 100 }).notNull().unique(),
+    color: varchar('color', { length: 50 }).notNull().default('#3B82F6'),
     description: text('description'),
-    createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
-    updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow(),
 });
 
 // Gem-Label mappings table (many-to-many)
-export const gemLabelMappings = sqliteTable('gem_label_mappings', {
-    id: integer('id').primaryKey({ autoIncrement: true }),
-    gemSlug: text('gem_slug').notNull(),
+export const gemLabelMappings = pgTable('gem_label_mappings', {
+    id: serial('id').primaryKey(),
+    gemSlug: varchar('gem_slug', { length: 255 }).notNull(),
     labelId: integer('label_id').notNull().references(() => gemLabels.id, { onDelete: 'cascade' }),
-    createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+    createdAt: timestamp('created_at').defaultNow(),
 });
 
 // Type exports for TypeScript
