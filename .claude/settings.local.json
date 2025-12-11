@@ -4,7 +4,12 @@
       "Bash(bun install:*)",
       "Bash(cat:*)",
       "Bash(bun run build)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Update base URL to Netlify and add AGENTS.MD Generator gem\n\n- Updated astro.config.mjs: site changed to https://geminigems.netlify.app\n- Changed base path from /gemini-gems to / for Netlify deployment\n- Updated all internal links in Header, Footer, GemCard, and detail pages\n- Added new gem: AGENTS.MD Generator (ID: 19)\n  - Expert AI system analyst for generating machine-readable instruction files\n  - Auto-detects package managers, tech stack, and project conventions\n  - Generates actionable AGENTS.MD files for AI coding agents\n  - Category: Development, Color: bg-purple-600, Icon: file-code\n- Reinstalled dependencies with bun (package versions updated)\n- Build successful: 20 pages generated (including new gem)\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(git checkout:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
