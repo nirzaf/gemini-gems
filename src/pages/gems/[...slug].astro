@@ -1,6 +1,7 @@
 ---
 import fs from "node:fs";
 import path from "node:path";
+import matter from "gray-matter";
 import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
@@ -8,13 +9,34 @@ import { ArrowLeft, Copy, Download } from "lucide-astro";
 import { marked } from "marked";
 
 export async function getStaticPaths() {
-  const gemsPath = path.join(process.cwd(), "src", "data", "gems.json");
-  const gemsData = JSON.parse(fs.readFileSync(gemsPath, "utf-8"));
+  const gemsDir = path.join(process.cwd(), "src", "content", "gems");
+  const gemFiles = fs
+    .readdirSync(gemsDir)
+    .filter((file) => file.endsWith(".md"));
 
-  return gemsData.map((gem: any) => ({
-    params: { slug: gem.slug },
-    props: { gem },
-  }));
+  return gemFiles.map((file) => {
+    const slug = file.replace(/\.md$/, "");
+    const filePath = path.join(gemsDir, file);
+    const source = fs.readFileSync(filePath, "utf-8");
+    const { data, content } = matter(source);
+
+    return {
+      params: { slug },
+      props: {
+        gem: {
+          slug,
+          title: data.title,
+          description: data.description,
+          category: data.category,
+          icon: data.icon,
+          color: data.color,
+          features: data.features ?? [],
+          content,
+          lastUpdated: data.lastUpdated ?? null,
+        },
+      },
+    };
+  });
 }
 
 interface Props {
@@ -24,8 +46,15 @@ interface Props {
 const { gem } = Astro.props;
 const contentHtml = marked.parse(gem.content);
 
-// Parse features JSON
-const features = JSON.parse(gem.features);
+const features = Array.isArray(gem.features)
+  ? gem.features
+  : (() => {
+      try {
+        return JSON.parse(gem.features);
+      } catch {
+        return [];
+      }
+    })();
 
 // Map category to gradient colors
 const categoryColors: Record<string, string> = {

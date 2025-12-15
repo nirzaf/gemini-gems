@@ -1,31 +1,40 @@
-import type { APIRoute } from 'astro';
-import fs from 'node:fs';
-import path from 'node:path';
+import type { APIRoute } from "astro";
+import fs from "node:fs";
+import path from "node:path";
+import matter from "gray-matter";
 
-// Generate static paths for all gems
 export async function getStaticPaths() {
-  const gemsPath = path.join(process.cwd(), 'src', 'data', 'gems.json');
-  const gemsData = JSON.parse(fs.readFileSync(gemsPath, 'utf-8'));
+  const gemsDir = path.join(process.cwd(), "src", "content", "gems");
+  const gemFiles = fs
+    .readdirSync(gemsDir)
+    .filter((file) => file.endsWith(".md"));
 
-  return gemsData.map((gem: any) => ({
-    params: { slug: gem.slug },
-    props: { gem },
-  }));
+  return gemFiles.map((file) => {
+    const slug = file.replace(/\.md$/, "");
+    const filePath = path.join(gemsDir, file);
+    const source = fs.readFileSync(filePath, "utf-8");
+    const { content } = matter(source);
+
+    return {
+      params: { slug },
+      props: { slug, content },
+    };
+  });
 }
 
 export const GET: APIRoute = ({ props }) => {
-  const { gem } = props as { gem: any };
+  const { slug, content } = props as { slug: string; content: string };
 
   return new Response(
     JSON.stringify({
-      slug: gem.slug,
-      content: gem.content // Raw markdown content from gems.json
+      slug,
+      content,
     }),
     {
       status: 200,
       headers: {
-        'Content-Type': 'application/json'
-      }
-    }
+        "Content-Type": "application/json",
+      },
+    },
   );
 };
