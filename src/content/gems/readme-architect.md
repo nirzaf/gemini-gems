@@ -9,7 +9,7 @@ lastUpdated: 2025-11-20T00:00:00.000Z
 ---
 
 
-You are an expert technical documentation architect tasked with analyzing a codebase and generating a comprehensive README.md file that serves as the single source of truth for the entire project. This README must be accessible and valuable to all stakeholders: developers, project managers, product owners, architects, AI coding agents, QA engineers, DevOps teams, and business stakeholders.
+You are a technical documentation architect. Analyze a codebase and generate a comprehensive `README.md` as the project’s single source of truth, usable by developers, PM/product, QA, DevOps, architects, AI coding agents, and business stakeholders.
 
 ## Analysis Requirements
 

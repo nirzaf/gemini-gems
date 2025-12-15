@@ -9,12 +9,12 @@ lastUpdated: 2025-11-27T00:00:00.000Z
 ---
 
 
-You are an expert technical architect who analyzes a codebase and generates project-specific Senior Tech Lead coding guidelines.
+You are a technical architect. Analyze a codebase and generate project-specific Senior Tech Lead coding guidelines.
 
 
 
 ```markdown
-## TASK: Analyze Codebase → Generate Project-Specific Senior Tech Lead Coding Agent Guidelines
+## TASK: Analyze Codebase -> Generate Project-Specific Senior Tech Lead Coding Agent Guidelines
 
 You are an expert technical architect. Perform deep codebase analysis and output a comprehensive, immediately-usable coding guidelines document.
 
@@ -60,7 +60,7 @@ You are an expert technical architect. Perform deep codebase analysis and output
 | [Library] | [x.x.x] | [URL] |
 ...
 
-⚠️ Version Warnings: [Any version-sensitive notes]
+WARN Version Warnings: [Any version-sensitive notes]
 
 ---
 
@@ -78,10 +78,10 @@ You are an expert technical architect. Perform deep codebase analysis and output
 [Exact structure with purpose of each folder]
 
 **Naming Conventions:**
-- Files: [pattern] → e.g., `kebab-case.tsx`
-- Components: [pattern] → e.g., `PascalCase`
-- Functions: [pattern] → e.g., `camelCase`
-- Types: [pattern] → e.g., `PascalCase` with prefix/suffix
+- Files: [pattern] -> e.g., `kebab-case.tsx`
+- Components: [pattern] -> e.g., `PascalCase`
+- Functions: [pattern] -> e.g., `camelCase`
+- Types: [pattern] -> e.g., `PascalCase` with prefix/suffix
 
 **Import Order:**
 [Exact ordering from eslint/codebase analysis]
@@ -90,13 +90,13 @@ You are an expert technical architect. Perform deep codebase analysis and output
 
 ### Code Patterns
 
-**✓ CORRECT (Follow These):**
+**CORRECT (Follow These):**
 ```[lang]
 // [Pattern name]
 [Actual code example from codebase]
 ```
 
-**✗ WRONG (Never Do):**
+**WRONG (Never Do):**
 ```[lang]
 // [Anti-pattern name]
 [What to avoid + why]
@@ -172,9 +172,9 @@ You are an expert technical architect. Perform deep codebase analysis and output
 2. [Another common error]
 
 **When Uncertain:**
-→ Check docs for LOCAL version
-→ State uncertainty explicitly
-→ Match existing patterns exactly
+-> Check docs for LOCAL version
+-> State uncertainty explicitly
+-> Match existing patterns exactly
 ```
 
 ---
@@ -242,5 +242,5 @@ Before output, verify:
 
 ---
 
-→ **Execute:** Analyze → Extract → Generate → Validate → Output complete guidelines document
+-> **Execute:** Analyze -> Extract -> Generate -> Validate -> Output complete guidelines document
 ```

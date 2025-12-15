@@ -8,10 +8,7 @@ features: ["Architecture diagram + data flow","Directory map with PURPOSE annota
 lastUpdated: 2025-11-25T00:00:00.000Z
 ---
 
-
-
-
-You are an expert documentation architect. Your task is to analyze the current repository and generate a `CLAUDE.md` that is optimized for AI assistant comprehension and token efficiency. Follow the structure, rules, and precision requirements strictly.
+You are a documentation architect. Analyze the repository and generate a token-efficient `CLAUDE.md` optimized for AI assistant comprehension. Follow the structure and precision rules below.
 
 ## Output Requirements
 
@@ -28,9 +25,9 @@ You are an expert documentation architect. Your task is to analyze the current r
 ### Token Efficiency Rules
 - Use tables over prose for structured data
 - Use abbreviations with legend: `Ctrl=Controller, Svc=Service, Repo=Repository`
-- Collapse obvious info: `src/components/*.tsx → React components`
+- Collapse obvious info: `src/components/*.tsx -> React components`
 - Reference by path, not description: `See auth flow: src/lib/auth.ts:45-89`
-- Use symbols: ⚠️=warning, 🔒=security-critical, 🔄=async, 💾=DB operation
+- Use tags: `WARN=warning`, `SEC=security-critical`, `ASYNC=async`, `DB=database operation`
 
 ### Precision Requirements
 - Include exact file paths (relative to root)
@@ -40,11 +37,11 @@ You are an expert documentation architect. Your task is to analyze the current r
 - Mark deprecated patterns with ~~strikethrough~~
 
 ### Anti-Patterns to Avoid
-- ❌ Generic descriptions ("handles user stuff")
-- ❌ Redundant explanations of standard patterns
-- ❌ Documentation of obvious TypeScript/framework conventions
-- ❌ Listing every file (group by pattern instead)
-- ❌ Prose paragraphs where tables work better
+- Generic descriptions ("handles user stuff")
+- Redundant explanations of standard patterns
+- Obvious TypeScript/framework conventions
+- Listing every file (group by pattern instead)
+- Prose paragraphs where tables work better
 
 ### Format Example
 
@@ -54,8 +51,8 @@ You are an expert documentation architect. Your task is to analyze the current r
 
 ## Architecture
 ```
-[Client] → [API Routes] → [tRPC] → [Services] → [Prisma] → [PostgreSQL]
-    ↓           ↓            ↓
+[Client] -> [API Routes] -> [tRPC] -> [Services] -> [Prisma] -> [PostgreSQL]
+    |           |            |
 [Zustand]  [Middleware]  [Validators]
 ```
 
@@ -70,21 +67,21 @@ You are an expert documentation architect. Your task is to analyze the current r
 | Pattern | Location | Notes |
 |---------|----------|-------|
 | Repository | `src/server/repos/` | Abstract DB access |
-| Middleware chain | `src/middleware.ts` | Auth → Rate limit → Log |
+| Middleware chain | `src/middleware.ts` | Auth -> Rate limit -> Log |
 
 ## Conventions
 - Files: `kebab-case.ts`, Components: `PascalCase.tsx`
-- Imports: react → external → internal → relative → types
+- Imports: react -> external -> internal -> relative -> types
 - API: `/api/v1/[resource]/[action]`
 
 ## Critical Paths
-- **Auth**: `middleware.ts` → `lib/auth.ts` → `server/repos/user.ts`
-- **Build**: `pnpm build` → Next.js → Prisma generate → Type check
+- **Auth**: `middleware.ts` -> `lib/auth.ts` -> `server/repos/user.ts`
+- **Build**: `pnpm build` -> Next.js -> Prisma generate -> Type check
 
 ## Gotchas
-⚠️ `prisma generate` required after schema changes
-⚠️ Env vars in `NEXT_PUBLIC_*` are client-exposed
-🔒 Never import `server/` from `app/` client components
+WARN `prisma generate` required after schema changes
+WARN Env vars in `NEXT_PUBLIC_*` are client-exposed
+SEC Never import `server/` from `app/` client components
 
 ## Commands
 | Action | Command | Notes |
