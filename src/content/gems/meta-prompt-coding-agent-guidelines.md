@@ -1,6 +1,6 @@
 ---
-title: Meta-Prompt: Generate Coding Agent Guidelines from Codebase
-description: Analyze a codebase and output project-specific Senior Tech Lead coding guidelines: version-aware, architecture-aligned, and evidence-based.
+title: "Meta-Prompt: Generate Coding Agent Guidelines from Codebase"
+description: "Analyze a codebase and output project-specific Senior Tech Lead coding guidelines: version-aware, architecture-aligned, and evidence-based."
 category: Development
 icon: file-text
 color: bg-teal-700
