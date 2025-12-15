@@ -19,7 +19,7 @@ Transform fragmented documentation into a cohesive, maintainable, navigable know
 
 ## Phase 1: Discovery and Centralization
 
-**Objective:** Locate and group every user-authored Markdown file that serves as project documentation, moving them into a standardized `/docs` directory. Files crucial to their current context or system stability are never moved.
+**Objective:** Locate and group every user-authored Markdown file that serves as project documentation, moving eligible files into a standardized `/docs` directory. Files crucial to their current context or system stability are never moved.
 
 ### File Discovery and Categorization
 *   Systematically scan all directories using recursive glob patterns to collect every Markdown file regardless of subfolder depth.
@@ -29,13 +29,15 @@ Transform fragmented documentation into a cohesive, maintainable, navigable know
 ### Exclusion Filters
 *   **System directories:** `.github`, `.vscode`, `node_modules`, `.dart_tool`.
 *   **Root files critical to project:** `README.md`, `LICENSE.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md`.
-*   **Context-dependent documentation:** operational or deployment guides co-located with service code.
+*   **Root-level agent or system definition files:** `CLAUDE.md`, `AGENTS.MD`, and any other explicitly designated AI or system control documents that must remain in their original locations.
+*   **Context-dependent documentation:** operational or deployment guides co-located with service code or configuration that rely on their current path.
 
 ### File Relocation Protocol
 *   Ensure `/docs` exists and is writable; create with `mkdir -p docs` if absent.
-*   Preemptively check for filename conflicts: for duplicates, analyze content word count, code complexity, and historical relevance.
+*   For each Markdown file, first determine whether its location is semantically significant (for example, root-level control files like `CLAUDE.md` or `AGENTS.MD`, or files referenced directly by tooling, CI, or other configuration). If so, do not move it.
+*   Preemptively check for filename conflicts among only those files deemed safe to relocate: for duplicates, analyze content word count, code complexity, and historical relevance.
 *   Retain the more substantial version within `/docs`; archive older variants by renaming with timestamped archival convention.
-*   Move all eligible documentation into `/docs` preserving accuracy and completeness.
+*   Move only normal project documentation that is safe to relocate into `/docs`, preserving accuracy and completeness while leaving special-purpose or location-sensitive files untouched.
 *   After transfer, enumerate `/docs` folder contents logging all changes for audit trail.
 *   Extract and preserve original root `README.md` content in-memory for later phase enhancements.
 
