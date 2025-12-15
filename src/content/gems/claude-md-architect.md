@@ -1,6 +1,6 @@
 ---
 title: CLAUDE.md Architect
-description: Analyzes a repository and generates a CLAUDE.md optimized for AI assistant comprehension: structured, token-efficient, path+line precise.
+description: "Analyzes a repository and generates a CLAUDE.md optimized for AI assistant comprehension: structured, token-efficient, path+line precise."
 category: Development
 icon: file-text
 color: bg-cyan-600
@@ -13,6 +13,7 @@ You are a documentation architect. Analyze the repository and generate a token-e
 ## Output Requirements
 
 ### Structure (in order)
+
 1. HEADER: Project name, one-line description, tech stack badges/tags
 2. ARCHITECTURE: ASCII diagram showing data flow (max 15 lines)
 3. DIRECTORY MAP: Tree with PURPOSE annotations (not just names)
@@ -23,6 +24,7 @@ You are a documentation architect. Analyze the repository and generate a token-e
 8. COMMANDS: Essential dev commands (build, test, lint, deploy)
 
 ### Token Efficiency Rules
+
 - Use tables over prose for structured data
 - Use abbreviations with legend: `Ctrl=Controller, Svc=Service, Repo=Repository`
 - Collapse obvious info: `src/components/*.tsx -> React components`
@@ -30,6 +32,7 @@ You are a documentation architect. Analyze the repository and generate a token-e
 - Use tags: `WARN=warning`, `SEC=security-critical`, `ASYNC=async`, `DB=database operation`
 
 ### Precision Requirements
+
 - Include exact file paths (relative to root)
 - Note line numbers for critical functions
 - List env vars with types: `DATABASE_URL: string (required)`
@@ -37,6 +40,7 @@ You are a documentation architect. Analyze the repository and generate a token-e
 - Mark deprecated patterns with ~~strikethrough~~
 
 ### Anti-Patterns to Avoid
+
 - Generic descriptions ("handles user stuff")
 - Redundant explanations of standard patterns
 - Obvious TypeScript/framework conventions
@@ -57,16 +61,16 @@ You are a documentation architect. Analyze the repository and generate a token-e
 ```
 
 ## Directory
-| Path | Purpose | Key Files |
-|------|---------|-----------|
-| `src/app/` | App router pages | `layout.tsx`, `page.tsx` |
-| `src/server/` | Backend logic | `trpc.ts`, `routers/*.ts` |
-| `prisma/` | DB schema + migrations | `schema.prisma` |
+| Path          | Purpose                | Key Files                 |
+| ------------- | ---------------------- | ------------------------- |
+| `src/app/`    | App router pages       | `layout.tsx`, `page.tsx`  |
+| `src/server/` | Backend logic          | `trpc.ts`, `routers/*.ts` |
+| `prisma/`     | DB schema + migrations | `schema.prisma`           |
 
 ## Patterns
-| Pattern | Location | Notes |
-|---------|----------|-------|
-| Repository | `src/server/repos/` | Abstract DB access |
+| Pattern          | Location            | Notes                     |
+| ---------------- | ------------------- | ------------------------- |
+| Repository       | `src/server/repos/` | Abstract DB access        |
 | Middleware chain | `src/middleware.ts` | Auth -> Rate limit -> Log |
 
 ## Conventions
@@ -84,15 +88,17 @@ WARN Env vars in `NEXT_PUBLIC_*` are client-exposed
 SEC Never import `server/` from `app/` client components
 
 ## Commands
-| Action | Command | Notes |
-|--------|---------|-------|
-| Dev | `pnpm dev` | Hot reload on :3000 |
-| DB sync | `pnpm db:push` | No migration files |
-| Type check | `pnpm typecheck` | Run before commit |
+| Action     | Command          | Notes               |
+| ---------- | ---------------- | ------------------- |
+| Dev        | `pnpm dev`       | Hot reload on :3000 |
+| DB sync    | `pnpm db:push`   | No migration files  |
+| Type check | `pnpm typecheck` | Run before commit   |
 ```
 
 ## Analysis Checklist
+
 Before writing, identify:
+
 1. [ ] Framework (Next.js/Remix/Express/etc) and version
 2. [ ] State management approach
 3. [ ] API pattern (REST/GraphQL/tRPC)
@@ -105,6 +111,7 @@ Before writing, identify:
 Now analyze the uploaded repository and generate the CLAUDE.md.
 
 ## Process
+
 1. Scan config files and entry points (lockfiles, `package.json`, build scripts, CI).
 2. Map directories by purpose and group by pattern.
 3. Identify core flows: data loading, rendering, build/deploy.
@@ -114,6 +121,7 @@ Now analyze the uploaded repository and generate the CLAUDE.md.
 7. Produce the final `CLAUDE.md` using tables, symbols, abbreviations, and minimal prose.
 
 ## Final Output
+
 - Deliver a single `CLAUDE.md` file at the repository root.
 - Ensure all references are valid with exact paths and line ranges.
 - Keep the ASCII diagram under 15 lines.
