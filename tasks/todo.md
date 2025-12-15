@@ -1,6 +1,7 @@
 # Plan: Stabilize Static Build, Secret Hygiene, and CI
 
 ## Todos
+
 - [x] Identify relevant files and entry points
 - [x] Confirm reproduction and root cause (API 404s under base path)
 - [x] Implement minimal fix in `src/pages/index.astro` (content-driven)
@@ -10,11 +11,13 @@
 - [ ] Document change explanation (this file)
 
 ## Notes
+
 - Dependencies: `astro@5.16.4`, `drizzle-orm@0.45.0`, `@libsql/client@0.14.0`, Bun `1.3.3`
 - Assumptions: GitHub Pages serves under `/gemini-gems/`; repository secrets supply DB creds only for CI/servers
 - Risks: None; changes are static-render and client fetch base prefix only
 
 ## Review
+
 - Summary of changes:
   - `src/pages/index.astro` – render gems via `getCollection('gems')` to avoid build-time API dependency
   - `src/lib/load-gem-data.ts` – fetch `${import.meta.env.BASE_URL}api/*` so GH Pages base path works
