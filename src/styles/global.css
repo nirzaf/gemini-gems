@@ -33,9 +33,9 @@
     --bg-secondary: #1e293b;
     --bg-tertiary: #334155;
     
-    --text-primary: #f9fafb;
-    --text-secondary: #d1d5db;
-    --text-tertiary: #9ca3af;
+    --text-primary: #ffffff;
+    --text-secondary: #e5e7eb;
+    --text-tertiary: #e2e8f0;
     
     --border-primary: #334155;
     --border-secondary: #475569;
@@ -235,6 +235,13 @@ html {
         transform: scale(1.05);
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
     }
+}
+
+@layer utilities {
+    .dark .text-gray-300 { color: #f3f4f6 !important; }
+    .dark .text-gray-400 { color: #e5e7eb !important; }
+    .dark .text-gray-600 { color: #e5e7eb !important; }
+    .dark .text-gray-700 { color: #ffffff !important; }
 }
 
     .quadrate-powered {

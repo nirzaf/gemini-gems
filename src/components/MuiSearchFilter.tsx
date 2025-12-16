@@ -37,11 +37,14 @@ const useModeTheme = () => {
   }, []);
 
   return useMemo(
-    () =>
-      createTheme({
-        palette: { mode },
+    () => {
+      const darkText = { primary: "#ffffff", secondary: "#f3f4f6" };
+      const lightText = { primary: "#111827", secondary: "#374151" };
+      return createTheme({
+        palette: { mode, text: mode === "dark" ? darkText : lightText },
         shape: { borderRadius: 12 },
-      }),
+      });
+    },
     [mode]
   );
 };
@@ -228,4 +231,3 @@ export default function MuiSearchFilter({
     </ThemeProvider>
   );
 }
-
