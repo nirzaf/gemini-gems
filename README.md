@@ -652,6 +652,19 @@ Please read [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) before contributing.
 
 ---
 
+## 🗄️ ARCHIVED FILES OVERVIEW
+
+The following non-essential scripts and notes were moved to `_archived` to reduce root-level clutter while preserving history:
+
+- **Scripts & Tools:** `_archived/scripts/`
+  - Legacy helper scripts such as `build.js`, `migrate.js`, `mock-api-server.js`
+- **Docs & Notes:** `_archived/docs/`
+  - Internal task notes such as `tasks/todo.md` under `_archived/docs/tasks/`
+
+See the `_archived/` directory for full paths and contents.
+
+---
+
 ## 📄 LICENSE
 
 This project is open source and available under the MIT License.
