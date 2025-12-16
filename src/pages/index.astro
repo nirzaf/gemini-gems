@@ -114,7 +114,7 @@ const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
       </div>
 
       <!-- Search & Filters -->
-      <div class="sticky top-4 z-20">
+      <div>
         <MuiSearchFilter client:load categories={categories} initialCount={gems.length} />
       </div>
 
