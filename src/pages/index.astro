@@ -28,6 +28,7 @@ const gems = gemFiles
         icon: data.icon as string,
         color: data.color as string,
         features: Array.isArray(data.features) ? data.features : [],
+        summary: data.summary as string | undefined,
         lastUpdated: data.lastUpdated
           ? new Date(data.lastUpdated as string | number | Date)
           : undefined,
@@ -115,7 +116,11 @@ const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
 
       <!-- Search & Filters -->
       <div>
-        <MuiSearchFilter client:load categories={categories} initialCount={gems.length} />
+        <MuiSearchFilter
+          client:load
+          categories={categories}
+          initialCount={gems.length}
+        />
       </div>
 
       <!-- Gems Grid -->

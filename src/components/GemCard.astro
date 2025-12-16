@@ -12,6 +12,7 @@ interface Props {
       icon: string;
       color: string;
       features: string[];
+      summary?: string;
     };
   };
 }
@@ -31,6 +32,7 @@ const categoryIcons: Record<string, string> = {
 };
 
 const categoryIcon = categoryIcons[gem.data.category] || "fas fa-tag";
+const hasSummary = !!gem.data.summary;
 ---
 
 <div
@@ -40,8 +42,9 @@ const categoryIcon = categoryIcons[gem.data.category] || "fas fa-tag";
   data-category={gem.data.category}
   data-features={gem.data.features.join(" ")}
   data-gem-slug={gem.slug}
+  data-has-summary={hasSummary ? "true" : "false"}
 >
-  <!-- Icon, Title and Quick Action -->
+  <!-- Icon and Title -->
   <div class="flex items-center gap-3 mb-3">
     <div
       class={`w-10 h-10 rounded-lg flex items-center justify-center shadow-md flex-shrink-0 ${gem.data.color}`}
@@ -53,14 +56,6 @@ const categoryIcon = categoryIcons[gem.data.category] || "fas fa-tag";
     >
       {gem.data.title}
     </h3>
-    <button
-      data-gem-slug={gem.slug}
-      class="copy-gem-btn p-2 rounded-md bg-gray-100 dark:bg-white/10 border border-gray-200 dark:border-white/20 text-gray-600 dark:text-white hover:bg-gray-200 dark:hover:bg-white/20 transition inline-flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:focus-visible:ring-white/40"
-      title="Copy gem content"
-      aria-label="Copy gem content"
-    >
-      <Copy class="w-3.5 h-3.5" />
-    </button>
   </div>
 
   <!-- Category Badge -->
@@ -71,6 +66,35 @@ const categoryIcon = categoryIcons[gem.data.category] || "fas fa-tag";
       {gem.data.category}
     </span>
     <!-- Copy count and labels will be added dynamically via client-side script -->
+  </div>
+
+  <!-- Tab Buttons for Copy Content Type -->
+  <div class="mb-3 flex items-center gap-1">
+    <button
+      data-tab="full"
+      data-gem-slug={gem.slug}
+      class="tab-btn active-tab flex-1 px-2 py-1.5 text-xs font-semibold rounded-l-md border border-gray-300 dark:border-white/20 bg-blue-600 text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+      title="Copy full gem content"
+    >
+      <span class="flex items-center justify-center gap-1">
+        <Copy class="w-3 h-3" />
+        Full
+      </span>
+    </button>
+    <button
+      data-tab="summary"
+      data-gem-slug={gem.slug}
+      class={`tab-btn flex-1 px-2 py-1.5 text-xs font-semibold rounded-r-md border border-gray-300 dark:border-white/20 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${hasSummary ? "bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/20" : "bg-gray-50 dark:bg-white/5 text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-50"}`}
+      title={hasSummary
+        ? "Copy summarized version (125-150 words)"
+        : "Summary not available"}
+      disabled={!hasSummary}
+    >
+      <span class="flex items-center justify-center gap-1">
+        <Copy class="w-3 h-3" />
+        Summary
+      </span>
+    </button>
   </div>
 
   <!-- Description -->
@@ -125,17 +149,56 @@ const categoryIcon = categoryIcons[gem.data.category] || "fas fa-tag";
 />
 
 <script>
-  // Copy gem content functionality
-  function initCopyButtons() {
+  // Tab-based copy gem content functionality
+  function initTabCopyButtons() {
+    // Track active tab per card
+    const activeTabMap = new Map<string, string>();
+
     // Use event delegation for better performance and handling dynamic content
     document.body.addEventListener("click", async (e) => {
       const target = e.target as HTMLElement;
-      const button = target.closest(".copy-gem-btn");
+      const button = target.closest(".tab-btn") as HTMLButtonElement;
 
       if (!button) return;
+      if (button.disabled) return;
 
       const slug = button.getAttribute("data-gem-slug");
-      if (!slug) return;
+      const tabType = button.getAttribute("data-tab");
+      if (!slug || !tabType) return;
+
+      // Find the parent card
+      const card = button.closest(".gem-card");
+      if (!card) return;
+
+      // Update active tab styling
+      const allTabBtns = card.querySelectorAll(".tab-btn");
+      allTabBtns.forEach((btn) => {
+        const btnTab = btn.getAttribute("data-tab");
+        if (btnTab === tabType) {
+          btn.classList.add("active-tab", "bg-blue-600", "text-white");
+          btn.classList.remove(
+            "bg-gray-100",
+            "dark:bg-white/10",
+            "text-gray-700",
+            "dark:text-gray-300",
+            "hover:bg-gray-200",
+            "dark:hover:bg-white/20",
+          );
+        } else if (!btn.hasAttribute("disabled")) {
+          btn.classList.remove("active-tab", "bg-blue-600", "text-white");
+          btn.classList.add(
+            "bg-gray-100",
+            "dark:bg-white/10",
+            "text-gray-700",
+            "dark:text-gray-300",
+            "hover:bg-gray-200",
+            "dark:hover:bg-white/20",
+          );
+        }
+      });
+
+      // Store active tab
+      activeTabMap.set(slug, tabType);
 
       // Prevent multiple clicks while processing
       if (button.getAttribute("data-processing") === "true") return;
@@ -150,51 +213,25 @@ const categoryIcon = categoryIcons[gem.data.category] || "fas fa-tag";
 
         const data = await response.json();
 
-        // Copy to clipboard
-        await navigator.clipboard.writeText(data.content);
+        // Copy the appropriate content based on tab
+        const contentToCopy =
+          tabType === "summary" && data.summary ? data.summary : data.content;
 
-        // Track copy event in database (Disabled for static GitHub Pages deployment)
-        /*
-        try {
-          await fetch("/api/copy", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ gemSlug: slug }),
-          });
-        } catch (apiError) {
-          console.warn("Failed to track copy event:", apiError);
-        }
-        */
+        await navigator.clipboard.writeText(contentToCopy);
 
         // Show success feedback
         const originalHTML = button.innerHTML;
         button.innerHTML =
-          '<svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>';
-        button.classList.add("bg-green-500", "border-green-400", "text-white");
-        button.classList.remove(
-          "bg-gray-100",
-          "dark:bg-white/10",
-          "border-gray-200",
-          "dark:border-white/20",
-          "hover:bg-gray-200",
-          "dark:hover:bg-white/20",
-        );
+          '<span class="flex items-center justify-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Copied!</span>';
+        button.classList.add("bg-green-500", "border-green-400");
 
         setTimeout(() => {
           button.innerHTML = originalHTML;
-          button.classList.remove(
-            "bg-green-500",
-            "border-green-400",
-            "text-white",
-          );
-          button.classList.add(
-            "bg-gray-100",
-            "dark:bg-white/10",
-            "border-gray-200",
-            "dark:border-white/20",
-            "hover:bg-gray-200",
-            "dark:hover:bg-white/20",
-          );
+          button.classList.remove("bg-green-500", "border-green-400");
+          // Restore active tab styling
+          if (activeTabMap.get(slug) === tabType) {
+            button.classList.add("bg-blue-600", "text-white");
+          }
           button.removeAttribute("data-processing");
         }, 2000);
       } catch (error) {
@@ -206,8 +243,8 @@ const categoryIcon = categoryIcons[gem.data.category] || "fas fa-tag";
   }
 
   // Initialize once
-  if (!(window as any).hasInitCopyButtons) {
-    (window as any).hasInitCopyButtons = true;
-    initCopyButtons();
+  if (!(window as any).hasInitTabCopyButtons) {
+    (window as any).hasInitTabCopyButtons = true;
+    initTabCopyButtons();
   }
 </script>

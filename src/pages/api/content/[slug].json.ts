@@ -13,22 +13,31 @@ export async function getStaticPaths() {
     const slug = file.replace(/\.md$/, "");
     const filePath = path.join(gemsDir, file);
     const source = fs.readFileSync(filePath, "utf-8");
-    const { content } = matter(source);
+    const { content, data } = matter(source);
 
     return {
       params: { slug },
-      props: { slug, content },
+      props: {
+        slug,
+        content,
+        summary: data.summary || null,
+      },
     };
   });
 }
 
 export const GET: APIRoute = ({ props }) => {
-  const { slug, content } = props as { slug: string; content: string };
+  const { slug, content, summary } = props as {
+    slug: string;
+    content: string;
+    summary: string | null;
+  };
 
   return new Response(
     JSON.stringify({
       slug,
       content,
+      summary,
     }),
     {
       status: 200,
