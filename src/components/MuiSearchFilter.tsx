@@ -9,6 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
+import Pagination from "@mui/material/Pagination";
 
 type Label = { id: number; name: string; color: string };
 
@@ -19,6 +20,7 @@ interface Props {
 }
 
 const normalize = (s: string | null) => (s || "").toLowerCase();
+const PAGE_SIZE = 12;
 
 const useModeTheme = () => {
   const [mode, setMode] = useState<"light" | "dark">("light");
@@ -60,7 +62,10 @@ export default function MuiSearchFilter({
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [selectedLabel, setSelectedLabel] = useState<string>("all");
   const [sortValue, setSortValue] = useState<string>("most-copied");
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
   const [visibleCount, setVisibleCount] = useState<number>(initialCount);
+  const [totalMatching, setTotalMatching] = useState<number>(initialCount);
 
   const matchesQuery = (el: HTMLElement, q: string) => {
     if (!q) return true;
@@ -95,7 +100,6 @@ export default function MuiSearchFilter({
     const cards = Array.from(
       document.querySelectorAll(".gem-card")
     ) as HTMLElement[];
-    let visible = 0;
     const visibleCards: HTMLElement[] = [];
 
     cards.forEach((card) => {
@@ -103,14 +107,13 @@ export default function MuiSearchFilter({
         matchesCategory(card, selectedCategory) &&
         matchesQuery(card, query) &&
         matchesLabel(card, selectedLabel);
-      card.style.display = show ? "" : "none";
       if (show) {
-        visible++;
         visibleCards.push(card);
       }
+      card.style.display = "none";
     });
 
-    setVisibleCount(visible);
+    setTotalMatching(visibleCards.length);
 
     const grid = document.getElementById("gemsGrid");
     if (!grid) return;
@@ -129,7 +132,33 @@ export default function MuiSearchFilter({
       });
     }
 
-    visibleCards.forEach((card) => grid.appendChild(card));
+    const nextTotalPages = Math.max(1, Math.ceil(visibleCards.length / PAGE_SIZE));
+    if (nextTotalPages !== totalPages) {
+      setTotalPages(nextTotalPages);
+    }
+
+    let currentPage = page;
+    if (currentPage > nextTotalPages) currentPage = nextTotalPages;
+    if (currentPage < 1) currentPage = 1;
+    if (currentPage !== page) {
+      setPage(currentPage);
+    }
+
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    let currentVisible = 0;
+
+    visibleCards.forEach((card, index) => {
+      if (index >= start && index < end) {
+        grid.appendChild(card);
+        card.style.display = "";
+        currentVisible++;
+      } else {
+        card.style.display = "none";
+      }
+    });
+
+    setVisibleCount(currentVisible);
   };
 
   useEffect(() => {
@@ -140,7 +169,7 @@ export default function MuiSearchFilter({
     document.addEventListener("gems-data-loaded", handleDataLoad);
     return () => document.removeEventListener("gems-data-loaded", handleDataLoad);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, selectedCategory, selectedLabel, sortValue]);
+  }, [query, selectedCategory, selectedLabel, sortValue, page]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -153,12 +182,18 @@ export default function MuiSearchFilter({
             variant="outlined"
             placeholder="Search gems by name, description, features..."
             value={query}
-            onChange={(e) => setQuery(e.target.value.toLowerCase())}
+            onChange={(e) => {
+              setQuery(e.target.value.toLowerCase());
+              setPage(1);
+            }}
           />
           <Select
             size="medium"
             value={sortValue}
-            onChange={(e) => setSortValue(e.target.value)}
+            onChange={(e) => {
+              setSortValue(e.target.value);
+              setPage(1);
+            }}
             sx={{ minWidth: 200 }}
           >
             <MenuItem value="most-copied">Most Copied</MenuItem>
@@ -172,14 +207,20 @@ export default function MuiSearchFilter({
             <Chip
               label="All"
               color={selectedCategory === "All" ? "primary" : "default"}
-              onClick={() => setSelectedCategory("All")}
+              onClick={() => {
+                setSelectedCategory("All");
+                setPage(1);
+              }}
             />
             {categories.map((cat) => (
               <Chip
                 key={cat}
                 label={cat}
                 color={selectedCategory === cat ? "primary" : "default"}
-                onClick={() => setSelectedCategory(cat)}
+                onClick={() => {
+                  setSelectedCategory(cat);
+                  setPage(1);
+                }}
               />
             ))}
           </Stack>
@@ -193,20 +234,26 @@ export default function MuiSearchFilter({
               flexWrap="wrap"
               alignItems="center"
               justifyContent="center"
-            >
-              <Typography variant="caption" sx={{ color: "text.secondary", mr: 1 }}>
-                Filter by label:
-              </Typography>
-              <Chip
-                label="All Labels"
-                onClick={() => setSelectedLabel("all")}
-                color={selectedLabel === "all" ? "primary" : "default"}
-              />
+              >
+                <Typography variant="caption" sx={{ color: "text.secondary", mr: 1 }}>
+                  Filter by label:
+                </Typography>
+                <Chip
+                  label="All Labels"
+                  onClick={() => {
+                    setSelectedLabel("all");
+                    setPage(1);
+                  }}
+                  color={selectedLabel === "all" ? "primary" : "default"}
+                />
               {labels.map((label) => (
                 <Chip
                   key={label.id}
                   label={label.name}
-                  onClick={() => setSelectedLabel(String(label.id))}
+                  onClick={() => {
+                    setSelectedLabel(String(label.id));
+                    setPage(1);
+                  }}
                   sx={{
                     borderColor: label.color,
                     borderWidth: 1,
@@ -226,8 +273,19 @@ export default function MuiSearchFilter({
           display="block"
           sx={{ color: "text.secondary", mt: 1 }}
         >
-          Showing {visibleCount} of {initialCount} gems
+          Showing {visibleCount} of {totalMatching} gems
         </Typography>
+        {totalPages > 1 && (
+          <Box display="flex" justifyContent="center" mt={2}>
+            <Pagination
+              count={totalPages}
+              page={page}
+              onChange={(_, newPage) => setPage(newPage)}
+              color="primary"
+              shape="rounded"
+            />
+          </Box>
+        )}
       </Box>
     </ThemeProvider>
   );
