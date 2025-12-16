@@ -117,12 +117,8 @@ export default function MuiSearchFilter({
 
     if (sortValue === "most-copied") {
       visibleCards.sort((a, b) => {
-        const aCount = parseInt(
-          a.querySelector(".copy-count-badge")?.textContent?.trim() || "0"
-        );
-        const bCount = parseInt(
-          b.querySelector(".copy-count-badge")?.textContent?.trim() || "0"
-        );
+        const aCount = parseInt(a.dataset.copyCount || "0", 10);
+        const bCount = parseInt(b.dataset.copyCount || "0", 10);
         return bCount - aCount;
       });
     } else if (sortValue === "alphabetical") {

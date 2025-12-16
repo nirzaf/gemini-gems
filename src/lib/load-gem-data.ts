@@ -29,6 +29,7 @@ async function loadGemData() {
             // Add copy count badge (show 0 if no stats)
             const stats = gemStats[gemSlug];
             const copyCount = stats?.copyCount || 0;
+            el.dataset.copyCount = String(copyCount);
 
             // Find the category badge container to append next to it
             // The structure in GemCard is: <div class="mb-3 flex items-center gap-2 flex-wrap"> ... badge ... </div>
