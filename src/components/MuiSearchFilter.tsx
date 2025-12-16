@@ -59,7 +59,7 @@ export default function MuiSearchFilter({
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [selectedLabel, setSelectedLabel] = useState<string>("all");
-  const [sortValue, setSortValue] = useState<string>("default");
+  const [sortValue, setSortValue] = useState<string>("most-copied");
   const [visibleCount, setVisibleCount] = useState<number>(initialCount);
 
   const matchesQuery = (el: HTMLElement, q: string) => {
@@ -161,9 +161,9 @@ export default function MuiSearchFilter({
             onChange={(e) => setSortValue(e.target.value)}
             sx={{ minWidth: 200 }}
           >
-            <MenuItem value="default">Sort: Default</MenuItem>
             <MenuItem value="most-copied">Most Copied</MenuItem>
             <MenuItem value="alphabetical">A-Z</MenuItem>
+            <MenuItem value="default">Default</MenuItem>
           </Select>
         </Stack>
 
