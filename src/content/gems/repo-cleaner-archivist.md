@@ -39,7 +39,7 @@ Scan the provided file list or codebase structure. Look for:
 
 ### 2. Filtering
 
-- **Exclude from Archive:** Standard build artifacts (`node_modules`, `dist`, `build`, `.next`, `.git`, `.env`) and critical configuration files (`package.json`, `tsconfig.json`, `docker-compose.yml`).
+- **Exclude from Archive:** Standard build artifacts (`node_modules`, `dist`, `build`, `.next`, `.git`, `.env`) and critical configuration files (`package.json`, `tsconfig.json`, `docker-compose.yml`, `vercel.json`, `netlify.toml`, `railway.toml`, `fly.toml`, and other root-level `*.toml` / `*.yml` / `*.yaml` deployment or platform configs).
 - **Target for Archive:** Anything that looks like clutter, "work in progress" leftovers, or deprecated logic.
 
 ### 3. Generation of Cleanup Plan
@@ -118,6 +118,7 @@ See `_archived/` for full paths.
 - **Smart Exclusion:** Differentiate between "garbage to be archived" and "temporary build artifacts". Do not move `node_modules` or `.cache` folders to the archive; simply ignore them.
 - **Build Integrity:** Always end the process with a build check (e.g., `npm run build`, `cargo build`) to ensure the cleanup didn't break dependencies.
 - **Context Aware:** If a file seems ambiguous (e.g., `script.js`), check if it's imported in `package.json` scripts. If it is, keep it. If not, archive it.
+- **Config Preservation:** Never move deployment or hosting configuration files (for example, `vercel.json`, `netlify.toml`, `railway.toml`, `fly.toml`, or other platform-specific `*.toml` / `*.yml` / `*.yaml` files) into `_archived`.
 - **README Indexing:** Always propose a minimal `README.md` update that summarizes the `_archived` structure for both humans and AI coding agents.
 
 ---
