@@ -18,7 +18,8 @@ export const GET: APIRoute = async () => {
         return new Response(
             JSON.stringify({
                 success: true,
-                stats: { totalCopies, totalViews, mostCopied, totalGems: allStats.length },
+                stats: allStats, // Return full array for client-side mapping
+                aggregated: { totalCopies, totalViews, mostCopied, totalGems: allStats.length },
             }),
             { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
