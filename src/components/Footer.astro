@@ -1,9 +1,68 @@
 ---
-import { Gem, Github, GitFork } from "lucide-astro";
+import { Gem, Github, GitFork, Sparkles } from "lucide-astro";
+
+interface Props {
+  gemCount?: number;
+  categoryCount?: number;
+}
+
+const { gemCount, categoryCount }: Props = Astro.props;
 ---
 
 <footer class="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-16">
   <div class="container mx-auto px-6">
+    <div class="text-center mb-12">
+      <p class="text-gray-200 mb-4 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+        🚀 Supercharge your AI with expert prompts. ✨ Transform Gemini into
+        specialized assistants with ready-to-use professional prompts.
+      </p>
+      <a
+        href="/#gems"
+        class="btn-primary text-sm px-5 py-2 inline-flex items-center justify-center gap-2"
+      >
+        <Sparkles class="w-4 h-4" />
+        Explore Gems
+      </a>
+      {
+        typeof gemCount === "number" &&
+        typeof categoryCount === "number" && (
+          <div
+            class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center max-w-3xl mx-auto"
+          >
+            <div class="stats-card p-4 rounded-xl shadow-sm">
+              <div
+                class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-1"
+              >
+                {gemCount}
+              </div>
+              <div class="text-gray-300 font-semibold text-xs uppercase tracking-wide">
+                Gems
+              </div>
+            </div>
+            <div class="stats-card p-4 rounded-xl shadow-sm">
+              <div
+                class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-1"
+              >
+                {categoryCount}
+              </div>
+              <div class="text-gray-300 font-semibold text-xs uppercase tracking-wide">
+                Categories
+              </div>
+            </div>
+            <div class="stats-card p-4 rounded-xl shadow-sm">
+              <div
+                class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-slate-300 to-gray-200 bg-clip-text text-transparent mb-1"
+              >
+                100%
+              </div>
+              <div class="text-gray-300 font-semibold text-xs uppercase tracking-wide">
+                Open Source
+              </div>
+            </div>
+          </div>
+        )
+      }
+    </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
       <div>
         <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">

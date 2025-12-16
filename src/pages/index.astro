@@ -47,54 +47,6 @@ const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
 <Layout>
   <Header />
 
-  <!-- Stats Section -->
-  <section
-    class="py-8 bg-gray-50 dark:bg-[#0f1419] transition-colors duration-300"
-  >
-    <div class="container mx-auto px-4">
-      <div
-        class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center max-w-4xl mx-auto"
-      >
-        <div
-          class="stats-card p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow"
-        >
-          <div
-            class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-2"
-          >
-            {gems.length}
-          </div>
-          <div class="text-gray-600 dark:text-gray-400 font-semibold text-sm">
-            Gems
-          </div>
-        </div>
-        <div
-          class="stats-card p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow"
-        >
-          <div
-            class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-2"
-          >
-            {categories.length}
-          </div>
-          <div class="text-gray-600 dark:text-gray-400 font-semibold text-sm">
-            Categories
-          </div>
-        </div>
-        <div
-          class="stats-card p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow"
-        >
-          <div
-            class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-slate-400 to-gray-400 bg-clip-text text-transparent mb-2"
-          >
-            100%
-          </div>
-          <div class="text-gray-600 dark:text-gray-400 font-semibold text-sm">
-            Open Source
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Gems Section -->
   <section
     id="gems"
@@ -133,7 +85,7 @@ const categories = [...new Set(gems.map((gem) => gem.data.category))].sort();
     </div>
   </section>
 
-  <Footer />
+  <Footer gemCount={gems.length} categoryCount={categories.length} />
 
   <!-- Load gem data client-side -->
   <script src="../lib/load-gem-data.ts"></script>
