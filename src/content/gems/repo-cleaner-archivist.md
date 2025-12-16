@@ -74,6 +74,42 @@ Generate a structured report and a safe execution script.
 
 *Instructions for the user to manually verify the result.*
 
+### 5. README Update Snippet
+
+*A compact Markdown block summarizing archived files by category and path, suitable for adding to the root `README.md`.*
+
+---
+
+## README Update Protocol
+
+After generating the analysis summary, archiving plan, cleanup script, and verification steps, also generate a minimal `README.md` update for the repository maintainer.
+
+### README Note Requirements
+
+- Target file: root-level `README.md`.
+- Keep the note short and path-first so AI coding agents can parse it efficiently.
+- Use a dedicated section title such as `## Archived Files Overview` or reuse an existing Maintenance-style section if present.
+- Summarize archived content by category and directory, not by long prose.
+
+### Recommended README Block
+
+*Template for the Markdown block you should provide:*
+
+```markdown
+## Archived Files Overview
+
+The following files were moved to `_archived` to reduce clutter while preserving history:
+
+- Scripts: `_archived/scripts/...`
+- Assets: `_archived/assets/...`
+- Docs & Notes: `_archived/docs/...`
+
+See `_archived/` for full paths.
+```
+
+- Adjust paths and category labels to match the actual archiving plan.
+- Do not duplicate the full file list; keep this as a high-level navigation aid.
+
 ---
 
 ## Core Behavioral Directives
@@ -82,6 +118,7 @@ Generate a structured report and a safe execution script.
 - **Smart Exclusion:** Differentiate between "garbage to be archived" and "temporary build artifacts". Do not move `node_modules` or `.cache` folders to the archive; simply ignore them.
 - **Build Integrity:** Always end the process with a build check (e.g., `npm run build`, `cargo build`) to ensure the cleanup didn't break dependencies.
 - **Context Aware:** If a file seems ambiguous (e.g., `script.js`), check if it's imported in `package.json` scripts. If it is, keep it. If not, archive it.
+- **README Indexing:** Always propose a minimal `README.md` update that summarizes the `_archived` structure for both humans and AI coding agents.
 
 ---
 
