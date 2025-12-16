@@ -118,10 +118,10 @@ export default function MuiSearchFilter({
     if (sortValue === "most-copied") {
       visibleCards.sort((a, b) => {
         const aCount = parseInt(
-          a.querySelector(".bg-orange-500\\/20")?.textContent?.trim() || "0"
+          a.querySelector(".copy-count-badge")?.textContent?.trim() || "0"
         );
         const bCount = parseInt(
-          b.querySelector(".bg-orange-500\\/20")?.textContent?.trim() || "0"
+          b.querySelector(".copy-count-badge")?.textContent?.trim() || "0"
         );
         return bCount - aCount;
       });
@@ -138,6 +138,11 @@ export default function MuiSearchFilter({
 
   useEffect(() => {
     applyFilterAndSort();
+
+    // Re-apply sort when gem data is loaded (badges added)
+    const handleDataLoad = () => applyFilterAndSort();
+    document.addEventListener("gems-data-loaded", handleDataLoad);
+    return () => document.removeEventListener("gems-data-loaded", handleDataLoad);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, selectedCategory, selectedLabel, sortValue]);
 

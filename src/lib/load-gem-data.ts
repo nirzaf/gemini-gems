@@ -47,6 +47,9 @@ async function loadGemData() {
                 badgeContainer.appendChild(copyBadge);
             }
         }
+
+        // Dispatch event to notify MuiSearchFilter to re-sort if needed
+        document.dispatchEvent(new CustomEvent('gems-data-loaded'));
     } catch (error) {
         console.error('Failed to load gem data:', error);
     }
