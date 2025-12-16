@@ -63,65 +63,7 @@ If &gt;3 files affected: Present plan first, implement after approval.
 
 ---
 
-## 3. Token Budget Management
-
-**Auto Mode Selection:**
-- **&lt;50K tokens:** Full context analysis
-- **20-50K:** Targeted (modified file + deps + interfaces)
-- **&lt;20K:** Consultation only
-
-**Overflow Strategy:** Request minimal context (entry point, target file, interfaces, configs)
-
----
-
-## 4. Implementation Output
-
-### Structure
-
-````markdown
-```markdown
-## 📍 Context
-[1 line: what you're modifying + architecture]
-
-## 🎯 Confidence: [🟢100%|🟡90%|🔴50%]
-⚠️ Assumptions: [list with evidence]
-🔴 Missing: [specific files needed]
-
-## 📋 Plan
-[Steps for complex changes | "Direct implementation"]
-Files: Modified X | Created Y | Migrations Z
-
-## 🔧 Code
-
-### 📁 `path/file.ext` [Modified|Created]
-```lang
-// Production-ready code with:
-// - Why comments (non-obvious decisions)
-// - Security (🔒), Performance (⚡), Error handling
-// - Edge cases covered
-```
-
-## 🔗 Integration
-**Upstream:** [Dependency] - ✅Exists | ⚠️Needs work
-**Downstream:** [Impact assessment]
-**Breaking:** [None | List + migration]
-
-## 📝 Notes
-[SQL migrations, commit msg, warnings]
-```
-
-### For Small Changes (&lt;10 lines)
-```diff
-📁 file.ts
-  existing code
-+ new lines
-- removed lines
-```
-````
-
----
-
-## 5. Security Checklist (OWASP Top 10)
+## 3. Security Checklist (OWASP Top 10)
 
 - [ ] Parameterized queries (SQLi prevention)
 - [ ] Input sanitization (XSS/injection)
@@ -139,7 +81,7 @@ Files: Modified X | Created Y | Migrations Z
 
 ---
 
-## 6. Performance Standards
+## 4. Performance Standards
 
 - [ ] No N+1 queries
 - [ ] Async I/O (non-blocking)
@@ -154,7 +96,7 @@ Files: Modified X | Created Y | Migrations Z
 
 ---
 
-## 7. Error Handling
+## 5. Error Handling
 
 **Pattern:**
 ```typescript
@@ -171,7 +113,7 @@ try {
 
 ---
 
-## 8. Version Control
+## 6. Version Control
 
 **Breaking Change Protocol:**
 ```
@@ -203,7 +145,7 @@ COMMIT;
 
 ---
 
-## 9. Quality Gates (Pre-Submission)
+## 7. Quality Gates (Pre-Submission)
 
 - [ ] All refs exist in context
 - [ ] No unjustified `any` types
@@ -216,7 +158,7 @@ COMMIT;
 
 ---
 
-## 10. Edge Cases
+## 8. Edge Cases
 
 **Ambiguity:**
 ```
@@ -243,7 +185,7 @@ Revised: [solution]
 
 ---
 
-## 11. Adaptive Scaling
+## 9. Adaptive Scaling
 
 - **Simple (&lt;2 lines):** Direct answer
 - **Medium (3-15 lines):** Brief context + code + verification
