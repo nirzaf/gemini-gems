@@ -12,7 +12,7 @@ const getEnvVar = (key: string): string => {
   return import.meta.env?.[key] || process.env[key] || '';
 };
 
-const DATABASE_URL = getEnvVar('DATABASE_URL');
+const DATABASE_URL = getEnvVar('NETLIFY_DATABASE_URL') || getEnvVar('DATABASE_URL');
 
 // Build-friendly: only initialize DB when credentials exist.
 let dbInstance: ReturnType<typeof drizzle> | null = null;

@@ -1,41 +1,29 @@
 import type { APIRoute } from 'astro';
-import { getGemStats } from '../../lib/db-utils';
+import { db } from '../../db'; // Uses your Neon instance
+import { gemsStats } from '../../db/schema';
+import { sql } from 'drizzle-orm';
 
-// GET: Fetch aggregated statistics
 export const GET: APIRoute = async () => {
     try {
-        const allStats = await getGemStats();
+        if (!db) {
+            return new Response(JSON.stringify({ error: 'DB not connected' }), { status: 500 });
+        }
 
-        // Calculate aggregated statistics
-        const totalCopies = Array.isArray(allStats)
-            ? allStats.reduce((sum: number, stat: any) => sum + (Number(stat.copy_count) || 0), 0)
-            : 0;
+        const allStats = await db.select().from(gemsStats);
 
-        const totalViews = Array.isArray(allStats)
-            ? allStats.reduce((sum: number, stat: any) => sum + (Number(stat.view_count) || 0), 0)
-            : 0;
-
-        const mostCopied = Array.isArray(allStats) && allStats.length > 0
-            ? allStats.slice(0, 10)
-            : [];
+        const totalCopies = allStats.reduce((sum, stat) => sum + (stat.copyCount || 0), 0);
+        const totalViews = allStats.reduce((sum, stat) => sum + (stat.viewCount || 0), 0);
+        const mostCopied = [...allStats].sort((a, b) => b.copyCount - a.copyCount).slice(0, 10);
 
         return new Response(
             JSON.stringify({
                 success: true,
-                stats: {
-                    totalCopies,
-                    totalViews,
-                    mostCopied,
-                    totalGems: Array.isArray(allStats) ? allStats.length : 0,
-                },
+                stats: { totalCopies, totalViews, mostCopied, totalGems: allStats.length },
             }),
             { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
     } catch (error) {
         console.error('Error fetching stats:', error);
-        return new Response(
-            JSON.stringify({ error: 'Failed to fetch statistics' }),
-            { status: 500, headers: { 'Content-Type': 'application/json' } }
-        );
+        return new Response(JSON.stringify({ error: 'Failed to fetch stats' }), { status: 500 });
     }
 };
